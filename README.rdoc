@@ -4,7 +4,7 @@ Ruby library for working with the Tesseract OCR.
 
 == REQUIREMENTS:
 
-To work properly RTesseract are needed:
+To work properly rtesseract are needed:
 * Tesseract - Program
 * ImageMagic - Program
 * RMagick - Gem

@@ -2,7 +2,7 @@ require "RMagick"
 require "pathname"
 require "tempfile"
 
-class rtesseract
+class RTesseract
   VERSION = '0.0.1'
 
   def initialize(src="", options={})
