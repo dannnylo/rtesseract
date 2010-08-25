@@ -1,6 +1,13 @@
 = rtesseract
 
-Description goes here.
+Ruby library for working with the Tesseract OCR.
+
+== REQUIREMENTS:
+
+To work properly RTesseract are needed:
+* Tesseract - Program
+* ImageMagic - Program
+* RMagick - Gem
 
 == Note on Patches/Pull Requests
  
