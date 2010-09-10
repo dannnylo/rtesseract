@@ -9,16 +9,33 @@ To work properly rtesseract are needed:
 * ImageMagic - Program
 * RMagick - Gem
 
+== EXAMPLE USAGE
+
+It's very simple to use rtesseract:
+
+=== CONVERT IMAGE TO STRING
+
+  image = RTesseract.new("my_image.jpg")
+  image.to_s #Getting the value
+
+=== CHANGE THE IMAGE
+
+  image = RTesseract.new("my_image.jpg")
+  image.source = "new_image.png"
+  image.to_s
+
 == Note on Patches/Pull Requests
- 
+
 * Fork the project.
 * Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
+
+== Links
+
+* Github - http://github.com/dannnylo/rtesseract
+* Rubygems - http://rubygems.org/gems/rtesseract
 
 == Copyright
 
 Copyright (c) 2010 Danilo Jeremias da Silva. See LICENSE for details.
+

@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
      "README.rdoc",
      "Rakefile",
      "lib/rtesseract.rb",
+     "rtesseract.gemspec",
      "test/helper.rb",
      "test/test_rtesseract.rb"
   ]

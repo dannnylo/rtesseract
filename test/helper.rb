@@ -8,3 +8,4 @@ require 'rtesseract'
 
 class Test::Unit::TestCase
 end
+

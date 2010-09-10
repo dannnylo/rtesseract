@@ -12,7 +12,7 @@ begin
     gem.homepage = "http://github.com/dannnylo/rtesseract"
     gem.authors = ["Danilo Jeremias da Silva"]
     gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
-    gem.add_development_dependency "rmagick", '>= 2.13.1'
+    gem.add_runtime_dependency "rmagick", '>= 2.13.1'
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
@@ -52,3 +52,4 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
+
