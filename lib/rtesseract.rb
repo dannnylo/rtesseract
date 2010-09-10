@@ -3,7 +3,7 @@ require "pathname"
 require "tempfile"
 
 class RTesseract
-  VERSION = '0.0.1'
+  VERSION = '0.0.2'
 
   def initialize(src="", options={})
     @source = Pathname.new src
