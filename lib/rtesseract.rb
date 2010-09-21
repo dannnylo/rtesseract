@@ -3,7 +3,7 @@ require "pathname"
 require "tempfile"
 
 class RTesseract
-  VERSION = '0.0.2'
+  VERSION = '0.0.3'
   attr_accessor :options
   attr_writer   :lang
 
