@@ -56,6 +56,14 @@ class TestRtesseract < Test::Unit::TestCase
       assert_equal RTesseract.new(@image_tiff,{:chop_enable=>0,:enable_assoc=>0,:display_text=>0}).config , "chop_enable 0\nenable_assoc 0\ndisplay_text 0"
       assert_equal RTesseract.new(@image_tiff,{:chop_enable=>0}).config , "chop_enable 0"
       assert_equal RTesseract.new(@image_tiff,{:enable_assoc=>0,:chop_enable=>0}).config , "chop_enable 0\nenable_assoc 0"
+      assert_equal RTesseract.new(@image_tiff,{:chop_enable=>0}).to_s_without_spaces , "43ZZ"
+    end
+
+    should "crop image" do
+      assert_equal RTesseract.new(@image_tiff).crop!(140,10,36,40).to_s_without_spaces, "4"
+      assert_equal RTesseract.new(@image_tiff).crop!(180,10,36,40).to_s_without_spaces, "3"
+      assert_equal RTesseract.new(@image_tiff).crop!(200,10,36,40).to_s_without_spaces, "Z"
+      assert_equal RTesseract.new(@image_tiff).crop!(220,10,30,40).to_s_without_spaces, "Z"
     end
   end
 end

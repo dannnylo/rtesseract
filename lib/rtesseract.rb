@@ -3,7 +3,7 @@ require "pathname"
 require "tempfile"
 
 class RTesseract
-  VERSION = '0.0.3'
+  VERSION = '0.0.4'
   attr_accessor :options
   attr_writer   :lang
 
@@ -13,6 +13,7 @@ class RTesseract
     @lang    = options.delete(:lang) || options.delete("lang") || ""
     @options = options
     @value   = ""
+    @x,@y,@w,@h = []
   end
 
   def source= src
@@ -27,9 +28,16 @@ class RTesseract
   #Convert image to tiff
   def image_to_tiff
     tmp_file = Pathname.new(Dir::tmpdir).join("#{@source.basename}.tif").to_s
-    cat = Magick::ImageList.new @source.to_s
+    cat = Magick::Image.read(@source.to_s).first
+    cat.crop!(@x, @y, @w, @h) unless [@x,@y,@w,@h].compact == []
     cat.write tmp_file.to_s
     return tmp_file
+  end
+
+  #Crop image to convert
+  def crop!(x,y,width,height)
+    @x, @y, @w, @h = x, y, width, height
+    self
   end
 
   #Remove files
@@ -74,14 +82,17 @@ class RTesseract
   end
 
   def config_file
-    #TODO: create the config
+    return "" if @options == {}
+    conf = Tempfile.new("config")
+    conf.write(config)
+    conf.path
   end
 
   #Convert image to string
   def convert
     tmp_file  = Pathname.new(Dir::tmpdir).join("#{@source.basename}")
     tmp_image = image_to_tiff
-    `#{@command} #{tmp_image} #{tmp_file.to_s} #{lang}`
+    `#{@command} #{tmp_image} #{tmp_file.to_s} #{lang} #{config_file}`
     @value = File.read("#{tmp_file.to_s}.txt").to_s
     remove_file([tmp_image,"#{tmp_file.to_s}.txt"])
   rescue

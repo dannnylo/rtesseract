@@ -5,14 +5,14 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "rtesseract"
-    gem.version = '0.0.3'
+    gem.version = '0.0.4'
     gem.summary = "Ruby library for working with the Tesseract OCR."
     gem.description = "Ruby library for working with the Tesseract OCR."
     gem.email = "dannnylo@gmail.com"
     gem.homepage = "http://github.com/dannnylo/rtesseract"
     gem.authors = ["Danilo Jeremias da Silva"]
     gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
-    gem.add_runtime_dependency "rmagick", '>= 2.13.1'
+    gem.add_runtime_dependency "rmagick", '>= 2.10.1'
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
