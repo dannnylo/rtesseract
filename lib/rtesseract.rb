@@ -3,11 +3,12 @@ require "pathname"
 require "tempfile"
 
 class RTesseract
-  VERSION = '0.0.4'
+  VERSION = '0.0.5'
   attr_accessor :options
   attr_writer   :lang
 
   def initialize(src="", options={})
+    @uid = options.delete(:uid) || nil
     @source  = Pathname.new src
     @command = options.delete(:command) || "tesseract"
     @lang    = options.delete(:lang) || options.delete("lang") || ""
@@ -27,7 +28,8 @@ class RTesseract
 
   #Convert image to tiff
   def image_to_tiff
-    tmp_file = Pathname.new(Dir::tmpdir).join("#{@source.basename}.tif").to_s
+    generate_uid
+    tmp_file = Pathname.new(Dir::tmpdir).join("#{@uid}_#{@source.basename}.tif").to_s
     cat = Magick::Image.read(@source.to_s).first
     cat.crop!(@x, @y, @w, @h) unless [@x,@y,@w,@h].compact == []
     cat.write tmp_file.to_s
@@ -52,6 +54,11 @@ class RTesseract
     true
     rescue
       raise "Error on remove file."
+  end
+
+  def generate_uid
+    @uid = rand.to_s[2,10] if @uid.nil?
+    @uid
   end
 
   # Select the language
@@ -90,10 +97,12 @@ class RTesseract
 
   #Convert image to string
   def convert
-    tmp_file  = Pathname.new(Dir::tmpdir).join("#{@source.basename}")
+    generate_uid
+    tmp_file  = Pathname.new(Dir::tmpdir).join("#{@uid}_#{@source.basename}")
     tmp_image = image_to_tiff
     `#{@command} #{tmp_image} #{tmp_file.to_s} #{lang} #{config_file}`
     @value = File.read("#{tmp_file.to_s}.txt").to_s
+    @uid = nil
     remove_file([tmp_image,"#{tmp_file.to_s}.txt"])
   rescue
     raise "Error on conversion."

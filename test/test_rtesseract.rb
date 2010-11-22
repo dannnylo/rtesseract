@@ -55,7 +55,7 @@ class TestRtesseract < Test::Unit::TestCase
     should "be configurable" do
       assert_equal RTesseract.new(@image_tiff,{:chop_enable=>0,:enable_assoc=>0,:display_text=>0}).config , "chop_enable 0\nenable_assoc 0\ndisplay_text 0"
       assert_equal RTesseract.new(@image_tiff,{:chop_enable=>0}).config , "chop_enable 0"
-      assert_equal RTesseract.new(@image_tiff,{:enable_assoc=>0,:chop_enable=>0}).config , "chop_enable 0\nenable_assoc 0"
+      assert_equal RTesseract.new(@image_tiff,{:chop_enable=>0,:enable_assoc=>0}).config , "chop_enable 0\nenable_assoc 0"
       assert_equal RTesseract.new(@image_tiff,{:chop_enable=>0}).to_s_without_spaces , "43ZZ"
     end
 
@@ -64,6 +64,18 @@ class TestRtesseract < Test::Unit::TestCase
       assert_equal RTesseract.new(@image_tiff).crop!(180,10,36,40).to_s_without_spaces, "3"
       assert_equal RTesseract.new(@image_tiff).crop!(200,10,36,40).to_s_without_spaces, "Z"
       assert_equal RTesseract.new(@image_tiff).crop!(220,10,30,40).to_s_without_spaces, "Z"
+    end
+
+    should "unique uid" do
+      assert_not_equal RTesseract.new(@image_tiff).generate_uid , RTesseract.new(@image_tiff).generate_uid
+    end
+
+    should "generate a unique id" do
+      reg = RTesseract.new(@image_tiff)
+      assert_equal reg.generate_uid , reg.generate_uid
+      value = reg.generate_uid
+      reg.convert
+      assert_not_equal value , reg.generate_uid
     end
   end
 end
