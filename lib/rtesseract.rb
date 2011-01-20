@@ -75,7 +75,7 @@ class RTesseract
   ## Note: Make sure you have installed the language to tesseract
   def lang
     language = "#{@lang}".strip
-    {"eng" => ["eng","en","en-us","english"], "deu" => ["deu"], "deu-f" => ["deu-f"] , "fra" => ["fra"], "ita" => ["ita","it"] , "nld" => ["nld"] , "por" => ["por","pt","pt-br","portuguese"] , "spa" => ["spa"] , "vie" => ["vie"]}.each do |value,names|
+    {"eng" => ["eng","en","en-us","english"], "qru" => ["qru"], "deu" => ["deu"], "deu-f" => ["deu-f"] , "fra" => ["fra"], "ita" => ["ita","it"] , "nld" => ["nld"] , "por" => ["por","pt","pt-br","portuguese"] , "spa" => ["spa"] , "vie" => ["vie"]}.each do |value,names|
       return " -l #{value} " if names.include? language.downcase
     end
     ""
