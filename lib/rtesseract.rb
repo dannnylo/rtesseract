@@ -6,12 +6,14 @@ class RTesseract
   VERSION = '0.0.5'
   attr_accessor :options
   attr_writer   :lang
+  attr_writer   :psm
 
   def initialize(src="", options={})
     @uid = options.delete(:uid) || nil
     @source  = Pathname.new src
     @command = options.delete(:command) || "tesseract"
     @lang    = options.delete(:lang) || options.delete("lang") || ""
+    @psm    = options.delete(:psm) || options.delete("psm") || ""
     @options = options
     @value   = ""
     @x,@y,@w,@h = []
@@ -83,6 +85,13 @@ class RTesseract
     ""
   end
 
+  def psm
+    segment_mode= ""
+    segment_mode= " -psm #{@psm} " unless @psm == nil
+    segment_mode
+  end
+
+
   def config
     @options ||= {}
     @options.collect{|k,v| "#{k} #{v}" }.join("\n")
@@ -100,7 +109,7 @@ class RTesseract
     generate_uid
     tmp_file  = Pathname.new(Dir::tmpdir).join("#{@uid}_#{@source.basename}")
     tmp_image = image_to_tiff
-    `#{@command} #{tmp_image} #{tmp_file.to_s} #{lang} #{config_file}`
+    `#{@command} #{tmp_image} #{tmp_file.to_s} #{lang} #{psm} #{config_file}`
     @value = File.read("#{tmp_file.to_s}.txt").to_s
     @uid = nil
     remove_file([tmp_image,"#{tmp_file.to_s}.txt"])
