@@ -2,8 +2,11 @@ require "RMagick"
 require "pathname"
 require "tempfile"
 
+require "rtesseract/errors"
+require "rtesseract/mixed"
+
 class RTesseract
-  VERSION = '0.0.5'
+  VERSION = '0.0.6'
   attr_accessor :options
   attr_writer   :lang
 
