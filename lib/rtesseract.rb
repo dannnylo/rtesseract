@@ -55,8 +55,8 @@ class RTesseract
       end
     end
     true
-    rescue
-      raise "Error on remove file."
+  rescue
+    raise RTesseract::TempFilesNotRemovedError
   end
 
   def generate_uid
@@ -108,7 +108,7 @@ class RTesseract
     @uid = nil
     remove_file([tmp_image,"#{tmp_file.to_s}.txt"])
   rescue
-    raise "Error on conversion."
+    raise RTesseract::ConversionError
   end
 
   #Output value
@@ -118,7 +118,7 @@ class RTesseract
       convert
       @value
     else
-      raise "Select a image file."
+      raise RTesseract::ImageNotSelectedError
     end
   end
 

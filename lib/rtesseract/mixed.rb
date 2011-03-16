@@ -40,7 +40,7 @@ class RTesseract
         convert
         @value
       else
-        raise "Select a image file."
+        raise RTesseract::ImageNotSelectedError
       end
     end
 
