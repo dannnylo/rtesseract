@@ -103,7 +103,7 @@ class RTesseract
     generate_uid
     tmp_file  = Pathname.new(Dir::tmpdir).join("#{@uid}_#{@source.basename}")
     tmp_image = image_to_tiff
-    `#{@command} #{tmp_image} #{tmp_file.to_s} #{lang} #{config_file}`
+    `#{@command} #{tmp_image} #{tmp_file.to_s} #{lang} #{config_file} 2>/dev/null`
     @value = File.read("#{tmp_file.to_s}.txt").to_s
     @uid = nil
     remove_file([tmp_image,"#{tmp_file.to_s}.txt"])
