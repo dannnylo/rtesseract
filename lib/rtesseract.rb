@@ -6,7 +6,7 @@ require "rtesseract/errors"
 require "rtesseract/mixed"
 
 class RTesseract
-  VERSION = '0.0.6'
+  VERSION = '0.0.7'
   attr_accessor :options
   attr_writer   :lang
 
@@ -15,6 +15,8 @@ class RTesseract
     @source  = Pathname.new src
     @command = options.delete(:command) || "tesseract"
     @lang    = options.delete(:lang) || options.delete("lang") || ""
+    @clear_console_output = options.delete(:clear_console_output)
+    @clear_console_output = true if @clear_console_output.nil?
     @options = options
     @value   = ""
     @x,@y,@w,@h = []
@@ -98,12 +100,18 @@ class RTesseract
     conf.path
   end
 
+  #TODO: Clear console for MacOS or Windows
+  def clear_console_output
+    return "" unless @clear_console_output
+    return "2>/dev/null" if File.exist?("/dev/null") #Linux console clear
+  end
+
   #Convert image to string
   def convert
     generate_uid
     tmp_file  = Pathname.new(Dir::tmpdir).join("#{@uid}_#{@source.basename}")
     tmp_image = image_to_tiff
-    `#{@command} #{tmp_image} #{tmp_file.to_s} #{lang} #{config_file} 2>/dev/null`
+    `#{@command} #{tmp_image} #{tmp_file.to_s} #{lang} #{config_file} #{clear_console_output}`
     @value = File.read("#{tmp_file.to_s}.txt").to_s
     @uid = nil
     remove_file([tmp_image,"#{tmp_file.to_s}.txt"])

@@ -5,7 +5,7 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "rtesseract"
-    gem.version = '0.0.6'
+    gem.version = '0.0.7'
     gem.summary = "Ruby library for working with the Tesseract OCR."
     gem.description = "Ruby library for working with the Tesseract OCR."
     gem.email = "dannnylo@gmail.com"
