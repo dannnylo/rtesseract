@@ -11,7 +11,9 @@ begin
     gem.email = "dannnylo@gmail.com"
     gem.homepage = "http://github.com/dannnylo/rtesseract"
     gem.authors = ["Danilo Jeremias da Silva"]
+    gem.add_development_dependency "jeweler", ">=1.4.0"
     gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
+
     gem.add_runtime_dependency "rmagick", '>= 2.10.1'
   end
   Jeweler::GemcutterTasks.new
