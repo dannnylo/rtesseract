@@ -9,12 +9,14 @@ class RTesseract
   VERSION = '0.0.7'
   attr_accessor :options
   attr_writer   :lang
+  attr_writer   :psm
 
   def initialize(src="", options={})
     @uid = options.delete(:uid) || nil
     @source  = Pathname.new src
     @command = options.delete(:command) || "tesseract"
     @lang    = options.delete(:lang) || options.delete("lang") || ""
+    @psm    = options.delete(:psm) || options.delete("psm") || nil
     @clear_console_output = options.delete(:clear_console_output)
     @clear_console_output = true if @clear_console_output.nil?
     @options = options
@@ -79,11 +81,24 @@ class RTesseract
   ## * vie   - Vietnamese
   ## Note: Make sure you have installed the language to tesseract
   def lang
-    language = "#{@lang}".strip
-    {"eng" => ["eng","en","en-us","english"], "deu" => ["deu"], "deu-f" => ["deu-f"] , "fra" => ["fra"], "ita" => ["ita","it"] , "nld" => ["nld"] , "por" => ["por","pt","pt-br","portuguese"] , "spa" => ["spa"] , "vie" => ["vie"]}.each do |value,names|
-      return " -l #{value} " if names.include? language.downcase
+    language = "#{@lang}".strip.downcase
+    { #Aliases to languages names
+      "eng" => ["en","en-us","english"],
+      "ita" => ["it"],
+      "por" => ["pt","pt-br","portuguese"],
+      "spa" => ["sp"]
+    }.each do |value,names|
+      return " -l #{value} " if names.include? language
     end
+    return " -l #{language} " if language.size > 0
     ""
+  rescue
+    ""
+  end
+
+  #Page Segment Mode
+  def psm
+    @psm.nil? ? "" : " -psm #{@psm} "
   rescue
     ""
   end
@@ -111,7 +126,7 @@ class RTesseract
     generate_uid
     tmp_file  = Pathname.new(Dir::tmpdir).join("#{@uid}_#{@source.basename}")
     tmp_image = image_to_tiff
-    `#{@command} #{tmp_image} #{tmp_file.to_s} #{lang} #{config_file} #{clear_console_output}`
+    `#{@command} #{tmp_image} #{tmp_file.to_s} #{lang} #{psm} #{config_file} #{clear_console_output}`
     @value = File.read("#{tmp_file.to_s}.txt").to_s
     @uid = nil
     remove_file([tmp_image,"#{tmp_file.to_s}.txt"])
