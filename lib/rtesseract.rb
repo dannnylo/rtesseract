@@ -124,7 +124,6 @@ class RTesseract
     @uid = nil
     remove_file([tmp_image,"#{tmp_file.to_s}.txt"])
   rescue
-    puts $!
     raise RTesseract::ConversionError
   end
 
