@@ -1,4 +1,3 @@
-require "RMagick"
 require "pathname"
 require "tempfile"
 
@@ -10,18 +9,21 @@ class RTesseract
   attr_accessor :options
   attr_writer   :lang
   attr_writer   :psm
+  attr_reader   :processor
 
-  def initialize(src="", options={})
-    @uid = options.delete(:uid) || nil
+  def initialize(src = "", options = {})
+    @uid     = options.delete(:uid) || nil
     @source  = Pathname.new src
     @command = options.delete(:command) || "tesseract"
-    @lang    = options.delete(:lang) || options.delete("lang") || ""
-    @psm    = options.delete(:psm) || options.delete("psm") || nil
+    @lang    = options.delete(:lang)    || options.delete("lang") || ""
+    @psm     = options.delete(:psm)     || options.delete("psm")  || nil
     @clear_console_output = options.delete(:clear_console_output)
     @clear_console_output = true if @clear_console_output.nil?
     @options = options
     @value   = ""
-    @x,@y,@w,@h = []
+    @x, @y, @w, @h = []
+    @processor = options.delete(:processor) || options.delete("processor")
+    choose_processor!
   end
 
   def source= src
@@ -33,15 +35,6 @@ class RTesseract
     @source.basename
   end
 
-  #Convert image to tiff
-  def image_to_tiff
-    generate_uid
-    tmp_file = Pathname.new(Dir::tmpdir).join("#{@uid}_#{@source.basename}.tif").to_s
-    cat = Magick::Image.read(@source.to_s).first
-    cat.crop!(@x, @y, @w, @h) unless [@x,@y,@w,@h].compact == []
-    cat.write tmp_file.to_s
-    return tmp_file
-  end
 
   #Crop image to convert
   def crop!(x,y,width,height)
@@ -131,6 +124,7 @@ class RTesseract
     @uid = nil
     remove_file([tmp_image,"#{tmp_file.to_s}.txt"])
   rescue
+    puts $!
     raise RTesseract::ConversionError
   end
 
@@ -148,6 +142,17 @@ class RTesseract
   #Remove spaces and break-lines
   def to_s_without_spaces
     to_s.gsub(" ","").gsub("\n","").gsub("\r","")
+  end
+  
+  private
+  def choose_processor!
+    if @processor.to_s == "mini_magick"
+      require File.expand_path(File.dirname(__FILE__) + "/processors/mini_magick.rb")
+      self.class.send(:include, MiniMagickProcessor)
+    else
+      require File.expand_path(File.dirname(__FILE__) + "/processors/rmagick.rb")
+      self.class.send(:include, RMagickProcessor)
+    end
   end
 end
 
