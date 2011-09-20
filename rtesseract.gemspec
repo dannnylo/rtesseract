@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{rtesseract}
-  s.version = "0.0.7"
+  s.version = "0.0.8"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Danilo Jeremias da Silva"]
-  s.date = %q{2011-03-16}
+  s.authors = [%q{Danilo Jeremias da Silva}]
+  s.date = %q{2011-09-20}
   s.description = %q{Ruby library for working with the Tesseract OCR.}
   s.email = %q{dannnylo@gmail.com}
   s.extra_rdoc_files = [
@@ -21,6 +21,8 @@ Gem::Specification.new do |s|
     "LICENSE",
     "README.rdoc",
     "Rakefile",
+    "lib/processors/mini_magick.rb",
+    "lib/processors/rmagick.rb",
     "lib/rtesseract.rb",
     "lib/rtesseract/errors.rb",
     "lib/rtesseract/mixed.rb",
@@ -36,14 +38,9 @@ Gem::Specification.new do |s|
     "test/test_rtesseract.rb"
   ]
   s.homepage = %q{http://github.com/dannnylo/rtesseract}
-  s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.4.2}
+  s.require_paths = [%q{lib}]
+  s.rubygems_version = %q{1.8.7}
   s.summary = %q{Ruby library for working with the Tesseract OCR.}
-  s.test_files = [
-    "test/helper.rb",
-    "test/test_mixed.rb",
-    "test/test_rtesseract.rb"
-  ]
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
