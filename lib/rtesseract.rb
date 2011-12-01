@@ -5,7 +5,7 @@ require "rtesseract/errors"
 require "rtesseract/mixed"
 
 class RTesseract
-  VERSION = '0.0.8'
+  VERSION = '0.0.9'
   attr_accessor :options
   attr_writer   :lang
   attr_writer   :psm
@@ -142,7 +142,7 @@ class RTesseract
   def to_s_without_spaces
     to_s.gsub(" ","").gsub("\n","").gsub("\r","")
   end
-  
+
   private
   def choose_processor!
     if @processor.to_s == "mini_magick"
