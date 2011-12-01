@@ -39,7 +39,7 @@ Gem::Specification.new do |s|
   ]
   s.homepage = %q{http://github.com/dannnylo/rtesseract}
   s.require_paths = [%q{lib}]
-  s.rubygems_version = %q{1.8.7}
+  s.rubygems_version = %q{1.8.3}
   s.summary = %q{Ruby library for working with the Tesseract OCR.}
 
   if s.respond_to? :specification_version then
