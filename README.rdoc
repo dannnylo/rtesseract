@@ -24,6 +24,14 @@ It's very simple to use rtesseract:
   image.source = "new_image.png"
   image.to_s
 
+=== TRANSFORM THE IMAGE
+
+  image = RTesseract.read("my_image.jpg") do |img|
+    img = img.white_threshold(245)
+    img = img.quantize(256,Magick::GRAYColorspace)
+  end
+  image.to_s
+
 === CONVERT PARTS OF IMAGE TO STRING
 
   mix_block = RTesseract::Mixed.new("test.jpg") do |image|
@@ -58,4 +66,3 @@ It's very simple to use rtesseract:
 == Copyright
 
 Copyright (c) 2010 Danilo Jeremias da Silva. See LICENSE for details.
-

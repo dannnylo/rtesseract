@@ -94,7 +94,7 @@ class TestRtesseract < Test::Unit::TestCase
       end
       assert_equal test.to_s_without_spaces , "HW9W"
 
-      test = RTesseract.read(@path.join("images","test.jpg").to_s) do |image|
+      test = RTesseract.read(@path.join("images","test.jpg").to_s,{:lang=>'en'}) do |image|
         image = image.white_threshold(245).quantize(256,Magick::GRAYColorspace)
       end
       assert_equal test.to_s_without_spaces , "3R8Z"
