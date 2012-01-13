@@ -26,6 +26,15 @@ class RTesseract
     choose_processor!
   end
 
+  def self.read(src = nil, options = {}, &block)
+    raise RTesseract::ImageNotSelectedError if src == nil
+    image = Magick::Image.read(src.to_s).first
+    yield image
+    object = RTesseract.new("", options)
+    object.from_blob(image.to_blob)
+    object
+  end
+
   def source= src
     @value = ""
     @source = Pathname.new src

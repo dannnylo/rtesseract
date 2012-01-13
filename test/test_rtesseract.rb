@@ -86,5 +86,18 @@ class TestRtesseract < Test::Unit::TestCase
       test.from_blob(blob)
       assert_equal test.to_s_without_spaces , "HW9W"
     end
+
+    should "change image in a block" do
+      test = RTesseract.read(@path.join("images","test.png").to_s) do |image|
+        image = image.white_threshold(245)
+        image = image.quantize(256,Magick::GRAYColorspace)
+      end
+      assert_equal test.to_s_without_spaces , "HW9W"
+
+      test = RTesseract.read(@path.join("images","test.jpg").to_s) do |image|
+        image = image.white_threshold(245).quantize(256,Magick::GRAYColorspace)
+      end
+      assert_equal test.to_s_without_spaces , "3R8Z"
+    end
   end
 end
