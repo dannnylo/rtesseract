@@ -167,4 +167,3 @@ class RTesseract
     end
   end
 end
-

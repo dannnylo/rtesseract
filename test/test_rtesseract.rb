@@ -77,6 +77,14 @@ class TestRtesseract < Test::Unit::TestCase
       reg.convert
       assert_not_equal value , reg.generate_uid
     end
+
+    should "read image from blob" do
+      image = Magick::Image.read(@path.join("images","test.png").to_s).first
+      blob = image.white_threshold(245).quantize(256,Magick::GRAYColorspace).to_blob
+
+      test = RTesseract.new
+      test.from_blob(blob)
+      assert_equal test.to_s_without_spaces , "HW9W"
+    end
   end
 end
-
