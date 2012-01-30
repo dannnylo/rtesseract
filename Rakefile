@@ -5,7 +5,7 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "rtesseract"
-    gem.version = '0.0.10'
+    gem.version = '0.0.11'
     gem.summary = "Ruby library for working with the Tesseract OCR."
     gem.description = "Ruby library for working with the Tesseract OCR."
     gem.email = "dannnylo@gmail.com"
@@ -54,3 +54,4 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
+
