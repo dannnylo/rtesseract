@@ -1,11 +1,12 @@
 require "pathname"
 require "tempfile"
+require 'RMagick'
 
 require "rtesseract/errors"
 require "rtesseract/mixed"
 
 class RTesseract
-  VERSION = '0.0.10'
+  VERSION = '0.0.11'
   attr_accessor :options
   attr_writer   :lang
   attr_writer   :psm
@@ -13,7 +14,6 @@ class RTesseract
 
   def initialize(src = "", options = {})
     @uid     = options.delete(:uid) || nil
-    @source  = Pathname.new src
     @command = options.delete(:command) || "tesseract"
     @lang    = options.delete(:lang)    || options.delete("lang") || ""
     @psm     = options.delete(:psm)     || options.delete("psm")  || nil
@@ -24,6 +24,13 @@ class RTesseract
     @x, @y, @w, @h = []
     @processor = options.delete(:processor) || options.delete("processor")
     choose_processor!
+    if is_a_instance?(src)
+      @source = Pathname.new '.'
+      @instance = src
+    else
+      @instance = nil
+      @source  = Pathname.new src
+    end
   end
 
   def self.read(src = nil, options = {}, &block)
@@ -114,6 +121,7 @@ class RTesseract
     return "" if @options == {}
     conf = Tempfile.new("config")
     conf.write(config)
+    conf.flush
     conf.path
   end
 
@@ -152,7 +160,7 @@ class RTesseract
   #Output value
   def to_s
     return @value if @value != ""
-    if @source.file?
+    if @source.file? || @instance.present?
       convert
       @value
     else
@@ -176,3 +184,4 @@ class RTesseract
     end
   end
 end
+
