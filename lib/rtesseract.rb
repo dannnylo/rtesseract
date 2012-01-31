@@ -14,7 +14,7 @@ class RTesseract
 
   def initialize(src = "", options = {})
     @uid     = options.delete(:uid) || nil
-    @command = options.delete(:command) || "tesseract"
+    @command = options.delete(:command) || default_command
     @lang    = options.delete(:lang)    || options.delete("lang") || ""
     @psm     = options.delete(:psm)     || options.delete("psm")  || nil
     @clear_console_output = options.delete(:clear_console_output)
@@ -31,6 +31,12 @@ class RTesseract
       @instance = nil
       @source  = Pathname.new src
     end
+  end
+
+  def default_command
+    TesseractBin::Executables[:tesseract] || 'tesseract'
+  rescue
+    "tesseract"
   end
 
   def self.read(src = nil, options = {}, &block)
