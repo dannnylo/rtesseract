@@ -6,7 +6,7 @@ require "rtesseract/errors"
 require "rtesseract/mixed"
 
 class RTesseract
-  VERSION = '0.0.11'
+  VERSION = '0.0.12'
   attr_accessor :options
   attr_writer   :lang
   attr_writer   :psm
