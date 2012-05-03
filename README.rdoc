@@ -65,4 +65,4 @@ It's very simple to use rtesseract:
 
 == Copyright
 
-Copyright (c) 2010 Danilo Jeremias da Silva. See LICENSE for details.
+Copyright (c) 2012 Danilo Jeremias da Silva. See LICENSE for details.

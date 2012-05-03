@@ -17,6 +17,7 @@ class TestRtesseract < Test::Unit::TestCase
     should "translate image to text" do
       assert_equal RTesseract.new(@image_tiff).to_s_without_spaces , "43ZZ"
       assert_equal RTesseract.new(@path.join("images","test1.tif").to_s).to_s_without_spaces , "V2V4"
+      assert_equal RTesseract.new(@path.join("images","test with spaces.tif").to_s).to_s_without_spaces , "V2V4"
     end
 
     should "translate images .png, .jpg, .bmp" do
