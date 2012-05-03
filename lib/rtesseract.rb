@@ -142,7 +142,7 @@ class RTesseract
     generate_uid
     tmp_file  = Pathname.new(Dir::tmpdir).join("#{@uid}_#{@source.basename}")
     tmp_image = image_to_tiff
-    `#{@command} '#{tmp_image}' '#{tmp_file.to_s}' #{lang} #{psm} #{config_file} #{clear_console_output}`
+    `#{@command} "#{tmp_image}" "#{tmp_file.to_s}" #{lang} #{psm} #{config_file} #{clear_console_output}`
     @value = File.read("#{tmp_file.to_s}.txt").to_s
     @uid = nil
     remove_file([tmp_image,"#{tmp_file.to_s}.txt"])
@@ -155,7 +155,7 @@ class RTesseract
     generate_uid
     tmp_file  = Pathname.new(Dir::tmpdir).join("#{@uid}_#{@source.basename}")
     tmp_image = image_from_blob(blob)
-    `#{@command} '#{tmp_image}' '#{tmp_file.to_s}' #{lang} #{psm} #{config_file} #{clear_console_output}`
+    `#{@command} "#{tmp_image}" "#{tmp_file.to_s}" #{lang} #{psm} #{config_file} #{clear_console_output}`
     @value = File.read("#{tmp_file.to_s}.txt").to_s
     @uid = nil
     remove_file([tmp_image,"#{tmp_file.to_s}.txt"])
