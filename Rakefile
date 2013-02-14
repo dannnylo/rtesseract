@@ -13,8 +13,11 @@ begin
     gem.authors = ["Danilo Jeremias da Silva"]
     gem.add_development_dependency "jeweler", ">=1.4.0"
     gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
-
-    gem.add_runtime_dependency "rmagick", '>= 2.10.1'
+    if defined?(PLATFORM) && PLATFORM == 'java'
+      gem.add_runtime_dependency "rmagick4j", '>= 0'
+    else
+      gem.add_runtime_dependency "rmagick", '>= 2.10.1'
+    end
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
@@ -54,4 +57,3 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
-
