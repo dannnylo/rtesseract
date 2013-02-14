@@ -49,16 +49,28 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<jeweler>, [">= 1.4.0"])
       s.add_development_dependency(%q<thoughtbot-shoulda>, [">= 0"])
-      s.add_runtime_dependency(%q<rmagick>, [">= 2.10.1"])
+      if defined?(PLATFORM) && PLATFORM == 'java'
+        s.add_runtime_dependency('rmagick4j', [">= 0"])
+      else
+        s.add_runtime_dependency('rmagick', [">= 2.10.1"])
+      end
     else
       s.add_dependency(%q<jeweler>, [">= 1.4.0"])
       s.add_dependency(%q<thoughtbot-shoulda>, [">= 0"])
-      s.add_dependency(%q<rmagick>, [">= 2.10.1"])
+      if defined?(PLATFORM) && PLATFORM == 'java'
+        s.add_dependency('rmagick4j', [">= 0"])
+      else
+        s.add_dependency('rmagick', [">= 2.10.1"])
+      end
     end
   else
     s.add_dependency(%q<jeweler>, [">= 1.4.0"])
     s.add_dependency(%q<thoughtbot-shoulda>, [">= 0"])
-    s.add_dependency(%q<rmagick>, [">= 2.10.1"])
+    if defined?(PLATFORM) && PLATFORM == 'java'
+      s.add_dependency('rmagick4j', [">= 0"])
+    else
+      s.add_dependency('rmagick', [">= 2.10.1"])
+    end
   end
 end
 
