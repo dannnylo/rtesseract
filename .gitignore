@@ -47,5 +47,3 @@ pkg
 
 # For rubinius:
 #*.rbc
-
-Gemfile.lock
