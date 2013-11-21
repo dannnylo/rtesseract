@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
     "lib/rtesseract.rb",
     "lib/rtesseract/errors.rb",
     "lib/rtesseract/mixed.rb",
+    "rtesseract.gemspec",
     "spec/images/mixed.tif",
     "spec/images/test with spaces.tif",
     "spec/images/test.bmp",
