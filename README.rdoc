@@ -1,4 +1,5 @@
 = rtesseract
+{<img src="https://badge.fury.io/rb/rtesseract.png" alt="Gem Version" />}[http://badge.fury.io/rb/rtesseract]
 
 Ruby library for working with the Tesseract OCR.
 
