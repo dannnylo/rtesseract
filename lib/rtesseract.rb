@@ -1,19 +1,16 @@
 require "pathname"
 require "tempfile"
-require 'RMagick'
 
 require "rtesseract/errors"
 require "rtesseract/mixed"
 
 class RTesseract
-  VERSION = '0.0.13'
   attr_accessor :options
   attr_writer   :lang
   attr_writer   :psm
   attr_reader   :processor
 
   def initialize(src = "", options = {})
-    @uid     = options.delete(:uid) || nil
     @command = options.delete(:command) || default_command
     @lang    = options.delete(:lang)    || options.delete("lang") || ""
     @psm     = options.delete(:psm)     || options.delete("psm")  || nil
@@ -41,7 +38,12 @@ class RTesseract
 
   def self.read(src = nil, options = {}, &block)
     raise RTesseract::ImageNotSelectedError if src == nil
-    image = Magick::Image.read(src.to_s).first
+    processor = options.delete(:processor) || options.delete("processor")
+    if processor == "mini_magick"
+      image = MiniMagickProcessor.read_with_processor(src.to_s)
+    else
+      image = RMagickProcessor.read_with_processor(src.to_s)
+    end
     yield image
     object = RTesseract.new("", options)
     object.from_blob(image.to_blob)
@@ -67,20 +69,12 @@ class RTesseract
   #Remove files
   def remove_file(files=[])
     files.each do |file|
-      begin
-        File.unlink(file) if File.exist?(file)
-      rescue
-        system "rm -f #{file}"
-      end
+      file.close
+      file.unlink
     end
     true
   rescue
     raise RTesseract::TempFilesNotRemovedError
-  end
-
-  def generate_uid
-    @uid = rand.to_s[2,10] if @uid.nil?
-    @uid
   end
 
   # Select the language
@@ -139,26 +133,24 @@ class RTesseract
 
   #Convert image to string
   def convert
-    generate_uid
-    tmp_file  = Pathname.new(Dir::tmpdir).join("#{@uid}_#{@source.basename}")
+    path = Tempfile.new(["",".txt"]).path.to_s
     tmp_image = image_to_tiff
-    `#{@command} "#{tmp_image}" "#{tmp_file.to_s}" #{lang} #{psm} #{config_file} #{clear_console_output}`
-    @value = File.read("#{tmp_file.to_s}.txt").to_s
-    @uid = nil
-    remove_file([tmp_image,"#{tmp_file.to_s}.txt"])
+    `#{@command} "#{tmp_image.path}" "#{path.gsub(".txt","")}" #{lang} #{psm} #{config_file} #{clear_console_output}`
+    @value = File.read("#{path}").to_s
+    remove_file([tmp_image])
   rescue
     raise RTesseract::ConversionError
   end
 
   #Read image from memory blob
   def from_blob(blob)
-    generate_uid
-    tmp_file  = Pathname.new(Dir::tmpdir).join("#{@uid}_#{@source.basename}")
-    tmp_image = image_from_blob(blob)
-    `#{@command} "#{tmp_image}" "#{tmp_file.to_s}" #{lang} #{psm} #{config_file} #{clear_console_output}`
-    @value = File.read("#{tmp_file.to_s}.txt").to_s
-    @uid = nil
-    remove_file([tmp_image,"#{tmp_file.to_s}.txt"])
+    blob_file = Tempfile.new("blob")
+    blob_file.write(blob)
+    blob_file.rewind
+    blob_file.flush
+    self.source = blob_file.path
+    convert
+    remove_file([blob_file])
   rescue
     raise RTesseract::ConversionError
   end

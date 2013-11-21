@@ -25,7 +25,7 @@ class RTesseract
     def convert
       @value = ""
       @areas.each do |area|
-        image = RTesseract.new(@source.to_s,@options)
+        image = RTesseract.new(@source.to_s,@options.dup)
         image.crop!(area[:x].to_i, area[:y].to_i,  area[:width].to_i,  area[:height].to_i)
         @value << image.to_s
       end

@@ -7,7 +7,9 @@ Ruby library for working with the Tesseract OCR.
 To work properly rtesseract are needed:
 * Tesseract - Program
 * ImageMagic - Program
-* RMagick - Gem
+* RMagick or mini_magick - Gem
+
+Atention: Version 1.0.0 works fine with Ruby 2.0 and tesseract 3.0 and lower versions of rtesseract works fine with Ruby 1.8 and tesseract 2.0.4.
 
 == EXAMPLE USAGE
 
@@ -65,4 +67,4 @@ It's very simple to use rtesseract:
 
 == Copyright
 
-Copyright (c) 2012 Danilo Jeremias da Silva. See LICENSE for details.
+Copyright (c) 2013 Danilo Jeremias da Silva. See LICENSE for details.

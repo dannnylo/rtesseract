@@ -1,51 +1,45 @@
+# encoding: utf-8
+
 require 'rubygems'
+require 'bundler'
+begin
+  Bundler.setup(:default, :development)
+rescue Bundler::BundlerError => e
+  $stderr.puts e.message
+  $stderr.puts "Run `bundle install` to install missing gems"
+  exit e.status_code
+end
 require 'rake'
 
-begin
-  require 'jeweler'
-  Jeweler::Tasks.new do |gem|
-    gem.name = "rtesseract"
-    gem.version = '0.0.13'
-    gem.summary = "Ruby library for working with the Tesseract OCR."
-    gem.description = "Ruby library for working with the Tesseract OCR."
-    gem.email = "dannnylo@gmail.com"
-    gem.homepage = "http://github.com/dannnylo/rtesseract"
-    gem.authors = ["Danilo Jeremias da Silva"]
-    gem.add_development_dependency "jeweler", ">=1.4.0"
-    gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
+require 'jeweler'
+Jeweler::Tasks.new do |gem|
+  # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
+  gem.name = "rtesseract"
+  gem.homepage = "http://github.com/dannnylo/rtesseract"
+  gem.license = "MIT"
+  gem.summary = %Q{Ruby library for working with the Tesseract OCR.}
+  gem.description = %Q{Ruby library for working with the Tesseract OCR.}
+  gem.email = "dannnylo@gmail.com"
+  gem.authors = ["Danilo Jeremias da Silva"]
+  # dependencies defined in Gemfile
+end
+Jeweler::RubygemsDotOrgTasks.new
 
-    gem.add_runtime_dependency "rmagick", '>= 2.10.1'
-  end
-  Jeweler::GemcutterTasks.new
-rescue LoadError
-  puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
+require 'rspec/core'
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec) do |spec|
+  spec.pattern = FileList['spec/**/*_spec.rb']
 end
 
-require 'rake/testtask'
-Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
+desc "Code coverage detail"
+task :simplecov do
+  ENV['COVERAGE'] = "true"
+  Rake::Task['spec'].execute
 end
 
-begin
-  require 'rcov/rcovtask'
-  Rcov::RcovTask.new do |test|
-    test.libs << 'test'
-    test.pattern = 'test/**/test_*.rb'
-    test.verbose = true
-  end
-rescue LoadError
-  task :rcov do
-    abort "RCov is not available. In order to run rcov, you must: sudo gem install spicycode-rcov"
-  end
-end
+task :default => :spec
 
-task :test => :check_dependencies
-
-task :default => :test
-
-require 'rake/rdoctask'
+require 'rdoc/task'
 Rake::RDocTask.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 
@@ -54,4 +48,3 @@ Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
-
