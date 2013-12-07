@@ -5,7 +5,7 @@ module RMagickProcessor
     tmp_file = Tempfile.new(["",".tif"])
     cat = @instance || Magick::Image.read(@source.to_s).first
     cat.crop!(@x, @y, @w, @h) unless [@x, @y, @w, @h].compact == []
-    cat.write(tmp_file.path.to_s){self.compress = "none"}
+    cat.write(tmp_file.path.to_s){self.quality = 100}
     return tmp_file
   end
 
