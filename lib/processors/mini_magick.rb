@@ -1,3 +1,4 @@
+# encoding: UTF-8
 require 'mini_magick'
 module MiniMagickProcessor
   extend self

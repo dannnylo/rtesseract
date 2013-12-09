@@ -1,3 +1,4 @@
+# encoding: UTF-8
 class RTesseract
   class Mixed
     def initialize(src="", options={})
