@@ -159,7 +159,7 @@ class RTesseract
   #Output value
   def to_s
     return @value if @value != ""
-    if @source.file? || @instance.present?
+    if @source.file? || !@instance.nil?
       convert
       @value
     else

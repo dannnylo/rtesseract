@@ -20,6 +20,8 @@ describe "Rtesseract" do
     RTesseract.new(@path.join("images","test with spaces.tif").to_s).to_s_without_spaces.should eql("V2V4")
   end
 
+
+
   it " translate images .png, .jpg, .bmp" do
     RTesseract.new(@path.join("images","test.png").to_s).to_s_without_spaces.should eql("HW9W")
     RTesseract.new(@path.join("images","test.jpg").to_s).to_s_without_spaces.should eql("3R8Z")
@@ -75,6 +77,10 @@ describe "Rtesseract" do
     test = RTesseract.new("", {:psm => 7})
     test.from_blob(blob)
     test.to_s_without_spaces.should eql("HW9W")
+  end
+
+  it " use a instance" do
+    RTesseract.new(Magick::Image.read(@image_tiff.to_s).first).to_s_without_spaces.should eql("43ZZ")
   end
 
   it " change image in a block" do
