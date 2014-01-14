@@ -5,7 +5,9 @@ module MiniMagickProcessor
   def image_to_tiff
     tmp_file = Tempfile.new(["",".tif"])
     cat = @instance || read_with_processor(@source.to_s)
-    cat.format("tif")
+    cat.format("tif") do |c|
+      c.compress "None"
+    end
     cat.crop("#{@w}x#{@h}+#{@x}+#{@y}") unless [@x, @y, @w, @h].compact == []
     cat.write tmp_file.path.to_s
     return tmp_file
