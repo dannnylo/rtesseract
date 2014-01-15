@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "rtesseract"
-  s.version = "1.0.3"
+  s.version = "1.0.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Danilo Jeremias da Silva"]
-  s.date = "2013-12-20"
+  s.date = "2014-01-15"
   s.description = "Ruby library for working with the Tesseract OCR."
   s.email = "dannnylo@gmail.com"
   s.extra_rdoc_files = [
