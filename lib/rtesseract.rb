@@ -69,10 +69,14 @@ class RTesseract
 
   #Remove files
   def remove_file(files=[])
-    files.each do |file|
-      file.close
-      file.unlink
-    end
+      files.each do |file|
+        if file.is_a?(Tempfile)
+          file.close
+          file.unlink
+        else
+          File.unlink(file)
+        end
+      end
     true
   rescue
     raise RTesseract::TempFilesNotRemovedError
@@ -134,11 +138,11 @@ class RTesseract
 
   #Convert image to string
   def convert
-    path = Tempfile.new(["",".txt"]).path.to_s
+    path = Pathname.new(Dir::tmpdir).join("#{Time.now.to_f}#{rand(1500)}.txt").to_s
     tmp_image = image_to_tiff
     `#{@command} "#{tmp_image.path}" "#{path.gsub(".txt","")}" #{lang} #{psm} #{config_file} #{clear_console_output}`
-    @value = File.read("#{path}").to_s
-    remove_file([tmp_image])
+    @value = File.read(path).to_s
+    remove_file([tmp_image, path])
   rescue
     raise RTesseract::ConversionError
   end
