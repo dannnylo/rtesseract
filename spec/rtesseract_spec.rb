@@ -20,8 +20,6 @@ describe "Rtesseract" do
     RTesseract.new(@path.join("images","test with spaces.tif").to_s).to_s_without_spaces.should eql("V2V4")
   end
 
-
-
   it " translate images .png, .jpg, .bmp" do
     RTesseract.new(@path.join("images","test.png").to_s).to_s_without_spaces.should eql("HW9W")
     RTesseract.new(@path.join("images","test.jpg").to_s).to_s_without_spaces.should eql("3R8Z")
@@ -96,4 +94,8 @@ describe "Rtesseract" do
      test.to_s_without_spaces.should eql("3R8Z")
   end
 
+  it " get a error" do
+    expect{ RTesseract.new(@path.join("images","test.jpg").to_s, {:command => "tesseract_error"}).to_s }.to raise_error(RTesseract::ConversionError)
+    expect{ RTesseract.new(@path.join("images","test_not_exists.png").to_s).to_s }.to raise_error(RTesseract::ImageNotSelectedError)
+  end
 end

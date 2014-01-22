@@ -30,8 +30,8 @@ class RTesseract
         image.crop!(area[:x].to_i, area[:y].to_i,  area[:width].to_i,  area[:height].to_i)
         @value << image.to_s
       end
-    rescue
-      raise RTesseract::ConversionError
+    rescue => error
+      raise RTesseract::ConversionError.new(error)
     end
 
     #Output value
@@ -41,7 +41,7 @@ class RTesseract
         convert
         @value
       else
-        raise RTesseract::ImageNotSelectedError
+        raise RTesseract::ImageNotSelectedError.new({:source => @source})
       end
     end
 

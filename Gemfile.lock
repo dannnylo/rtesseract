@@ -1,7 +1,7 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    activesupport (4.0.1)
+    activesupport (4.0.2)
       i18n (~> 0.6, >= 0.6.4)
       minitest (~> 4.2)
       multi_json (~> 1.3)
@@ -25,7 +25,7 @@ GEM
     hashie (2.0.5)
     highline (1.6.20)
     httpauth (0.2.0)
-    i18n (0.6.5)
+    i18n (0.6.9)
     jeweler (1.8.8)
       builder
       bundler (~> 1.0)

@@ -12,15 +12,9 @@ class RTesseract
   attr_reader   :processor
 
   def initialize(src = "", options = {})
-    @command = options.delete(:command) || default_command
-    @lang    = options.delete(:lang)    || options.delete("lang") || ""
-    @psm     = options.delete(:psm)     || options.delete("psm")  || nil
-    @clear_console_output = options.delete(:clear_console_output)
-    @clear_console_output = true if @clear_console_output.nil?
-    @options = options
+    @options = command_line_options(options)
     @value   = ""
     @x, @y, @w, @h = []
-    @processor = options.delete(:processor) || options.delete("processor")
     choose_processor!
     if is_a_instance?(src)
       @source = Pathname.new '.'
@@ -29,6 +23,20 @@ class RTesseract
       @instance = nil
       @source  = Pathname.new src
     end
+  end
+
+  def command_line_options(options)
+    @command    = options.fetch(:command, default_command)
+    @lang       = options.fetch("lang", options.fetch(:lang, ""))
+    @psm        = options.fetch("psm", options.fetch(:psm, nil))
+    @processor  = options.fetch("processor", options.fetch(:processor, "rmagick"))
+    @debug      = options.fetch("debug", options.fetch(:debug, false))
+
+    #Disable clear console if debug mode
+    @clear_console_output = @debug ? false : options.fetch("clear_console_output", options.fetch(:clear_console_output, true))
+
+    options.delete_if{|k,v| ["command","lang","psm","processor","debug","clear_console_output"].include?(k.to_s)}
+    options
   end
 
   def default_command
@@ -78,8 +86,8 @@ class RTesseract
         end
       end
     true
-  rescue
-    raise RTesseract::TempFilesNotRemovedError
+  rescue => error
+    raise RTesseract::TempFilesNotRemovedError.new({:error => error, :files => files })
   end
 
   # Select the language
@@ -143,8 +151,8 @@ class RTesseract
     `#{@command} "#{tmp_image.path}" "#{path.gsub(".txt","")}" #{lang} #{psm} #{config_file} #{clear_console_output}`
     @value = File.read(path).to_s
     remove_file([tmp_image, path])
-  rescue
-    raise RTesseract::ConversionError
+  rescue => error
+    raise RTesseract::ConversionError.new(error)
   end
 
   #Read image from memory blob
@@ -156,8 +164,8 @@ class RTesseract
     self.source = blob_file.path
     convert
     remove_file([blob_file])
-  rescue
-    raise RTesseract::ConversionError
+  rescue => error
+    raise RTesseract::ConversionError.new(error)
   end
 
   #Output value
@@ -167,7 +175,7 @@ class RTesseract
       convert
       @value
     else
-      raise RTesseract::ImageNotSelectedError
+      raise RTesseract::ImageNotSelectedError.new({:source => @source, :instance => @instance})
     end
   end
 
