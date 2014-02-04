@@ -8,6 +8,7 @@ group :development do
   gem "jeweler", "~> 1.8.7"
   gem "simplecov", ">= 0"
   gem 'shoulda-matchers'
+  gem 'coveralls', require: false
 end
 
 group :test do
