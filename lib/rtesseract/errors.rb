@@ -1,4 +1,5 @@
 class RTesseract
+  # Class of error with storage of normal errors
   class ErrorWithMemory < StandardError
     attr_accessor :old_error
 
@@ -11,4 +12,3 @@ class RTesseract
   class ImageNotSelectedError < ErrorWithMemory; end
   class TempFilesNotRemovedError < ErrorWithMemory; end
 end
-

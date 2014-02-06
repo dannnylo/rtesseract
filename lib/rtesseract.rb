@@ -1,19 +1,20 @@
 # encoding: UTF-8
-require "pathname"
-require "tempfile"
+require 'pathname'
+require 'tempfile'
 
-require "rtesseract/errors"
-require "rtesseract/mixed"
+require 'rtesseract/errors'
+require 'rtesseract/mixed'
 
+# Ruby wrapper for Tesseract OCR
 class RTesseract
   attr_accessor :options
   attr_writer   :lang
   attr_writer   :psm
   attr_reader   :processor
 
-  def initialize(src = "", options = {})
+  def initialize(src = '', options = {})
     @options = command_line_options(options)
-    @value   = ""
+    @value   = ''
     @x, @y, @w, @h = []
     choose_processor!
     if is_a_instance?(src)
@@ -27,40 +28,42 @@ class RTesseract
 
   def command_line_options(options)
     @command    = options.fetch(:command, default_command)
-    @lang       = options.fetch("lang", options.fetch(:lang, ""))
-    @psm        = options.fetch("psm", options.fetch(:psm, nil))
-    @processor  = options.fetch("processor", options.fetch(:processor, "rmagick"))
-    @debug      = options.fetch("debug", options.fetch(:debug, false))
+    @lang       = options.fetch('lang', options.fetch(:lang, ''))
+    @psm        = options.fetch('psm', options.fetch(:psm, nil))
+    @processor  = options.fetch('processor', options.fetch(:processor, 'rmagick'))
+    @debug      = options.fetch('debug', options.fetch(:debug, false))
 
-    #Disable clear console if debug mode
-    @clear_console_output = @debug ? false : options.fetch("clear_console_output", options.fetch(:clear_console_output, true))
+    # Disable clear console if debug mode
+    @clear_console_output = @debug ? false : options.fetch('clear_console_output', options.fetch(:clear_console_output, true))
 
-    options.delete_if{|k,v| ["command","lang","psm","processor","debug","clear_console_output"].include?(k.to_s)}
+    options.delete_if do |k, v|
+      ['command', 'lang', 'psm', 'processor', 'debug', 'clear_console_output'].include?(k.to_s)
+    end
     options
   end
 
   def default_command
     TesseractBin::Executables[:tesseract] || 'tesseract'
   rescue
-    "tesseract"
+    'tesseract'
   end
 
   def self.read(src = nil, options = {}, &block)
     raise RTesseract::ImageNotSelectedError if src == nil
-    processor = options.delete(:processor) || options.delete("processor")
-    if processor == "mini_magick"
+    processor = options.delete(:processor) || options.delete('processor')
+    if processor == 'mini_magick'
       image = MiniMagickProcessor.read_with_processor(src.to_s)
     else
       image = RMagickProcessor.read_with_processor(src.to_s)
     end
     yield image
-    object = RTesseract.new("", options)
+    object = RTesseract.new('', options)
     object.from_blob(image.to_blob)
     object
   end
 
-  def source= src
-    @value = ""
+  def source=(src)
+    @value = ''
     @source = Pathname.new src
   end
 
@@ -69,14 +72,14 @@ class RTesseract
   end
 
 
-  #Crop image to convert
+  # Crop image to convert
   def crop!(x,y,width,height)
     @x, @y, @w, @h = x, y, width, height
     self
   end
 
-  #Remove files
-  def remove_file(files=[])
+  # Remove files
+  def remove_file(files = [])
       files.each do |file|
         if file.is_a?(Tempfile)
           file.close
@@ -105,24 +108,24 @@ class RTesseract
   def lang
     language = "#{@lang}".strip.downcase
     { #Aliases to languages names
-      "eng" => ["en","en-us","english"],
-      "ita" => ["it"],
-      "por" => ["pt","pt-br","portuguese"],
-      "spa" => ["sp"]
+      'eng' => ['en', 'en-us', 'english'],
+      'ita' => ['it'],
+      'por' => ['pt', 'pt-br', 'portuguese'],
+      'spa' => ['sp']
     }.each do |value,names|
       return " -l #{value} " if names.include? language
     end
     return " -l #{language} " if language.size > 0
-    ""
+    ''
   rescue
-    ""
+    ''
   end
 
   #Page Segment Mode
   def psm
-    @psm.nil? ? "" : " -psm #{@psm} "
+    @psm.nil? ? '' : " -psm #{@psm} "
   rescue
-    ""
+    ''
   end
 
   def config
@@ -132,7 +135,7 @@ class RTesseract
 
   def config_file
     return "" if @options == {}
-    conf = Tempfile.new("config")
+    conf = Tempfile.new('config')
     conf.write(config)
     conf.flush
     conf.path
@@ -140,8 +143,8 @@ class RTesseract
 
   #TODO: Clear console for MacOS or Windows
   def clear_console_output
-    return "" unless @clear_console_output
-    return "2>/dev/null" if File.exist?("/dev/null") #Linux console clear
+    return '' unless @clear_console_output
+    return '2>/dev/null' if File.exist?('/dev/null') # Linux console clear
   end
 
   #Convert image to string
@@ -155,9 +158,9 @@ class RTesseract
     raise RTesseract::ConversionError.new(error)
   end
 
-  #Read image from memory blob
+  # Read image from memory blob
   def from_blob(blob)
-    blob_file = Tempfile.new("blob")
+    blob_file = Tempfile.new('blob')
     blob_file.write(blob)
     blob_file.rewind
     blob_file.flush
@@ -168,9 +171,9 @@ class RTesseract
     raise RTesseract::ConversionError.new(error)
   end
 
-  #Output value
+  # Output value
   def to_s
-    return @value if @value != ""
+    return @value if @value != ''
     if @source.file? || !@instance.nil?
       convert
       @value
@@ -179,18 +182,18 @@ class RTesseract
     end
   end
 
-  #Remove spaces and break-lines
+  # Remove spaces and break-lines
   def to_s_without_spaces
-    to_s.gsub(" ","").gsub("\n","").gsub("\r","")
+    to_s.gsub(' ', '').gsub("\n", '').gsub("\r", '')
   end
 
   private
   def choose_processor!
     if @processor.to_s == "mini_magick"
-      require File.expand_path(File.dirname(__FILE__) + "/processors/mini_magick.rb")
+      require File.expand_path(File.dirname(__FILE__) + '/processors/mini_magick.rb')
       self.class.send(:include, MiniMagickProcessor)
     else
-      require File.expand_path(File.dirname(__FILE__) + "/processors/rmagick.rb")
+      require File.expand_path(File.dirname(__FILE__) + '/processors/rmagick.rb')
       self.class.send(:include, RMagickProcessor)
     end
   end
