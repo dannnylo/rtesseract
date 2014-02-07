@@ -12,5 +12,6 @@ end
 
 group :test do
   gem "rmagick"
+  gem "mini_magick"
 end
 

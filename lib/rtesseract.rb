@@ -75,10 +75,6 @@ class RTesseract
     @source = @processor.image?(src) ? src : Pathname.new(src)
   end
 
-  def image_name
-    @source.basename
-  end
-
   # Crop image to convert
   def crop!(x, y, width, height)
     @value = ''

@@ -16,6 +16,7 @@ describe "Rtesseract" do
 
   it " translate image to text" do
     RTesseract.new(@image_tiff).to_s_without_spaces.should eql("43ZZ")
+    RTesseract.new(@image_tiff, {:processor => 'mini_magick'}).to_s_without_spaces.should eql("43ZZ")
     RTesseract.new(@path.join("images","test1.tif").to_s).to_s_without_spaces.should eql("V2V4")
     RTesseract.new(@path.join("images","test with spaces.tif").to_s).to_s_without_spaces.should eql("V2V4")
   end
@@ -79,6 +80,13 @@ describe "Rtesseract" do
 
   it " use a instance" do
     RTesseract.new(Magick::Image.read(@image_tiff.to_s).first).to_s_without_spaces.should eql("43ZZ")
+    RMagickProcessor.a_name?('teste').should == false
+    RMagickProcessor.a_name?('rmagick').should == true
+    RMagickProcessor.a_name?('RMagickProcessor').should == true
+
+    MiniMagickProcessor.a_name?('teste').should == false
+    MiniMagickProcessor.a_name?('mini_magick').should == true
+    MiniMagickProcessor.a_name?('MiniMagickProcessor').should == true
   end
 
   it " change image in a block" do
@@ -89,9 +97,17 @@ describe "Rtesseract" do
     test.to_s_without_spaces.should eql("HW9W")
 
     test = RTesseract.read(@path.join("images","test.jpg").to_s,{:lang=>'en'}) do |image|
-      image = image.white_threshold(245).quantize(256,Magick::GRAYColorspace)
+      image = image.white_threshold(245).quantize(256, Magick::GRAYColorspace)
     end
-     test.to_s_without_spaces.should eql("3R8Z")
+    test.to_s_without_spaces.should eql("3R8Z")
+    
+    require 'mini_magick'
+
+    test = RTesseract.read(@path.join("images","test.jpg").to_s,{:lang=>'en', :processor => 'mini_magick'}) do |image|
+      #image.white_threshold(245)
+      image.gravity "south"
+    end
+    test.to_s_without_spaces.should eql("3R8Z")
   end
 
   it " get a error" do

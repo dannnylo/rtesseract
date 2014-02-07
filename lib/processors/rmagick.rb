@@ -6,7 +6,7 @@ module RMagickProcessor
   end
 
   def self.a_name?(name)
-    %w(rmagick MiniMagickProcessor).include?(name.to_s)
+    %w(rmagick RMagickProcessor).include?(name.to_s)
   end
 
   def self.image_to_tif(source, x = nil, y = nil, w = nil, h = nil)
