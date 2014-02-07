@@ -5,6 +5,10 @@ require 'tempfile'
 require 'rtesseract/errors'
 require 'rtesseract/mixed'
 
+# Processors
+require 'processors/rmagick.rb'
+require 'processors/mini_magick.rb'
+
 # Ruby wrapper for Tesseract OCR
 class RTesseract
   attr_accessor :options
@@ -12,33 +16,37 @@ class RTesseract
   attr_writer   :psm
   attr_reader   :processor
 
+  OPTIONS = %w(command lang psm processor debug clear_console_output)
+   # Aliases to languages names
+  LANGUAGES = {
+    'eng' => %w(en en-us english),
+    'ita' => %w(it),
+    'por' => %w(pt pt-br portuguese),
+    'spa' => %w(sp)
+  }
+
   def initialize(src = '', options = {})
     @options = command_line_options(options)
-    @value   = ''
-    @x, @y, @w, @h = []
+    @value, @x, @y, @w, @h = ['']
     choose_processor!
-    if is_a_instance?(src)
-      @source = Pathname.new '.'
-      @instance = src
-    else
-      @instance = nil
-      @source  = Pathname.new src
-    end
+    @source = @processor.image?(src) ? src : Pathname.new(src)
+  end
+
+  def fetch_option(options, name, default)
+    options.fetch(name.to_s, options.fetch(name, default))
   end
 
   def command_line_options(options)
-    @command    = options.fetch(:command, default_command)
-    @lang       = options.fetch('lang', options.fetch(:lang, ''))
-    @psm        = options.fetch('psm', options.fetch(:psm, nil))
-    @processor  = options.fetch('processor', options.fetch(:processor, 'rmagick'))
-    @debug      = options.fetch('debug', options.fetch(:debug, false))
+    @command    = fetch_option(options, :command, default_command)
+    @lang       = fetch_option(options, :lang, '')
+    @psm        = fetch_option(options, :psm, nil)
+    @processor  = fetch_option(options, :processor, 'rmagick')
+    @debug      = fetch_option(options, :debug, false)
 
     # Disable clear console if debug mode
-    @clear_console_output = @debug ? false : options.fetch('clear_console_output', options.fetch(:clear_console_output, true))
+    @clear_console_output = @debug ? false : fetch_option(options, :clear_console_output, true)
 
-    options.delete_if do |k, v|
-      ['command', 'lang', 'psm', 'processor', 'debug', 'clear_console_output'].include?(k.to_s)
-    end
+    options.delete_if { |k, v| OPTIONS.include?(k.to_s) }
     options
   end
 
@@ -49,7 +57,7 @@ class RTesseract
   end
 
   def self.read(src = nil, options = {}, &block)
-    raise RTesseract::ImageNotSelectedError if src == nil
+    fail RTesseract::ImageNotSelectedError if src.nil?
     processor = options.delete(:processor) || options.delete('processor')
     if processor == 'mini_magick'
       image = MiniMagickProcessor.read_with_processor(src.to_s)
@@ -64,37 +72,37 @@ class RTesseract
 
   def source=(src)
     @value = ''
-    @source = Pathname.new src
+    @source = @processor.image?(src) ? src : Pathname.new(src)
   end
 
   def image_name
     @source.basename
   end
 
-
   # Crop image to convert
-  def crop!(x,y,width,height)
-    @x, @y, @w, @h = x, y, width, height
+  def crop!(x, y, width, height)
+    @value = ''
+    @x, @y, @w, @h = x.to_i, y.to_i, width.to_i, height.to_i
     self
   end
 
   # Remove files
   def remove_file(files = [])
-      files.each do |file|
-        if file.is_a?(Tempfile)
-          file.close
-          file.unlink
-        else
-          File.unlink(file)
-        end
+    files.each do |file|
+      if file.is_a?(Tempfile)
+        file.close
+        file.unlink
+      else
+        File.unlink(file)
       end
+    end
     true
   rescue => error
-    raise RTesseract::TempFilesNotRemovedError.new({:error => error, :files => files })
+    raise RTesseract::TempFilesNotRemovedError.new(:error => error, :files => files)
   end
 
   # Select the language
-  #===Languages
+  # ===Languages
   ## * eng   - English
   ## * deu   - German
   ## * deu-f - German fraktur
@@ -107,12 +115,7 @@ class RTesseract
   ## Note: Make sure you have installed the language to tesseract
   def lang
     language = "#{@lang}".strip.downcase
-    { #Aliases to languages names
-      'eng' => ['en', 'en-us', 'english'],
-      'ita' => ['it'],
-      'por' => ['pt', 'pt-br', 'portuguese'],
-      'spa' => ['sp']
-    }.each do |value,names|
+    LANGUAGES.each do |value, names|
       return " -l #{value} " if names.include? language
     end
     return " -l #{language} " if language.size > 0
@@ -121,7 +124,7 @@ class RTesseract
     ''
   end
 
-  #Page Segment Mode
+  # Page Segment Mode
   def psm
     @psm.nil? ? '' : " -psm #{@psm} "
   rescue
@@ -130,11 +133,11 @@ class RTesseract
 
   def config
     @options ||= {}
-    @options.collect{|k,v| "#{k} #{v}" }.join("\n")
+    @options.map { |k, v| "#{k} #{v}" }.join("\n")
   end
 
   def config_file
-    return "" if @options == {}
+    return '' if @options == {}
     conf = Tempfile.new('config')
     conf.write(config)
     conf.flush
@@ -147,13 +150,19 @@ class RTesseract
     return '2>/dev/null' if File.exist?('/dev/null') # Linux console clear
   end
 
-  #Convert image to string
+  def image
+    (@image = @processor.image_to_tif(@source, @x, @y, @w, @h)).path
+  end
+
+  def text_file
+    @text_file = Pathname.new(Dir.tmpdir).join("#{Time.now.to_f}#{rand(1500)}.txt").to_s
+  end
+
+  # Convert image to string
   def convert
-    path = Pathname.new(Dir::tmpdir).join("#{Time.now.to_f}#{rand(1500)}.txt").to_s
-    tmp_image = image_to_tiff
-    `#{@command} "#{tmp_image.path}" "#{path.gsub(".txt","")}" #{lang} #{psm} #{config_file} #{clear_console_output}`
-    @value = File.read(path).to_s
-    remove_file([tmp_image, path])
+    `#{@command} "#{image}" "#{text_file.gsub('.txt', '')}" #{lang} #{psm} #{config_file} #{clear_console_output}`
+    @value = File.read(@text_file).to_s
+    remove_file([@image, @text_file])
   rescue => error
     raise RTesseract::ConversionError.new(error)
   end
@@ -174,11 +183,11 @@ class RTesseract
   # Output value
   def to_s
     return @value if @value != ''
-    if @source.file? || !@instance.nil?
+    if @processor.image?(@source) || @source.file?
       convert
       @value
     else
-      raise RTesseract::ImageNotSelectedError.new({:source => @source, :instance => @instance})
+      fail RTesseract::ImageNotSelectedError.new(@source)
     end
   end
 
@@ -188,14 +197,14 @@ class RTesseract
   end
 
   private
+
   def choose_processor!
-    if @processor.to_s == "mini_magick"
-      require File.expand_path(File.dirname(__FILE__) + '/processors/mini_magick.rb')
-      self.class.send(:include, MiniMagickProcessor)
-    else
-      require File.expand_path(File.dirname(__FILE__) + '/processors/rmagick.rb')
-      self.class.send(:include, RMagickProcessor)
-    end
+    @processor =  if MiniMagickProcessor.a_name?(@processor.to_s)
+                    MiniMagickProcessor
+                  else
+                    RMagickProcessor
+                  end
+    @processor.setup
   end
 end
 

@@ -1,14 +1,7 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    activesupport (4.0.2)
-      i18n (~> 0.6, >= 0.6.4)
-      minitest (~> 4.2)
-      multi_json (~> 1.3)
-      thread_safe (~> 0.1)
-      tzinfo (~> 0.3.37)
     addressable (2.3.5)
-    atomic (1.1.14)
     builder (3.2.2)
     coveralls (0.7.0)
       multi_json (~> 1.3)
@@ -31,7 +24,6 @@ GEM
     hashie (2.0.5)
     highline (1.6.20)
     httpauth (0.2.0)
-    i18n (0.6.9)
     jeweler (1.8.8)
       builder
       bundler (~> 1.0)
@@ -45,7 +37,6 @@ GEM
     jwt (0.1.8)
       multi_json (>= 1.5)
     mime-types (2.1)
-    minitest (4.7.5)
     multi_json (1.8.2)
     multi_xml (0.5.5)
     multipart-post (1.2.0)
@@ -72,8 +63,6 @@ GEM
     rspec-expectations (2.8.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.8.0)
-    shoulda-matchers (2.4.0)
-      activesupport (>= 3.0.0)
     simplecov (0.8.2)
       docile (~> 1.1.0)
       multi_json
@@ -82,10 +71,7 @@ GEM
     term-ansicolor (1.2.2)
       tins (~> 0.8)
     thor (0.18.1)
-    thread_safe (0.1.3)
-      atomic
     tins (0.13.1)
-    tzinfo (0.3.38)
 
 PLATFORMS
   ruby
@@ -97,5 +83,4 @@ DEPENDENCIES
   rdoc (~> 3.12)
   rmagick
   rspec (~> 2.8.0)
-  shoulda-matchers
   simplecov

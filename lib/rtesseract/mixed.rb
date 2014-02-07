@@ -24,9 +24,8 @@ class RTesseract
     # Convert parts of image to string
     def convert
       @value = ''
-      @areas.each do |area|
-        image = RTesseract.new(@source.to_s, @options.dup)
-        image.crop!(area[:x].to_i, area[:y].to_i, area[:width].to_i, area[:height].to_i)
+      @areas.each_with_object(RTesseract.new(@source.to_s, @options.dup)) do |area, image|
+        image.crop!(area[:x], area[:y], area[:width], area[:height])
         @value << image.to_s
       end
     rescue => error
@@ -40,7 +39,7 @@ class RTesseract
         convert
         @value
       else
-        raise RTesseract::ImageNotSelectedError.new({ :source => @source })
+        fail RTesseract::ImageNotSelectedError.new(@source)
       end
     end
 
@@ -50,4 +49,3 @@ class RTesseract
     end
   end
 end
-
