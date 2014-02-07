@@ -82,11 +82,11 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler (~> 1.0)
+  bundler
   coveralls
   jeweler (~> 2.0.1)
   mini_magick
-  rdoc (~> 3.12)
+  rdoc
   rmagick
-  rspec (~> 2.8.0)
+  rspec
   simplecov
