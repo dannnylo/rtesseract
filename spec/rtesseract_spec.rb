@@ -27,6 +27,18 @@ describe "Rtesseract" do
     RTesseract.new(@path.join("images","test.bmp").to_s).to_s_without_spaces.should eql("ZLA6")
   end
 
+  it " support  diferent processors" do
+    #Rmagick
+    RTesseract.new(@image_tiff).to_s_without_spaces.should eql("43ZZ")
+    RTesseract.new(@image_tiff, :processor => 'rmagick').to_s_without_spaces.should eql("43ZZ")
+
+    #MiniMagick
+    RTesseract.new(@image_tiff, :processor => 'mini_magick').to_s_without_spaces.should eql("43ZZ")
+
+    #QuickMagick
+    RTesseract.new(@image_tiff, :processor => 'quick_magick').to_s_without_spaces.should eql("43ZZ")
+  end
+
   it " change the image" do
     image = RTesseract.new(@image_tiff)
     image.to_s_without_spaces.should eql("43ZZ")
