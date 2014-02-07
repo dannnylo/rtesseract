@@ -76,6 +76,9 @@ describe "Rtesseract" do
     test = RTesseract.new("", {:psm => 7})
     test.from_blob(blob)
     test.to_s_without_spaces.should eql("HW9W")
+
+    test = RTesseract.new("", {:psm => 7})
+    expect{test.from_blob('') }.to raise_error(RTesseract::ConversionError)
   end
 
   it " use a instance" do
@@ -100,7 +103,7 @@ describe "Rtesseract" do
       image = image.white_threshold(245).quantize(256, Magick::GRAYColorspace)
     end
     test.to_s_without_spaces.should eql("3R8Z")
-    
+
     require 'mini_magick'
 
     test = RTesseract.read(@path.join("images","test.jpg").to_s,{:lang=>'en', :processor => 'mini_magick'}) do |image|
@@ -113,5 +116,12 @@ describe "Rtesseract" do
   it " get a error" do
     expect{ RTesseract.new(@path.join("images","test.jpg").to_s, {:command => "tesseract_error"}).to_s }.to raise_error(RTesseract::ConversionError)
     expect{ RTesseract.new(@path.join("images","test_not_exists.png").to_s).to_s }.to raise_error(RTesseract::ImageNotSelectedError)
+  end
+
+  it "remove a file" do
+    rtesseract = RTesseract.new('.')
+    rtesseract.remove_file(Tempfile.new('config'))
+
+    expect{ rtesseract.remove_file(Pathname.new(Dir.tmpdir).join("test_not_exists")) }.to raise_error(RTesseract::TempFilesNotRemovedError)
   end
 end

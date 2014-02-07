@@ -21,6 +21,8 @@ describe "Rtesseract::Mixed" do
       image.area(248, 24, 22, 22) # position of z
     end
     mix_block.to_s_without_spaces.should eql("43ZZ")
+    mix_block.clear_areas
+    mix_block.areas.should == []
 
     mix_block = RTesseract::Mixed.new(@image_tiff,{:areas => [
       {:x => 28,  :y=>19, :width=>25, :height=>25 }, #position of 4
@@ -29,5 +31,16 @@ describe "Rtesseract::Mixed" do
       {:x => 248,  :y=>24, :width=>22, :height=>22}  # position of z
     ],:psm=>7})
     mix_block.to_s_without_spaces.should eql("43ZZ")
+  end
+
+  it " get a error" do
+    mix_block = RTesseract::Mixed.new(@path.join("images","test_not_exists.png").to_s,{:areas => [{:x => 28,  :y=>19, :width=>25, :height=>25 }
+    ],:psm=>7})
+    expect{ mix_block.to_s_without_spaces }.to raise_error(RTesseract::ImageNotSelectedError)
+
+
+    mix_block = RTesseract::Mixed.new(@image_tiff,{:areas => [{:x => 28,  :y=>19, :width=>25, :height=>25 }
+    ],:psm=>7, :command => "tesseract_error"})
+    expect{ mix_block.to_s }.to raise_error(RTesseract::ConversionError)
   end
 end
