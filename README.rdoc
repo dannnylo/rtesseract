@@ -58,14 +58,14 @@ It's very simple to use rtesseract:
   ]})
   mix_block.to_s
 
-== OPTIONS
+=== OPTIONS
   
-  **Processors Options**
+Processors Options
 
-   - Rmagick default or 
-   - Mini_magick as RTesseract.new("test.jpg", :processor => "mini_magick")
+  - Rmagick default or 
+  - Mini_magick as RTesseract.new("test.jpg", :processor => "mini_magick")
 
-  **Language Options** 
+Language Options 
 
   - English default 
   - Or Select the language RTesseract.new("test.jpg", :lang => "deu")
