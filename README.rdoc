@@ -60,11 +60,11 @@ It's very simple to use rtesseract:
 
 === OPTIONS
   
-**Processors Options**  (*Rmagick is default*) 
+Processors Options  (_Rmagick_ is default) 
 
   RTesseract.new("test.jpg", :processor => "mini_magick")
 
-**Language Options** 
+Language Options 
 
   RTesseract.new("test.jpg", :lang => "deu")
      * eng   - English
