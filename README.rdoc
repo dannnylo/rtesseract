@@ -58,6 +58,26 @@ It's very simple to use rtesseract:
   ]})
   mix_block.to_s
 
+=== OPTIONS
+  
+Processors Options  (_Rmagick_ is default) 
+
+  RTesseract.new("test.jpg", :processor => "mini_magick")
+
+Language Options 
+
+  RTesseract.new("test.jpg", :lang => "deu")
+     * eng   - English
+     * deu   - German
+     * deu-f - German fraktur
+     * fra   - French
+     * ita   - Italian
+     * nld   - Dutch
+     * por   - Portuguese
+     * spa   - Spanish
+     * vie   - Vietnamese
+  Note: Make sure you have installed the language to tesseract
+
 == Contributing to rtesseract
  
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.
