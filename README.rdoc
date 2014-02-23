@@ -3,7 +3,7 @@
 {<img src="https://travis-ci.org/dannnylo/rtesseract.png?branch=master" alt="Build Status" />}[https://travis-ci.org/dannnylo/rtesseract]
 {<img src="https://coveralls.io/repos/dannnylo/rtesseract/badge.png?branch=master" alt="Coverage Status" />}[https://coveralls.io/r/dannnylo/rtesseract?branch=master]
 {<img src="https://codeclimate.com/github/dannnylo/rtesseract.png" />}[https://codeclimate.com/github/dannnylo/rtesseract]
-{<img src="http://img.shields.io/gittip/dannnylo.png" />}[https://www.gittip.com/dannnylo/]
+{<img src="http://badgr.co/gittip/dannnylo.png" />}[https://www.gittip.com/dannnylo/]
 
 Ruby library for working with the Tesseract OCR.
 
