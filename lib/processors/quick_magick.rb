@@ -14,7 +14,7 @@ module QuickMagickProcessor
     cat = source.is_a?(Pathname) ? read_with_processor(source.to_s) : source
     cat.compress = 'None'
     cat.format = 'tif'
-    cat.crop("#{w}x#{h}+#{x}+#{y}") unless [x, y, w, h].compact == []
+    cat.crop("#{w}x#{h}+#{x}+#{y}") if (x.to_f + y.to_f + w.to_f + h.to_f) > 0
     cat.write tmp_file.path.to_s
     tmp_file
   end
