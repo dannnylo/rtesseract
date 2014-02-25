@@ -102,6 +102,10 @@ describe "Rtesseract" do
     MiniMagickProcessor.a_name?('teste').should == false
     MiniMagickProcessor.a_name?('mini_magick').should == true
     MiniMagickProcessor.a_name?('MiniMagickProcessor').should == true
+
+    QuickMagickProcessor.a_name?('teste').should == false
+    QuickMagickProcessor.a_name?('quick_magick').should == true
+    QuickMagickProcessor.a_name?('QuickMagickProcessor').should == true
   end
 
   it " change image in a block" do
@@ -115,8 +119,6 @@ describe "Rtesseract" do
       image = image.white_threshold(245).quantize(256, Magick::GRAYColorspace)
     end
     test.to_s_without_spaces.should eql("3R8Z")
-
-    require 'mini_magick'
 
     test = RTesseract.read(@path.join("images","test.jpg").to_s,{:lang=>'en', :processor => 'mini_magick'}) do |image|
       #image.white_threshold(245)

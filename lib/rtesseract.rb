@@ -60,11 +60,17 @@ class RTesseract
   def self.read(src = nil, options = {}, &block)
     fail RTesseract::ImageNotSelectedError if src.nil?
     processor = options.delete(:processor) || options.delete('processor')
-    if processor == 'mini_magick'
-      image = MiniMagickProcessor.read_with_processor(src.to_s)
+    processor = if MiniMagickProcessor.a_name?(processor.to_s)
+      MiniMagickProcessor
+    elsif QuickMagickProcessor.a_name?(processor.to_s)
+      QuickMagickProcessor
     else
-      image = RMagickProcessor.read_with_processor(src.to_s)
+      RMagickProcessor
     end
+
+    processor.setup
+    image = processor.read_with_processor(src.to_s)
+
     yield image
     object = RTesseract.new('', options)
     object.from_blob(image.to_blob)
