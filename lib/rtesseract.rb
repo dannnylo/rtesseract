@@ -29,7 +29,7 @@ class RTesseract
   def initialize(src = '', options = {})
     @options = command_line_options(options)
     @value, @x, @y, @w, @h = ['']
-    choose_processor!
+    @processor = RTesseract.choose_processor!(@processor)
     @source = @processor.image?(src) ? src : Pathname.new(src)
   end
 
@@ -59,16 +59,7 @@ class RTesseract
 
   def self.read(src = nil, options = {}, &block)
     fail RTesseract::ImageNotSelectedError if src.nil?
-    processor = options.delete(:processor) || options.delete('processor')
-    processor = if MiniMagickProcessor.a_name?(processor.to_s)
-      MiniMagickProcessor
-    elsif QuickMagickProcessor.a_name?(processor.to_s)
-      QuickMagickProcessor
-    else
-      RMagickProcessor
-    end
-
-    processor.setup
+    processor = RTesseract.choose_processor!(options.delete(:processor) || options.delete('processor'))
     image = processor.read_with_processor(src.to_s)
 
     yield image
@@ -129,9 +120,7 @@ class RTesseract
 
   # Page Segment Mode
   def psm
-    @psm.nil? ? '' : " -psm #{@psm} "
-  rescue
-    ''
+    (@psm.nil? ? '' : " -psm #{@psm} ") rescue ''
   end
 
   def config
@@ -199,17 +188,16 @@ class RTesseract
     to_s.gsub(' ', '').gsub("\n", '').gsub("\r", '')
   end
 
-  private
-
-  def choose_processor!
-    @processor =  if MiniMagickProcessor.a_name?(@processor.to_s)
+  def self.choose_processor!(processor)
+    processor =  if MiniMagickProcessor.a_name?(processor.to_s)
                     MiniMagickProcessor
-                  elsif QuickMagickProcessor.a_name?(@processor.to_s)
+                  elsif QuickMagickProcessor.a_name?(processor.to_s)
                     QuickMagickProcessor
                   else
                     RMagickProcessor
                   end
-    @processor.setup
+    processor.setup
+    processor
   end
 end
 
