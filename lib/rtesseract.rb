@@ -120,7 +120,9 @@ class RTesseract
 
   # Page Segment Mode
   def psm
-    (@psm.nil? ? '' : " -psm #{@psm} ") rescue ''
+    (@psm.nil? ? '' : " -psm #{@psm} ")
+  rescue
+    ''
   end
 
   def config

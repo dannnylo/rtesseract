@@ -1,6 +1,11 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 # encoding: UTF-8
 require 'pathname'
+class MakeStringError
+  def to_s
+    raise "error"
+  end
+end
 
 describe "Rtesseract" do
   before do
@@ -64,6 +69,9 @@ describe "Rtesseract" do
     RTesseract.new(@image_tiff,{:lang=>"por"}).to_s_without_spaces.should eql("43ZZ")
 
     RTesseract.new(@image_tiff,{:lang=>"eng"}).lang.should eql(" -l eng ")
+
+    #Inválid lang object
+    RTesseract.new(@image_tiff,{:lang=>MakeStringError.new}).lang.should eql("")
   end
 
   it " be configurable" do
@@ -130,6 +138,9 @@ describe "Rtesseract" do
   it " get a error" do
     expect{ RTesseract.new(@path.join("images","test.jpg").to_s, {:command => "tesseract_error"}).to_s }.to raise_error(RTesseract::ConversionError)
     expect{ RTesseract.new(@path.join("images","test_not_exists.png").to_s).to_s }.to raise_error(RTesseract::ImageNotSelectedError)
+
+    #Inválid psm object
+    RTesseract.new(@image_tiff,{:psm=>MakeStringError.new}).psm.should eql("")
   end
 
   it "remove a file" do

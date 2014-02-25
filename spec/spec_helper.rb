@@ -7,7 +7,7 @@ require "simplecov"
 SimpleCov.start do
   add_filter "/spec/"
 end
-Coveralls.wear!
+#Coveralls.wear!
 
 require 'rtesseract'
 # Requires supporting files with custom matchers and macros, etc,
