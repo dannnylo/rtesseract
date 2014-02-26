@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib"]
   s.authors = ["Danilo Jeremias da Silva"]
-  s.date = "2014-02-21"
+  s.date = "2014-02-26"
   s.description = "Ruby library for working with the Tesseract OCR."
   s.email = "dannnylo@gmail.com"
   s.extra_rdoc_files = [
