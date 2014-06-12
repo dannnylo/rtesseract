@@ -163,7 +163,7 @@ class RTesseract
 
   # Read image from memory blob
   def from_blob(blob)
-    blob_file = Tempfile.new('blob')
+    blob_file = Tempfile.new('blob', :encoding => 'ascii-8bit')
     blob_file.write(blob)
     blob_file.rewind
     blob_file.flush
