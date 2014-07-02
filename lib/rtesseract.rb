@@ -4,6 +4,7 @@ require 'tempfile'
 
 require 'rtesseract/errors'
 require 'rtesseract/mixed'
+require 'rtesseract/box'
 
 # Processors
 require 'processors/rmagick.rb'
