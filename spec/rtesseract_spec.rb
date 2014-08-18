@@ -118,8 +118,9 @@ describe "Rtesseract" do
 
   it " change image in a block" do
     test = RTesseract.read(@path.join("images","test.png").to_s) do |image|
-      image = image.white_threshold(245)
-      image = image.quantize(256,Magick::GRAYColorspace)
+      #image = image.white_threshold(245)
+      #image = image.quantize(256,Magick::GRAYColorspace)
+      image.rotate(90)
     end
     test.to_s_without_spaces.should eql("HW9W")
 

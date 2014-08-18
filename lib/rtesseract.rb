@@ -13,6 +13,7 @@ require 'processors/quick_magick.rb'
 
 # Ruby wrapper for Tesseract OCR
 class RTesseract
+  attr_accessor :image_object
   attr_accessor :options
   attr_writer   :lang
   attr_writer   :psm
@@ -63,10 +64,21 @@ class RTesseract
     processor = RTesseract.choose_processor!(options.delete(:processor) || options.delete('processor'))
     image = processor.read_with_processor(src.to_s)
 
-    yield image
+    yield(image)
     object = RTesseract.new('', options)
     object.from_blob(image.to_blob)
     object
+
+    # object = RTesseract.new(src, options)
+    # object.read(&block)
+    # object
+  end
+
+  def read(&block)
+    image = @processor.read_with_processor(@source.to_s)
+    new_image = yield(image)
+    self.from_blob(new_image.to_blob, File.extname(@source.to_s))
+    self
   end
 
   def source=(src)
@@ -163,8 +175,8 @@ class RTesseract
   end
 
   # Read image from memory blob
-  def from_blob(blob)
-    blob_file = Tempfile.new('blob', :encoding => 'ascii-8bit')
+  def from_blob(blob, ext = '')
+    blob_file = Tempfile.new(['blob',ext], :encoding => 'ascii-8bit')
     blob_file.binmode
     blob_file.write(blob)
     blob_file.rewind
