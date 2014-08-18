@@ -23,7 +23,7 @@ class RTesseract
 
     # Convert parts of image to string
     def convert
-      @value = ''
+      @value = []
       @areas.each_with_object(RTesseract.new(@source.to_s, @options.dup)) do |area, image|
         image.crop!(area[:x], area[:y], area[:width], area[:height])
         @value << image.to_s
@@ -37,7 +37,7 @@ class RTesseract
       return @value if @value != ''
       if @source.file?
         convert
-        @value
+        @value.join
       else
         fail RTesseract::ImageNotSelectedError.new(@source)
       end
