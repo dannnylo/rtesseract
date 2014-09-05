@@ -78,6 +78,15 @@ Language Options
      * spa   - Spanish
      * vie   - Vietnamese
   Note: Make sure you have installed the language to tesseract
+  
+Other Options
+
+  RTesseract.new("test.jpg", options: :digits)  # Only digit recognition
+  
+  OR
+  
+  RTesseract.new("test.jpg", options: [:digits, :quiet])
+  
 
 == Contributing to rtesseract
  
