@@ -80,7 +80,7 @@ describe "Rtesseract" do
      expect(RTesseract.new(@image_tiff, options: :digits).options_cmd).to eql([:digits])
      expect(RTesseract.new(@image_tiff, options: [:digits, :quiet]).options_cmd).to eql([:digits, :quiet])
   end
-  
+
   it " be configurable" do
      RTesseract.new(@image_tiff,{:chop_enable=>0,:enable_assoc=>0,:display_text=>0}).config.should eql("chop_enable 0\nenable_assoc 0\ndisplay_text 0")
      RTesseract.new(@image_tiff,{:chop_enable=>0}).config.should eql("chop_enable 0")
