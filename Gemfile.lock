@@ -25,7 +25,7 @@ GEM
       nokogiri (~> 1.6.3)
       oauth2
     hashie (3.4.0)
-    highline (1.7.0)
+    highline (1.7.1)
     jeweler (2.0.1)
       builder
       bundler (>= 1.0)
