@@ -17,7 +17,8 @@ class RTesseract
   attr_writer   :psm
   attr_reader   :processor
   attr_accessor :options_cmd
-
+  attr_accessor :source
+  
   OPTIONS = %w(command lang psm processor debug clear_console_output options)
    # Aliases to languages names
   LANGUAGES = {
@@ -148,7 +149,10 @@ class RTesseract
   end
 
   def image
-    (@image = @processor.image_to_tif(@source, @x, @y, @w, @h)).path
+    # tesseract fails on .tif images - this should be optional
+    # for now, let's just process the given image and let the user preprocess 
+    #(@image = @processor.image_to_tif(@source, @x, @y, @w, @h)).path
+    @image = @source
   end
 
   def text_file
