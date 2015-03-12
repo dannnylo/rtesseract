@@ -64,6 +64,11 @@ It's very simple to use rtesseract:
 Processors Options  (_Rmagick_ is default) 
 
   RTesseract.new("test.jpg", :processor => "mini_magick")
+  RTesseract.new("test.jpg", :processor => "quick_magick")
+
+  Note: For non process the image use NoneProcessor
+  
+  RTesseract.new("test.jpg", :processor => "none")
 
 Language Options 
 
