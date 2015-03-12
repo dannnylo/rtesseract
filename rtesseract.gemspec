@@ -6,7 +6,7 @@
 
 Gem::Specification.new do |s|
   s.name = "rtesseract"
-  s.version = "1.2.6"
+  s.version = "1.2.5w"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib"]
