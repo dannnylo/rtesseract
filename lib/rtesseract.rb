@@ -163,7 +163,7 @@ class RTesseract
   def convert
     `#{@command} "#{image}" "#{text_file.gsub('.txt', '')}" #{lang} #{psm} #{config_file} #{clear_console_output} #{@options_cmd.join(' ')}`
     @value = File.read(@text_file).to_s
-    remove_file([@image, @text_file])
+    remove_file([@text_file])
   rescue => error
     raise RTesseract::ConversionError.new(error)
   end
