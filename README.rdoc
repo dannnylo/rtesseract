@@ -3,7 +3,7 @@
 {<img src="https://travis-ci.org/dannnylo/rtesseract.png?branch=master" alt="Build Status" />}[https://travis-ci.org/dannnylo/rtesseract]
 {<img src="https://coveralls.io/repos/dannnylo/rtesseract/badge.png?branch=master" alt="Coverage Status" />}[https://coveralls.io/r/dannnylo/rtesseract?branch=master]
 {<img src="https://codeclimate.com/github/dannnylo/rtesseract.png" />}[https://codeclimate.com/github/dannnylo/rtesseract]
-{<img src="http://badgr.co/gittip/dannnylo.png" />}[https://www.gittip.com/dannnylo/]
+
 
 Ruby library for working with the Tesseract OCR.
 
@@ -67,7 +67,7 @@ Processors Options  (_Rmagick_ is default)
   RTesseract.new("test.jpg", :processor => "quick_magick")
 
   Note: For non process the image use NoneProcessor
-  
+
   RTesseract.new("test.jpg", :processor => "none")
 
 Language Options 
