@@ -9,6 +9,7 @@ require 'rtesseract/mixed'
 require 'processors/rmagick.rb'
 require 'processors/mini_magick.rb'
 require 'processors/quick_magick.rb'
+require 'processors/none.rb'
 
 # Ruby wrapper for Tesseract OCR
 class RTesseract
@@ -199,6 +200,8 @@ class RTesseract
                     MiniMagickProcessor
                   elsif QuickMagickProcessor.a_name?(processor.to_s)
                     QuickMagickProcessor
+                  elsif NoneProcessor.a_name?(processor.to_s)
+                    NoneProcessor
                   else
                     RMagickProcessor
                   end
