@@ -37,12 +37,15 @@ describe "Rtesseract" do
     #Rmagick
     RTesseract.new(@image_tif).to_s_without_spaces.should eql("43XF")
     RTesseract.new(@image_tif, :processor => 'rmagick').to_s_without_spaces.should eql("43XF")
+    RTesseract.new(@path.join("images","test.png").to_s, :processor => 'rmagick').to_s_without_spaces.should eql("HW9W")
 
     #MiniMagick
     RTesseract.new(@image_tif, :processor => 'mini_magick').to_s_without_spaces.should eql("43XF")
+    RTesseract.new(@path.join("images","test.png").to_s, :processor => 'mini_magick').to_s_without_spaces.should eql("HW9W")
 
     #QuickMagick
     RTesseract.new(@image_tif, :processor => 'quick_magick').to_s_without_spaces.should eql("43XF")
+    RTesseract.new(@path.join("images","test.png").to_s, :processor => 'quick_magick').to_s_without_spaces.should eql("HW9W")
 
     #NoneMagick
     RTesseract.new(@image_tif, :processor => 'none').to_s_without_spaces.should eql("43XF")
