@@ -3,7 +3,7 @@
 {<img src="https://travis-ci.org/dannnylo/rtesseract.png?branch=master" alt="Build Status" />}[https://travis-ci.org/dannnylo/rtesseract]
 {<img src="https://coveralls.io/repos/dannnylo/rtesseract/badge.png?branch=master" alt="Coverage Status" />}[https://coveralls.io/r/dannnylo/rtesseract?branch=master]
 {<img src="https://codeclimate.com/github/dannnylo/rtesseract.png" />}[https://codeclimate.com/github/dannnylo/rtesseract]
-{<img src="http://badgr.co/gittip/dannnylo.png" />}[https://www.gittip.com/dannnylo/]
+
 
 Ruby library for working with the Tesseract OCR.
 
@@ -11,7 +11,7 @@ Ruby library for working with the Tesseract OCR.
 
 To work properly rtesseract are needed:
 * Tesseract - Program
-* ImageMagic - Program
+* ImageMagick - Program
 * RMagick or mini_magick or quick_magick - Gem
 
 Atention: Version 1.0.0 works fine with Ruby 2.0 and tesseract 3.0 and lower versions of rtesseract works fine with Ruby 1.8 and tesseract 2.0.4.
@@ -64,6 +64,11 @@ It's very simple to use rtesseract:
 Processors Options  (_Rmagick_ is default) 
 
   RTesseract.new("test.jpg", :processor => "mini_magick")
+  RTesseract.new("test.jpg", :processor => "quick_magick")
+
+  Note: For non process the image use NoneProcessor
+
+  RTesseract.new("test.jpg", :processor => "none")
 
 Language Options 
 
@@ -78,6 +83,15 @@ Language Options
      * spa   - Spanish
      * vie   - Vietnamese
   Note: Make sure you have installed the language to tesseract
+  
+Other Options
+
+  RTesseract.new("test.jpg", options: :digits)  # Only digit recognition
+  
+  OR
+  
+  RTesseract.new("test.jpg", options: [:digits, :quiet])
+  
 
 == Contributing to rtesseract
  

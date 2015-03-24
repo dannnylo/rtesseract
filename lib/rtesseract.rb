@@ -10,6 +10,7 @@ require 'rtesseract/box'
 require 'processors/rmagick.rb'
 require 'processors/mini_magick.rb'
 require 'processors/quick_magick.rb'
+require 'processors/none.rb'
 
 # Ruby wrapper for Tesseract OCR
 class RTesseract
@@ -18,8 +19,9 @@ class RTesseract
   attr_writer   :lang
   attr_writer   :psm
   attr_reader   :processor
+  attr_accessor :options_cmd
 
-  OPTIONS = %w(command lang psm processor debug clear_console_output)
+  OPTIONS = %w(command lang psm processor debug clear_console_output options)
    # Aliases to languages names
   LANGUAGES = {
     'eng' => %w(en en-us english),
@@ -40,11 +42,13 @@ class RTesseract
   end
 
   def command_line_options(options)
-    @command    = fetch_option(options, :command, default_command)
-    @lang       = fetch_option(options, :lang, '')
-    @psm        = fetch_option(options, :psm, nil)
-    @processor  = fetch_option(options, :processor, 'rmagick')
-    @debug      = fetch_option(options, :debug, false)
+    @command     = fetch_option(options, :command, default_command)
+    @lang        = fetch_option(options, :lang, '')
+    @psm         = fetch_option(options, :psm, nil)
+    @processor   = fetch_option(options, :processor, 'rmagick')
+    @debug       = fetch_option(options, :debug, false)
+    @options_cmd = fetch_option(options, :options, [])
+    @options_cmd = [@options_cmd] unless @options_cmd.kind_of?(Array)
 
     # Disable clear console if debug mode
     @clear_console_output = @debug ? false : fetch_option(options, :clear_console_output, true)
@@ -167,7 +171,7 @@ class RTesseract
 
   # Convert image to string
   def convert
-    `#{@command} "#{image}" "#{text_file.gsub('.txt', '')}" #{lang} #{psm} #{config_file} #{clear_console_output}`
+    `#{@command} "#{image}" "#{text_file.gsub('.txt', '')}" #{lang} #{psm} #{config_file} #{clear_console_output} #{@options_cmd.join(' ')}`
     @value = File.read(@text_file).to_s
     remove_file([@image, @text_file])
   rescue => error
@@ -209,6 +213,8 @@ class RTesseract
                     MiniMagickProcessor
                   elsif QuickMagickProcessor.a_name?(processor.to_s)
                     QuickMagickProcessor
+                  elsif NoneProcessor.a_name?(processor.to_s)
+                    NoneProcessor
                   else
                     RMagickProcessor
                   end
