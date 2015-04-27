@@ -93,6 +93,7 @@ DEPENDENCIES
   coveralls
   jeweler (~> 2.0.1)
   mini_magick
+  nokogiri
   quick_magick
   rdoc
   rmagick

@@ -5,16 +5,29 @@ describe "Rtesseract::Box" do
   before do
     @path = Pathname.new(__FILE__.gsub("rtesseract_box_spec.rb","")).expand_path
     @image_tiff = @path.join("images","test.tif").to_s
+    @words_image = @path.join("images","test_words.png").to_s
   end
 
 
   it "bounding box" do
-    RTesseract::Box.new(@image_tiff).characters.is_a?(Array).should == true
-    RTesseract::Box.new(@image_tiff).characters.should eql([
-      {:char=>"4", :x_start=>145, :y_start=>14, :x_end=>159, :y_end=>33},
-      {:char=>"3", :x_start=>184, :y_start=>14, :x_end=>196, :y_end=>33},
-      {:char=>"X", :x_start=>222, :y_start=>14, :x_end=>238, :y_end=>32},
-      {:char=>"F", :x_start=>260, :y_start=>14, :x_end=>273, :y_end=>32}]
-    )
+    expect(RTesseract.new(@words_image).to_s).to eql("If you are a friend,\nyou speak the password,\nand the doors will open.\n\n")
+    expect(RTesseract::Box.new(@words_image).words).to eql([
+      {:word => 'If',  :x_start=>52, :y_start=>13, :x_end=>63, :y_end=>27},
+      {:word => 'you', :x_start=>69, :y_start=>17, :x_end=>100, :y_end=>31},
+      {:word => 'are', :x_start=>108, :y_start=>17, :x_end=>136, :y_end=>27},
+      {:word => 'a', :x_start=>143, :y_start=>17, :x_end=>151, :y_end=>27},
+      {:word => 'friend,', :x_start=>158, :y_start=>13, :x_end=>214, :y_end=>29},
+      {:word => 'you', :x_start=>51, :y_start=>39, :x_end=>82, :y_end=>53},
+      {:word => 'speak', :x_start=>90, :y_start=>35, :x_end=>140, :y_end=>53},
+      {:word => 'the', :x_start=>146, :y_start=>35, :x_end=>174, :y_end=>49},
+      {:word => 'password,', :x_start=>182, :y_start=>35, :x_end=>267, :y_end=>53},
+      {:word => 'and', :x_start=>51, :y_start=>57, :x_end=>81, :y_end=>71},
+      {:word => 'the', :x_start=>89, :y_start=>57, :x_end=>117, :y_end=>71},
+      {:word => 'doors', :x_start=>124, :y_start=>57, :x_end=>172, :y_end=>71},
+      {:word => 'will', :x_start=>180, :y_start=>57, :x_end=>208, :y_end=>71},
+      {:word => 'open.', :x_start=>216, :y_start=>61, :x_end=>263, :y_end=>75}
+    ])
+
+    expect(RTesseract::Box.new(@image_tiff).words.is_a?(Array)).to eql(true)
   end
 end
