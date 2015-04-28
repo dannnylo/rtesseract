@@ -34,6 +34,8 @@ class RTesseract
       convert_text(File.read(@text_file).to_s)
       remove_file([@image, @text_file])
     rescue => error
+      puts error.inspect
+      puts error.backtrace
       raise RTesseract::ConversionError.new(error)
     end
 
