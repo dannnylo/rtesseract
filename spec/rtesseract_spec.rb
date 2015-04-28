@@ -133,6 +133,12 @@ describe "Rtesseract" do
     test = RTesseract.read(@path.join("images","test.png").to_s){}
     expect(test.class).to eql(RTesseract)
 
+    test = RTesseract.new(@image_tif)
+    test.read do |image|
+      image = image.quantize(256, Magick::GRAYColorspace)
+    end
+    expect(test.to_s_without_spaces).to eql("43XF")
+
     test = RTesseract.read(@path.join("images","test.png").to_s) do |image|
       #image = image.white_threshold(245)
       #image = image.quantize(256,Magick::GRAYColorspace)
