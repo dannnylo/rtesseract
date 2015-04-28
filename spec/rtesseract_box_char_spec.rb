@@ -75,5 +75,8 @@ describe "Rtesseract::BoxChar" do
       {:char => 'n', :x_start=>250, :y_start=>47, :x_end=>258, :y_end=>57},
       {:char => '.', :x_start=>261, :y_start=>47, :x_end=>263, :y_end=>49}]
     )
+
+    expect{RTesseract::BoxChar.new(@image_tiff, {:command => "tesseract_error"}).to_s }.to raise_error(RTesseract::ConversionError)
+    expect{RTesseract::BoxChar.new(@image_tiff + "_not_exist").to_s }.to raise_error(RTesseract::ImageNotSelectedError)
   end
 end

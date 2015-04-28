@@ -1,19 +1,14 @@
 # encoding: UTF-8
 class RTesseract
   # Class to read char positions from an image
-  class BoxChar < RTesseract
-    def initialize(src = '', options = {})
-      super
-      @value, @x, @y, @w, @h = [[]]
+  class BoxChar < Box
+    def file_ext
+      '.box'
     end
 
     def characters
       convert if @value == []
       @value
-    end
-
-    def text_file
-      @text_file = Pathname.new(Dir.tmpdir).join("#{Time.now.to_f}#{rand(1500)}.box").to_s
     end
 
     def convert_text(text)
@@ -30,25 +25,11 @@ class RTesseract
       @options ||= {}
       @options['tessedit_create_boxfile'] = 1 #Split chars
 
-      `#{@command} "#{image}" "#{text_file.gsub('.box','')}" #{lang} #{psm} #{config_file} #{clear_console_output}`
-      convert_text(File.read(@text_file).to_s)
-      remove_file([@image, @text_file])
+      `#{@command} "#{image}" "#{text_file}" #{lang} #{psm} #{config_file} #{clear_console_output}`
+      convert_text(File.read(text_file_with_ext).to_s)
+      remove_file([@image, text_file_with_ext])
     rescue => error
-      puts error.inspect
-      puts error.backtrace
       raise RTesseract::ConversionError.new(error)
     end
-
-    # Output value
-    def to_s
-      return @value if @value != ''
-      if @processor.image?(@source) || @source.file?
-        convert
-        @value.map{|char| char[:char]}.join(' ')
-      else
-        fail RTesseract::ImageNotSelectedError.new(@source)
-      end
-    end
-
   end
 end

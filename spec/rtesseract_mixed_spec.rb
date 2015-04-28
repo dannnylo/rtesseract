@@ -9,8 +9,8 @@ describe "Rtesseract::Mixed" do
   end
 
   it "should be instantiable" do
-    RTesseract::Mixed.new.class.should eql(RTesseract::Mixed)
-    RTesseract::Mixed.new(@image_tif).class.should eql(RTesseract::Mixed)
+    expect(RTesseract::Mixed.new.class).to eql(RTesseract::Mixed)
+    expect(RTesseract::Mixed.new(@image_tif).class).to eql(RTesseract::Mixed)
   end
 
   it "should translate parts of the image to text" do
@@ -20,9 +20,9 @@ describe "Rtesseract::Mixed" do
       image.area(218, 22, 24, 28) # position of z
       image.area(248, 24, 22, 22) # position of z
     end
-    mix_block.to_s_without_spaces.should eql("43FF")
+    expect(mix_block.to_s_without_spaces).to eql("43FF")
     mix_block.clear_areas
-    mix_block.areas.should == []
+    expect(mix_block.areas).to eql([])
 
     mix_block = RTesseract::Mixed.new(@image_tif,{:areas => [
       {:x => 28,  :y=>19, :width=>25, :height=>25 }, #position of 4
@@ -30,7 +30,7 @@ describe "Rtesseract::Mixed" do
       {:x => 218,  :y=>22, :width=>24, :height=>28}, # position of z
       {:x => 248,  :y=>24, :width=>22, :height=>22}  # position of z
     ],:psm=>7})
-    mix_block.to_s_without_spaces.should eql("43FF")
+    expect(mix_block.to_s_without_spaces).to eql("43FF")
   end
 
   it " get a error" do

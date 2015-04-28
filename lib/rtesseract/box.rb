@@ -14,8 +14,8 @@ class RTesseract
       @value
     end
 
-    def text_file
-      @text_file = Pathname.new(Dir.tmpdir).join("#{Time.now.to_f}#{rand(1500)}.hocr").to_s
+    def file_ext
+      '.hocr'
     end
 
     def convert_text(text)
@@ -32,23 +32,21 @@ class RTesseract
     def convert
       @options ||= {}
       @options['tessedit_create_hocr'] = 1   #Split Words configuration
-      
-      `#{@command} "#{image}" "#{text_file.to_s.gsub('.hocr','')}" #{lang} #{psm} #{config_file} #{clear_console_output}`
-      puts `ls #{Pathname.new(Dir.tmpdir).to_s}`
-      convert_text(File.read(@text_file).to_s)
-      #remove_file([@image, @text_file])
+
+      `#{@command} "#{image}" "#{text_file}" #{lang} #{psm} #{config_file} #{clear_console_output}`
+      ext = File.exist?(text_file_with_ext) ? file_ext : '.html'
+      convert_text(File.read(text_file_with_ext(ext)))
+      remove_file([@image, text_file_with_ext(ext)])
     rescue => error
-      puts error.inspect
-      puts error.backtrace
       raise RTesseract::ConversionError.new(error)
     end
 
     # Output value
     def to_s
-      return @value if @value != ''
+      return @value.map{|word| word[:word]} if @value != []
       if @processor.image?(@source) || @source.file?
         convert
-        @value.map{|word|  word[:word]}.join(' ')
+        @value.map{|word| word[:word]}.join(' ')
       else
         fail RTesseract::ImageNotSelectedError.new(@source)
       end

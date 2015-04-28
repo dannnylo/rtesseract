@@ -73,10 +73,6 @@ class RTesseract
     object = RTesseract.new('', options)
     object.from_blob(image.to_blob)
     object
-
-    # object = RTesseract.new(src, options)
-    # object.read(&block)
-    # object
   end
 
   def read(&block)
@@ -166,15 +162,23 @@ class RTesseract
     (@image = @processor.image_to_tif(@source, @x, @y, @w, @h)).path
   end
 
+  def file_ext
+    '.txt'
+  end
+
   def text_file
-    @text_file = Pathname.new(Dir.tmpdir).join("#{Time.now.to_f}#{rand(1500)}.txt").to_s
+    @text_file = Pathname.new(Dir.tmpdir).join("#{Time.now.to_f}#{rand(1500)}").to_s
+  end
+
+  def text_file_with_ext(ext = nil)
+    [@text_file, ext || file_ext].join('')
   end
 
   # Convert image to string
   def convert
-    `#{@command} "#{image}" "#{text_file.gsub('.txt', '')}" #{lang} #{psm} #{config_file} #{clear_console_output} #{@options_cmd.join(' ')}`
-    @value = File.read(@text_file).to_s
-    remove_file([@image, @text_file])
+    `#{@command} "#{image}" "#{text_file}" #{lang} #{psm} #{config_file} #{clear_console_output} #{@options_cmd.join(' ')}`
+    @value = File.read(text_file_with_ext).to_s
+    remove_file([@image, text_file_with_ext])
   rescue => error
     raise RTesseract::ConversionError.new(error)
   end
