@@ -19,6 +19,7 @@ class RTesseract
     end
 
     def convert_text(text)
+      puts text
       html = Nokogiri::HTML(text)
       text_objects = []
       html.css('span.ocrx_word').each do |word|
