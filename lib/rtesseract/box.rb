@@ -19,10 +19,9 @@ class RTesseract
     end
 
     def convert_text(text)
-      puts text
       html = Nokogiri::HTML(text)
       text_objects = []
-      html.css('span.ocrx_word').each do |word|
+      html.css('span.ocrx_word, span.ocr_word').each do |word|
         attributes = word.attributes['title'].value.to_s.gsub(';', '').split(' ')
         text_objects << {:word => word.text, :x_start => attributes[1].to_i, :y_start => attributes[2].to_i , :x_end => attributes[3].to_i, :y_end => attributes[4].to_i}
       end
