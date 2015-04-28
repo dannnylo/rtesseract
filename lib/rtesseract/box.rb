@@ -32,7 +32,9 @@ class RTesseract
     def convert
       @options ||= {}
       @options['tessedit_create_hocr'] = 1   #Split Words configuration
-      `#{@command} "#{image}" "#{text_file.gsub('.hocr','')}" #{lang} #{psm} #{config_file} #{clear_console_output}`
+      puts "#{@command} \"#{image}\" \"#{text_file.gsub('.hocr','')}\" #{lang} #{psm} #{config_file} #{clear_console_output}" 
+      puts `ls #{Pathname.new(Dir.tmpdir).to_s}`
+      `#{@command} "#{image}" "#{@text_file.to_s.gsub('.hocr','')}" #{lang} #{psm} #{config_file} #{clear_console_output}`
       convert_text(File.read(@text_file).to_s)
       remove_file([@image, @text_file])
     rescue => error
