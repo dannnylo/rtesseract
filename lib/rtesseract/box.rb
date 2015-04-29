@@ -18,9 +18,7 @@ class RTesseract
       '.hocr'
     end
 
-    def convert_text
-      ext = File.exist?(text_file_with_ext) ? file_ext : '.html'
-      text = File.read(text_file_with_ext(ext))
+    def convert_text(text)
       html = Nokogiri::HTML(text)
       text_objects = []
       html.css('span.ocrx_word, span.ocr_word').each do |word|
@@ -29,10 +27,18 @@ class RTesseract
       end
       @value = text_objects
     end
-    
-    def set_addtional_configs
+
+    # Convert image to string
+    def convert
       @options ||= {}
       @options['tessedit_create_hocr'] = 1   #Split Words configuration
+
+      `#{@command} "#{image}" "#{text_file}" #{lang} #{psm} #{config_file} #{clear_console_output}`
+      ext = File.exist?(text_file_with_ext) ? file_ext : '.html'
+      convert_text(File.read(text_file_with_ext(ext)))
+      remove_file([@image, text_file_with_ext(ext)])
+    rescue => error
+      raise RTesseract::ConversionError.new(error)
     end
 
     # Output value

@@ -174,21 +174,12 @@ class RTesseract
     [@text_file, ext || file_ext].join('')
   end
 
-  def set_addtional_configs
-  end
-
-  def  convert_text
-    @value = File.read(text_file_with_ext).to_s
-  end
-
   # Convert image to string
   def convert
-    set_addtional_configs
     `#{@command} "#{image}" "#{text_file}" #{lang} #{psm} #{config_file} #{clear_console_output} #{@options_cmd.join(' ')}`
-    convert_text
+    @value = File.read(text_file_with_ext).to_s
     remove_file([@image, text_file_with_ext])
   rescue => error
-    puts error.inspect
     raise RTesseract::ConversionError.new(error)
   end
 
