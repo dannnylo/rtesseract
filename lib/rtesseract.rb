@@ -189,7 +189,6 @@ class RTesseract
     remove_file([@image, text_file_with_ext])
   rescue => error
     puts error.inspect
-    puts error.backtrace
     raise RTesseract::ConversionError.new(error)
   end
 
