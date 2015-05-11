@@ -33,7 +33,7 @@ class RTesseract
       @options ||= {}
       @options['tessedit_create_hocr'] = 1   #Split Words configuration
 
-      `#{@command} "#{image}" "#{text_file}" #{lang} #{psm} #{config_file} #{clear_console_output}`
+      `#{@command} "#{image}" "#{text_file}" #{psm} #{lang} #{config_file} #{clear_console_output}`
       ext = File.exist?(text_file_with_ext) ? file_ext : '.html'
       convert_text(File.read(text_file_with_ext(ext)))
       remove_file([@image, text_file_with_ext(ext)])
