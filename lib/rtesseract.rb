@@ -17,13 +17,13 @@ require 'processors/none.rb'
 class RTesseract
   attr_accessor :image_object
   attr_accessor :options
-  attr_writer   :lang
-  attr_writer   :psm
-  attr_reader   :processor
+  attr_writer :lang
+  attr_writer :psm
+  attr_reader :processor
   attr_accessor :options_cmd
 
   OPTIONS = %w(command lang psm processor debug clear_console_output options)
-   # Aliases to languages names
+  # Aliases to languages names
   LANGUAGES = {
     'eng' => %w(en en-us english),
     'ita' => %w(it),
@@ -36,6 +36,10 @@ class RTesseract
     @value, @x, @y, @w, @h = ['']
     @processor = RTesseract.choose_processor!(@processor)
     @source = @processor.image?(src) ? src : Pathname.new(src)
+    initialize_hook
+  end
+
+  def initialize_hook
   end
 
   def fetch_option(options, name, default)
@@ -43,13 +47,13 @@ class RTesseract
   end
 
   def command_line_options(options)
-    @command     = fetch_option(options, :command, default_command)
-    @lang        = fetch_option(options, :lang, '')
-    @psm         = fetch_option(options, :psm, nil)
-    @processor   = fetch_option(options, :processor, 'rmagick')
-    @debug       = fetch_option(options, :debug, false)
+    @command = fetch_option(options, :command, default_command)
+    @lang = fetch_option(options, :lang, '')
+    @psm = fetch_option(options, :psm, nil)
+    @processor = fetch_option(options, :processor, 'rmagick')
+    @debug = fetch_option(options, :debug, false)
     @options_cmd = fetch_option(options, :options, [])
-    @options_cmd = [@options_cmd] unless @options_cmd.kind_of?(Array)
+    @options_cmd = [@options_cmd] unless @options_cmd.is_a?(Array)
 
     # Disable clear console if debug mode
     @clear_console_output = @debug ? false : fetch_option(options, :clear_console_output, true)
@@ -139,12 +143,17 @@ class RTesseract
     ''
   end
 
+  def config_hook
+  end
+
   def config
     @options ||= {}
+    config_hook
     @options.map { |k, v| "#{k} #{v}" }.join("\n")
   end
 
   def config_file
+    config_hook
     return '' if @options == {}
     conf = Tempfile.new('config')
     conf.write(config)
@@ -152,7 +161,7 @@ class RTesseract
     conf.path
   end
 
-  #TODO: Clear console for MacOS or Windows
+  # TODO: Clear console for MacOS or Windows
   def clear_console_output
     return '' unless @clear_console_output
     return '2>/dev/null' if File.exist?('/dev/null') # Linux console clear
@@ -174,10 +183,22 @@ class RTesseract
     [@text_file, ext || file_ext].join('')
   end
 
+  def convert_command
+    `#{@command} "#{image}" "#{text_file}" #{lang} #{psm} #{config_file} #{clear_console_output} #{@options_cmd.join(' ')}`
+  end
+
+  def convert_text
+    @value = File.read(text_file_with_ext).to_s
+  end
+
+  def after_convert_hook
+  end
+
   # Convert image to string
   def convert
-    `#{@command} "#{image}" "#{text_file}" #{lang} #{psm} #{config_file} #{clear_console_output} #{@options_cmd.join(' ')}`
-    @value = File.read(text_file_with_ext).to_s
+    convert_command
+    after_convert_hook
+    convert_text
     remove_file([@image, text_file_with_ext])
   rescue => error
     raise RTesseract::ConversionError.new(error)
@@ -185,7 +206,7 @@ class RTesseract
 
   # Read image from memory blob
   def from_blob(blob, ext = '')
-    blob_file = Tempfile.new(['blob',ext], :encoding => 'ascii-8bit')
+    blob_file = Tempfile.new(['blob', ext], :encoding => 'ascii-8bit')
     blob_file.binmode
     blob_file.write(blob)
     blob_file.rewind
@@ -214,15 +235,16 @@ class RTesseract
   end
 
   def self.choose_processor!(processor)
-    processor =  if MiniMagickProcessor.a_name?(processor.to_s)
-                    MiniMagickProcessor
-                  elsif QuickMagickProcessor.a_name?(processor.to_s)
-                    QuickMagickProcessor
-                  elsif NoneProcessor.a_name?(processor.to_s)
-                    NoneProcessor
-                  else
-                    RMagickProcessor
-                  end
+    processor =
+    if MiniMagickProcessor.a_name?(processor.to_s)
+      MiniMagickProcessor
+    elsif QuickMagickProcessor.a_name?(processor.to_s)
+      QuickMagickProcessor
+    elsif NoneProcessor.a_name?(processor.to_s)
+      NoneProcessor
+    else
+      RMagickProcessor
+    end
     processor.setup
     processor
   end

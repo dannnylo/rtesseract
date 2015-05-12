@@ -12,10 +12,10 @@ module MiniMagickProcessor
   def self.image_to_tif(source, x = nil, y = nil, w = nil, h = nil)
     tmp_file = Tempfile.new(['', '.tif'])
     cat = source.is_a?(Pathname) ? read_with_processor(source.to_s) : source
-    cat.format('tif') { |c|
+    cat.format('tif') do |c|
       c.compress 'None'
-      c.alpha 'off' 
-    }
+      c.alpha 'off'
+    end
     cat.crop("#{w}x#{h}+#{x}+#{y}") unless [x, y, w, h].compact == []
     cat.alpha 'off'
     cat.write tmp_file.path.to_s

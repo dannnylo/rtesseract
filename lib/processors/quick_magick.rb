@@ -14,8 +14,8 @@ module QuickMagickProcessor
     cat = source.is_a?(Pathname) ? read_with_processor(source.to_s) : source
     cat.compress = 'None'
     cat.format = 'tif'
-    cat.alpha = "off"
-    cat.crop("#{w}x#{h}+#{x}+#{y}") if need_crop?( x, y, w, h)
+    cat.alpha = 'off'
+    cat.crop("#{w}x#{h}+#{x}+#{y}") if need_crop?(x, y, w, h)
     cat.write tmp_file.path.to_s
     tmp_file
   end

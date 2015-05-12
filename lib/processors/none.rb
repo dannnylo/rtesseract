@@ -8,13 +8,13 @@ module NoneProcessor
     %w(none NoneProcessor).include?(name.to_s)
   end
 
-  def self.image_to_tif(source, x = nil, y = nil, w = nil, h = nil)
+  def self.image_to_tif(source, _x = nil, _y = nil, _w = nil, _h = nil)
     tmp_file = Tempfile.new(['', '.tif'])
     tmp_file.write(self.read_with_processor(source))
     tmp_file
   end
 
-  def self.need_crop?(x = nil, y = nil, w = nil, h = nil)
+  def self.need_crop?(*)
   end
 
   def self.read_with_processor(path)
