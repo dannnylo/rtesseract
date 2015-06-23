@@ -2,7 +2,11 @@
 # Add to rtesseract a image manipulation with RMagick
 module RMagickProcessor
   def self.setup
-    require 'RMagick'
+    begin
+      require 'rmagick'
+    rescue
+      require 'RMagick'
+    end
   end
 
   def self.a_name?(name)
