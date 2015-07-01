@@ -8,7 +8,6 @@ describe "Rtesseract::Box" do
     @words_image = @path.join("images","test_words.png").to_s
   end
 
-
   it "bounding box" do
     expect(RTesseract.new(@words_image).to_s).to eql("If you are a friend,\nyou speak the password,\nand the doors will open.\n\n")
     expect(RTesseract::Box.new(@words_image).words).to eql([

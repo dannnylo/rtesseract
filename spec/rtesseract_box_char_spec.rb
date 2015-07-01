@@ -8,7 +8,6 @@ describe "Rtesseract::BoxChar" do
     @words_image = @path.join('images', 'test_words.png').to_s
   end
 
-
   it "bounding box by char" do
     expect(RTesseract::BoxChar.new(@image_tiff).characters.is_a?(Array)).to eql(true)
     expect(RTesseract::BoxChar.new(@image_tiff).characters).to eql([

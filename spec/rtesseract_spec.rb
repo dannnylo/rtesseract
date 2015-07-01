@@ -74,10 +74,10 @@ describe "Rtesseract" do
 
     expect(RTesseract.new(@image_tif,{:lang=>"eng"}).to_s_without_spaces).to eql("43XF")
     #RTesseract.new(@image_tif,{:lang=>"por"}).to_s_without_spaces).to eql("43XF")
-    expect(RTesseract.new(@image_tif,{:lang=>"eng"}).lang).to eql(" -l eng ")
+    expect(RTesseract.new(@image_tif,{ :lang => "eng" }).lang).to eql(" -l eng ")
 
-    #Inválid lang object
-    expect(RTesseract.new(@image_tif,{:lang=>MakeStringError.new}).lang).to eql("")
+    # Invalid lang object
+    expect(RTesseract.new(@image_tif,{ :lang => MakeStringError.new}).lang).to eql("")
   end
 
   it " select options" do
@@ -100,7 +100,6 @@ describe "Rtesseract" do
      expect(RTesseract.new(@image_tif,{:psm=>7}).crop!(216,10,20,40).to_s_without_spaces).to eql("X")
      expect(RTesseract.new(@image_tif,{:psm=>7}).crop!(240,10,30,40).to_s_without_spaces).to eql("F")
   end
-
 
   it " read image from blob" do
     image = Magick::Image.read(@path.join("images","test.png").to_s).first
@@ -140,8 +139,6 @@ describe "Rtesseract" do
     expect(test.to_s_without_spaces).to eql("43XF")
 
     test = RTesseract.read(@path.join("images","test.png").to_s) do |image|
-      #image = image.white_threshold(245)
-      #image = image.quantize(256,Magick::GRAYColorspace)
       image.rotate(90)
     end
     expect(test.to_s_without_spaces).to eql("HW9W")
@@ -161,8 +158,8 @@ describe "Rtesseract" do
     expect{ RTesseract.new(@path.join("images","test.jpg").to_s, {:command => "tesseract_error"}).to_s }.to raise_error(RTesseract::ConversionError)
     expect{ RTesseract.new(@path.join("images","test_not_exists.png").to_s).to_s }.to raise_error(RTesseract::ImageNotSelectedError)
 
-    #Inválid psm object
-    expect(RTesseract.new(@image_tif,{:psm=>MakeStringError.new}).psm).to eql("")
+    # Invalid psm object
+    expect(RTesseract.new(@image_tif,{ :psm => MakeStringError.new }).psm).to eql("")
   end
 
   it "remove a file" do

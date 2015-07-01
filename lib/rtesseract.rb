@@ -249,4 +249,3 @@ class RTesseract
     processor
   end
 end
-
