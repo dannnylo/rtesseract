@@ -23,15 +23,13 @@ class RTesseract
     end
 
     def parse_file
-      Nokogiri::HTML(File.read(text_file_with_ext)).css('span.ocrx_word, span.ocr_word')
+      html = Nokogiri::HTML(File.read(text_file_with_ext))
+      html.css('span.ocrx_word, span.ocr_word')
     end
 
     def convert_text
       text_objects =  []
-      parse_file.each do |word|
-        attributes = word.attributes['title'].value.to_s.gsub(';', '').split(' ')
-        text_objects << { :word => word.text, :x_start => attributes[1].to_i, :y_start => attributes[2].to_i , :x_end => attributes[3].to_i, :y_end => attributes[4].to_i }
-      end
+      parse_file.each { |word| text_objects << BoxParser.new(word).to_h }
       @value = text_objects
     end
 
@@ -47,6 +45,25 @@ class RTesseract
         @value.map { |word| word[:word] }.join(' ')
       else
         fail RTesseract::ImageNotSelectedError.new(@source)
+      end
+    end
+
+    # Parse word data from html.
+    class BoxParser
+      def initialize(word_html)
+        @word = word_html
+        title = @word.attributes['title'].value.to_s
+        @attributes = title.gsub(';', '').split(' ')
+      end
+
+      def to_h
+        {
+          word: @word.text,
+          x_start: @attributes[1].to_i,
+          y_start: @attributes[2].to_i,
+          x_end: @attributes[3].to_i,
+          y_end: @attributes[4].to_i
+        }
       end
     end
   end

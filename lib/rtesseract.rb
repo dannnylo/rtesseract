@@ -1,6 +1,7 @@
 # encoding: UTF-8
 require 'pathname'
 require 'tempfile'
+require 'utils'
 
 require 'rtesseract/errors'
 require 'rtesseract/mixed'
@@ -32,7 +33,7 @@ class RTesseract
   }
 
   def initialize(src = '', options = {})
-    @options = command_line_options(options)
+    command_line_options(options)
     @value, @x, @y, @w, @h = ['']
     @processor = RTesseract.choose_processor!(@processor)
     @source = @processor.image?(src) ? src : Pathname.new(src)
@@ -42,24 +43,17 @@ class RTesseract
   def initialize_hook
   end
 
-  def fetch_option(options, name, default)
-    options.fetch(name.to_s, options.fetch(name, default))
-  end
-
   def command_line_options(options)
-    @command = fetch_option(options, :command, default_command)
-    @lang = fetch_option(options, :lang, '')
-    @psm = fetch_option(options, :psm, nil)
-    @processor = fetch_option(options, :processor, 'rmagick')
-    @debug = fetch_option(options, :debug, false)
-    @options_cmd = fetch_option(options, :options, [])
+    @options = options
+    @command = @options.option(:command, default_command)
+    @lang = @options.option(:lang, '')
+    @psm = @options.option(:psm, nil)
+    @processor = @options.option(:processor, 'rmagick')
+    @debug = @options.option(:debug, false)
+    @options_cmd = @options.option(:options, [])
     @options_cmd = [@options_cmd] unless @options_cmd.is_a?(Array)
-
     # Disable clear console if debug mode
-    @clear_console_output = @debug ? false : fetch_option(options, :clear_console_output, true)
-
-    options.delete_if { |k, v| OPTIONS.include?(k.to_s) }
-    options
+    @clear_console_output = @debug ? false : options.option(:clear_console_output, true)
   end
 
   def default_command
@@ -68,21 +62,19 @@ class RTesseract
     'tesseract'
   end
 
-  def self.read(src = nil, options = {}, &block)
+  def self.read(src = nil, options = {})
     fail RTesseract::ImageNotSelectedError if src.nil?
-    processor = RTesseract.choose_processor!(options.delete(:processor) || options.delete('processor'))
+    processor = RTesseract.choose_processor!(options.option(:processor, nil))
     image = processor.read_with_processor(src.to_s)
-
     yield(image)
-    object = RTesseract.new('', options)
-    object.from_blob(image.to_blob)
+    object = RTesseract.new('', options).from_blob(image.to_blob)
     object
   end
 
-  def read(&block)
+  def read
     image = @processor.read_with_processor(@source.to_s)
     new_image = yield(image)
-    self.from_blob(new_image.to_blob, File.extname(@source.to_s))
+    from_blob(new_image.to_blob, File.extname(@source.to_s))
     self
   end
 
@@ -110,7 +102,7 @@ class RTesseract
     end
     true
   rescue => error
-    raise RTesseract::TempFilesNotRemovedError.new(:error => error, :files => files)
+    raise RTesseract::TempFilesNotRemovedError.new(error: error, files: files)
   end
 
   # Select the language
@@ -206,14 +198,14 @@ class RTesseract
 
   # Read image from memory blob
   def from_blob(blob, ext = '')
-    blob_file = Tempfile.new(['blob', ext], :encoding => 'ascii-8bit')
-    blob_file.binmode
-    blob_file.write(blob)
+    blob_file = Tempfile.new(['blob', ext], encoding: 'ascii-8bit')
+    blob_file.binmode.write(blob)
     blob_file.rewind
     blob_file.flush
     self.source = blob_file.path
     convert
     remove_file([blob_file])
+    self
   rescue => error
     raise RTesseract::ConversionError.new(error)
   end

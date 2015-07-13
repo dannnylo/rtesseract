@@ -14,7 +14,7 @@ class RTesseract
 
     def area(x, y, width, height)
       @value = ''
-      @areas << { :x => x,  :y => y, :width => width, :height => height }
+      @areas << { x: x,  y: y, width: width, height: height }
     end
 
     def clear_areas

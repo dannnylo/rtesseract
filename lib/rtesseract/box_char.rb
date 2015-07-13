@@ -19,8 +19,8 @@ class RTesseract
     def convert_text
       text_objects = []
       parse_file.each_line do |line|
-        char, x_start, y_start, x_end, y_end, word = line.split(' ')
-        text_objects << { :char => char, :x_start => x_start.to_i, :y_start => y_start.to_i , :x_end => x_end.to_i, :y_end => y_end.to_i }
+        char, x_start, y_start, x_end, y_end, _word = line.split(' ')
+        text_objects << { char: char, x_start: x_start.to_i, y_start: y_start.to_i, x_end: x_end.to_i, y_end: y_end.to_i }
       end
       @value = text_objects
     end

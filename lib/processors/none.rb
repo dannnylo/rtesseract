@@ -10,7 +10,7 @@ module NoneProcessor
 
   def self.image_to_tif(source, _x = nil, _y = nil, _w = nil, _h = nil)
     tmp_file = Tempfile.new(['', '.tif'])
-    tmp_file.write(self.read_with_processor(source))
+    tmp_file.write(read_with_processor(source))
     tmp_file
   end
 
@@ -21,6 +21,6 @@ module NoneProcessor
     File.read(path)
   end
 
-  def self.image?(object)
+  def self.image?(*)
   end
 end
