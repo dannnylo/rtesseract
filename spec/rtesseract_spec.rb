@@ -59,6 +59,11 @@ describe 'Rtesseract' do
     expect(image.to_s_without_spaces).to eql('V2V4')
   end
 
+  it ' returns the source' do
+    image = RTesseract.new(@image_tif)
+    expect(image.source).to eql(Pathname.new(@image_tif))
+  end
+
   it ' select the language' do
     # English
     expect(RTesseract.new(@image_tif, lang: 'eng').lang).to eql(' -l eng ')

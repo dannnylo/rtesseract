@@ -18,10 +18,11 @@ require 'processors/none.rb'
 class RTesseract
   attr_accessor :image_object
   attr_accessor :options
+  attr_accessor :options_cmd
   attr_writer :lang
   attr_writer :psm
   attr_reader :processor
-  attr_accessor :options_cmd
+  attr_reader :source
 
   OPTIONS = %w(command lang psm processor debug clear_console_output options)
   # Aliases to languages names
