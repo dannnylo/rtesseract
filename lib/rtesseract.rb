@@ -194,7 +194,7 @@ class RTesseract
     convert_text
     remove_file([@image, text_file_with_ext])
   rescue => error
-    raise RTesseract::ConversionError.new(error)
+    raise RTesseract::ConversionError.new(error), error, caller
   end
 
   # Read image from memory blob
@@ -208,7 +208,7 @@ class RTesseract
     remove_file([blob_file])
     self
   rescue => error
-    raise RTesseract::ConversionError.new(error)
+    raise RTesseract::ConversionError.new(error), error, caller
   end
 
   # Output value

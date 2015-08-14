@@ -29,7 +29,7 @@ class RTesseract
         @value << image.to_s
       end
     rescue => error
-      raise RTesseract::ConversionError.new(error)
+      raise RTesseract::ConversionError.new(error), error, caller
     end
 
     # Output value
