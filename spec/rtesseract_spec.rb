@@ -148,7 +148,7 @@ describe 'Rtesseract' do
     end
     expect(test.to_s_without_spaces).to eql('43XF')
 
-    test = RTesseract.new(@path.join('images', 'blank.png').to_s)
+    test = RTesseract.new(@path.join('images', 'blank.tif').to_s)
     test.read do |image|
       image
     end

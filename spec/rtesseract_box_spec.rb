@@ -32,6 +32,6 @@ describe 'Rtesseract::Box' do
     expect { RTesseract::Box.new(@image_tiff, command: 'tesseract_error').to_s }.to raise_error(RTesseract::ConversionError)
     expect { RTesseract::Box.new(@image_tiff + '_not_exist').to_s }.to raise_error(RTesseract::ImageNotSelectedError)
 
-    expect(RTesseract::Box.new(@path.join('images', 'blank.png').to_s).words).to eql([])
+    expect(RTesseract::Box.new(@path.join('images', 'blank.tif').to_s).words).to eql([])
   end
 end
