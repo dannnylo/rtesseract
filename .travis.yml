@@ -1,5 +1,9 @@
 language: ruby
-before_script: "./.travis.sh"
+addons:
+  apt:
+    packages:
+    - tesseract-ocr
+    - tesseract-ocr-por
 rvm:
   - 1.9.3
   - 2.0.0
