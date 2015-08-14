@@ -34,6 +34,10 @@ describe 'Rtesseract' do
     expect(RTesseract.new(@path.join('images', 'test.bmp').to_s).to_s_without_spaces).to eql('FLA6')
   end
 
+  it ' should not error with depth > 32' do
+    #expect(RTesseract.new(@path.join('images', 'README.pdf').to_s, debug: true).to_s_without_spaces).to eql('')
+  end
+
   it ' support  diferent processors' do
     # Rmagick
     expect(RTesseract.new(@image_tif).to_s_without_spaces).to eql('43XF')
@@ -143,6 +147,12 @@ describe 'Rtesseract' do
       image = image.quantize(256, Magick::GRAYColorspace)
     end
     expect(test.to_s_without_spaces).to eql('43XF')
+
+    test = RTesseract.new(@path.join('images', 'blank.png').to_s)
+    test.read do |image|
+      image
+    end
+    expect(test.to_s_without_spaces).to eql('')
 
     test = RTesseract.read(@path.join('images', 'test.png').to_s) do |image|
       image.rotate(90)

@@ -18,7 +18,10 @@ module RMagickProcessor
     cat = source.is_a?(Pathname) ? read_with_processor(source.to_s) : source
     cat.crop!(x, y, w, h) unless [x, y, w, h].compact == []
     cat.alpha Magick::DeactivateAlphaChannel
-    cat.write(tmp_file.path.to_s) { self.compression = Magick::NoCompression }
+    cat.write(tmp_file.path.to_s) {
+      # self.depth = 16
+      self.compression = Magick::NoCompression
+    }
     tmp_file
   end
 

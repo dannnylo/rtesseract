@@ -35,7 +35,7 @@ class RTesseract
 
   def initialize(src = '', options = {})
     command_line_options(options)
-    @value, @x, @y, @w, @h = ['']
+    @value, @x, @y, @w, @h = [nil]
     @processor = RTesseract.choose_processor!(@processor)
     @source = @processor.image?(src) ? src : Pathname.new(src)
     initialize_hook
@@ -80,13 +80,13 @@ class RTesseract
   end
 
   def source=(src)
-    @value = ''
+    @value = nil
     @source = @processor.image?(src) ? src : Pathname.new(src)
   end
 
   # Crop image to convert
   def crop!(x, y, width, height)
-    @value = ''
+    @value = nil
     @x, @y, @w, @h = x.to_i, y.to_i, width.to_i, height.to_i
     self
   end
@@ -213,7 +213,8 @@ class RTesseract
 
   # Output value
   def to_s
-    return @value if @value != ''
+    return @value if @value != nil
+
     if @processor.image?(@source) || @source.file?
       convert
       @value

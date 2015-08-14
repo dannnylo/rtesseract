@@ -32,6 +32,9 @@ describe 'Rtesseract::Mixed' do
 
     mix_block = RTesseract::Mixed.new(@image_tif, areas: @areas, psm: 7)
     expect(mix_block.to_s_without_spaces).to eql('43FF')
+
+    mix_block = RTesseract::Mixed.new(@path.join('images', 'blank.png').to_s, areas: @areas, psm: 7)
+    expect(mix_block.to_s_without_spaces).to eql('')
   end
 
   it ' get a error' do
