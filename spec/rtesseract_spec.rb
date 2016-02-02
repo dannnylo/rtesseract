@@ -38,7 +38,7 @@ describe 'Rtesseract' do
     #expect(RTesseract.new(@path.join('images', 'README.pdf').to_s, debug: true).to_s_without_spaces).to eql('')
   end
 
-  it ' support  diferent processors' do
+  it ' support  different processors' do
     # Rmagick
     expect(RTesseract.new(@image_tif).to_s_without_spaces).to eql('43XF')
     expect(RTesseract.new(@image_tif, processor: 'rmagick').to_s_without_spaces).to eql('43XF')
@@ -55,6 +55,7 @@ describe 'Rtesseract' do
     # NoneMagick
     expect(RTesseract.new(@image_tif, processor: 'none').to_s_without_spaces).to eql('43XF')
   end
+
 
   it ' change the image' do
     image = RTesseract.new(@image_tif)
@@ -184,4 +185,23 @@ describe 'Rtesseract' do
 
     expect { rtesseract.remove_file(Pathname.new(Dir.tmpdir).join('test_not_exists')) }.to raise_error(RTesseract::TempFilesNotRemovedError)
   end
+
+  it ' support  default config processors' do
+    # Rmagick
+    RTesseract.configure {|config| config.processor = 'rmagick' }
+    expect(RTesseract.new(@image_tif).processor.a_name?('rmagick')).to eql(true)
+
+    # MiniMagick
+    RTesseract.configure {|config| config.processor = 'mini_magick' }
+    expect(RTesseract.new(@image_tif).processor.a_name?('mini_magick')).to eql(true)
+
+    # QuickMagick
+    RTesseract.configure {|config| config.processor = 'quick_magick' }
+    expect(RTesseract.new(@image_tif).processor.a_name?('quick_magick')).to eql(true)
+
+    # NoneMagick
+    RTesseract.configure {|config| config.processor = 'none' }
+    expect(RTesseract.new(@image_tif).processor.a_name?('none')).to eql(true)
+  end
+
 end
