@@ -33,6 +33,27 @@ class RTesseract
     'spa' => %w(sp)
   }
 
+  class << self
+    attr_accessor :configuration
+  end
+
+  def self.configure
+    self.configuration ||= Configuration.new
+    yield(configuration)
+  end
+
+  class Configuration
+    attr_accessor :processor
+
+    def initialize
+      @processor = 'rmagick'
+    end
+
+    def to_hash
+      {processor: @processor}
+    end
+  end
+
   def initialize(src = '', options = {})
     command_line_options(options)
     @value, @x, @y, @w, @h = [nil]
@@ -45,7 +66,8 @@ class RTesseract
   end
 
   def command_line_options(options)
-    @options = options
+    default_config = RTesseract.configuration ? RTesseract.configuration.to_hash : {}
+    @options = default_config.merge(options)
     @command = @options.option(:command, default_command)
     @lang = @options.option(:lang, '')
     @psm = @options.option(:psm, nil)

@@ -70,6 +70,14 @@ Processors Options  (_Rmagick_ is default)
 
   RTesseract.new("test.jpg", :processor => "none")
 
+Or you can config default processor first:
+
+  RTesseract.configure do |config|
+    config.processor = "mini_magick"
+  end
+
+  RTesseract.new("test.jpg") # It will use mini_magick by default
+
 Language Options
 
   RTesseract.new("test.jpg", :lang => "deu")
