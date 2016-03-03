@@ -202,6 +202,16 @@ describe 'Rtesseract' do
     # NoneMagick
     RTesseract.configure {|config| config.processor = 'none' }
     expect(RTesseract.new(@image_tif).processor.a_name?('none')).to eql(true)
+
+    # overwrite default
+    RTesseract.configure {|config| config.processor = 'mini_magick' }
+    expect(RTesseract.new(@image_tif, processor: 'quick_magick').processor.a_name?('quick_magick')).to eql(true)
+
+    RTesseract.configure {|config| config.lang = 'portuguese' }
+    expect(RTesseract.new(@image_tif).lang).to eql(' -l por ')
+
+    RTesseract.configure {|config| config.psm = 7 }
+    expect(RTesseract.new(@image_tif).psm).to eql(' -psm 7 ')
   end
 
 end
