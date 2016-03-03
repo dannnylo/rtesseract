@@ -3,6 +3,7 @@ require 'pathname'
 require 'tempfile'
 require 'utils'
 
+require 'rtesseract/configuration'
 require 'rtesseract/errors'
 require 'rtesseract/mixed'
 require 'rtesseract/box'
@@ -40,18 +41,6 @@ class RTesseract
   def self.configure
     self.configuration ||= Configuration.new
     yield(configuration)
-  end
-
-  class Configuration
-    attr_accessor :processor, :lang, :psm
-
-    def initialize
-      @processor = 'rmagick'
-    end
-
-    def to_hash
-      {processor: @processor, lang: lang, psm: psm}
-    end
   end
 
   def initialize(src = '', options = {})
