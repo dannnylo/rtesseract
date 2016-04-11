@@ -228,5 +228,9 @@ describe 'Rtesseract' do
     expect(RTesseract.new(@image_tif, tessdata_dir: '/tmp/test').tessdata_dir).to eql(' --tessdata-dir /tmp/test ')
     expect(RTesseract.new(@image_tif, user_words: '/tmp/test').user_words).to eql(' --user-words /tmp/test ')
     expect(RTesseract.new(@image_tif, user_patterns: '/tmp/test').user_patterns).to eql(' --user-patterns /tmp/test ')
+
+    expect(RTesseract.new(@image_tif, tessdata_dir: MakeStringError.new).tessdata_dir).to eql('')
+    expect(RTesseract.new(@image_tif, user_words: MakeStringError.new).user_words).to eql('')
+    expect(RTesseract.new(@image_tif, user_patterns: MakeStringError.new).user_patterns).to eql('')
   end
 end
