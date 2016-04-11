@@ -224,4 +224,9 @@ describe 'Rtesseract' do
     expect(RTesseract.new(@image_tif).user_patterns).to eql(' --user-patterns /tmp/test ')
   end
 
+  it ' support new configs' do
+    expect(RTesseract.new(@image_tif, tessdata_dir: '/tmp/test').tessdata_dir).to eql(' --tessdata-dir /tmp/test ')
+    expect(RTesseract.new(@image_tif, user_words: '/tmp/test').user_words).to eql(' --user-words /tmp/test ')
+    expect(RTesseract.new(@image_tif, user_patterns: '/tmp/test').user_patterns).to eql(' --user-patterns /tmp/test ')
+  end
 end
