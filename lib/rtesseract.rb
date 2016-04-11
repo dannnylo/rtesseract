@@ -22,6 +22,9 @@ class RTesseract
   attr_accessor :options_cmd
   attr_writer :lang
   attr_writer :psm
+  attr_writer :tessdata_dir
+  attr_writer :user_words
+  attr_writer :user_patterns
   attr_reader :processor
   attr_reader :source
 
@@ -60,6 +63,11 @@ class RTesseract
     @command = @options.option(:command, default_command)
     @lang = @options.option(:lang, '')
     @psm = @options.option(:psm, nil)
+
+    @tessdata_dir = @options.option(:tessdata_dir, nil)
+    @user_words = @options.option(:user_words, nil)
+    @user_patterns = @options.option(:user_patterns, nil)
+
     @processor = @options.option(:processor, 'rmagick')
     @debug = @options.option(:debug, false)
     @options_cmd = @options.option(:options, [])
@@ -147,6 +155,27 @@ class RTesseract
     ''
   end
 
+  # Tessdata Dir
+  def tessdata_dir
+    (@tessdata_dir.nil? ? '' : " --tessdata-dir #{@tessdata_dir} ")
+  rescue
+    ''
+  end
+
+  # User Words
+  def user_words
+    (@user_words.nil? ? '' : " --user-words #{@user_words} ")
+  rescue
+    ''
+  end
+
+  # User Patterns
+  def user_patterns
+    (@user_patterns.nil? ? '' : " --user-patterns #{@user_patterns} ")
+  rescue
+    ''
+  end
+
   def config_hook
   end
 
@@ -188,7 +217,7 @@ class RTesseract
   end
 
   def convert_command
-    `#{@command} "#{image}" "#{text_file}" #{lang} #{psm} #{config_file} #{clear_console_output} #{@options_cmd.join(' ')}`
+    `#{@command} "#{image}" "#{text_file}" #{lang} #{psm} #{tessdata_dir} #{user_words} #{user_patterns} #{config_file} #{clear_console_output} #{@options_cmd.join(' ')}`
   end
 
   def convert_text
