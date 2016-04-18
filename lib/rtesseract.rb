@@ -12,12 +12,12 @@ require 'rtesseract/box_char'
 # Processors
 require 'processors/rmagick.rb'
 require 'processors/mini_magick.rb'
-require 'processors/quick_magick.rb'
 require 'processors/none.rb'
 
 # Ruby wrapper for Tesseract OCR
 class RTesseract
   attr_accessor :image_object
+  attr_accessor :configuration
   attr_accessor :options
   attr_accessor :options_cmd
   attr_writer :lang
@@ -28,28 +28,11 @@ class RTesseract
   attr_reader :processor
   attr_reader :source
 
-  OPTIONS = %w(command lang psm processor debug clear_console_output options)
-  # Aliases to languages names
-  LANGUAGES = {
-    'eng' => %w(en en-us english),
-    'ita' => %w(it),
-    'por' => %w(pt pt-br portuguese),
-    'spa' => %w(sp)
-  }
-
-  class << self
-    attr_accessor :configuration
-  end
-
-  def self.configure
-    self.configuration ||= Configuration.new
-    yield(configuration)
-  end
-
   def initialize(src = '', options = {})
+    self.configuration = RTesseract.local_config(options)
     command_line_options(options)
     @value, @x, @y, @w, @h = [nil]
-    @processor = RTesseract.choose_processor!(@processor)
+    @processor = RTesseract.choose_processor!(self.configuration.processor)
     @source = @processor.image?(src) ? src : Pathname.new(src)
     initialize_hook
   end
@@ -60,27 +43,20 @@ class RTesseract
   def command_line_options(options)
     default_config = RTesseract.configuration ? RTesseract.configuration.to_hash : {}
     @options = default_config.merge(options)
-    @command = @options.option(:command, default_command)
-    @lang = @options.option(:lang, '')
-    @psm = @options.option(:psm, nil)
 
-    @tessdata_dir = @options.option(:tessdata_dir, nil)
-    @user_words = @options.option(:user_words, nil)
-    @user_patterns = @options.option(:user_patterns, nil)
+    @options.option(:command, nil)
+    @options.option(:lang, '')
+    @options.option(:psm, nil)
+    @options.option(:tessdata_dir, nil)
+    @options.option(:user_words, nil)
+    @options.option(:user_patterns, nil)
+    @options.option(:processor, 'rmagick')
 
-    @processor = @options.option(:processor, 'rmagick')
     @debug = @options.option(:debug, false)
     @options_cmd = @options.option(:options, [])
     @options_cmd = [@options_cmd] unless @options_cmd.is_a?(Array)
-    # Disable clear console if debug mode
-    @clear_console_output = @debug ? false : options.option(:clear_console_output, true)
   end
 
-  def default_command
-    TesseractBin::Executables[:tesseract] || 'tesseract'
-  rescue
-    'tesseract'
-  end
 
   def self.read(src = nil, options = {})
     fail RTesseract::ImageNotSelectedError if src.nil?
@@ -138,7 +114,7 @@ class RTesseract
   ## * vie   - Vietnamese
   ## Note: Make sure you have installed the language to tesseract
   def lang
-    language = "#{@lang}".strip.downcase
+    language = "#{self.configuration.lang}".strip.downcase
     LANGUAGES.each do |value, names|
       return " -l #{value} " if names.include? language
     end
@@ -150,28 +126,28 @@ class RTesseract
 
   # Page Segment Mode
   def psm
-    (@psm.nil? ? '' : " -psm #{@psm} ")
+    (self.configuration.psm.nil? ? '' : " -psm #{self.configuration.psm} ")
   rescue
     ''
   end
 
   # Tessdata Dir
   def tessdata_dir
-    (@tessdata_dir.nil? ? '' : " --tessdata-dir #{@tessdata_dir} ")
+    (self.configuration.tessdata_dir.nil? ? '' : " --tessdata-dir #{self.configuration.tessdata_dir} ")
   rescue
     ''
   end
 
   # User Words
   def user_words
-    (@user_words.nil? ? '' : " --user-words #{@user_words} ")
+    (self.configuration.user_words.nil? ? '' : " --user-words #{self.configuration.user_words} ")
   rescue
     ''
   end
 
   # User Patterns
   def user_patterns
-    (@user_patterns.nil? ? '' : " --user-patterns #{@user_patterns} ")
+    (self.configuration.user_patterns.nil? ? '' : " --user-patterns #{self.configuration.user_patterns} ")
   rescue
     ''
   end
@@ -196,7 +172,7 @@ class RTesseract
 
   # TODO: Clear console for MacOS or Windows
   def clear_console_output
-    return '' unless @clear_console_output
+    return '' if @debug
     return '2>/dev/null' if File.exist?('/dev/null') # Linux console clear
   end
 
@@ -217,7 +193,7 @@ class RTesseract
   end
 
   def convert_command
-    `#{@command} "#{image}" "#{text_file}" #{lang} #{psm} #{tessdata_dir} #{user_words} #{user_patterns} #{config_file} #{clear_console_output} #{@options_cmd.join(' ')}`
+    `#{self.configuration.command} "#{image}" "#{text_file}" #{lang} #{psm} #{tessdata_dir} #{user_words} #{user_patterns} #{config_file} #{clear_console_output} #{@options_cmd.join(' ')}`
   end
 
   def convert_text
@@ -272,8 +248,6 @@ class RTesseract
     processor =
     if MiniMagickProcessor.a_name?(processor.to_s)
       MiniMagickProcessor
-    elsif QuickMagickProcessor.a_name?(processor.to_s)
-      QuickMagickProcessor
     elsif NoneProcessor.a_name?(processor.to_s)
       NoneProcessor
     else

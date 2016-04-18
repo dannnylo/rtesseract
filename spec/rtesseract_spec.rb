@@ -48,10 +48,6 @@ describe 'Rtesseract' do
     expect(RTesseract.new(@image_tif, processor: 'mini_magick').to_s_without_spaces).to eql('43XF')
     expect(RTesseract.new(@path.join('images', 'test.png').to_s, processor: 'mini_magick').to_s_without_spaces).to eql('HW9W')
 
-    # QuickMagick
-    expect(RTesseract.new(@image_tif, processor: 'quick_magick').to_s_without_spaces).to eql('43XF')
-    expect(RTesseract.new(@path.join('images', 'test.png').to_s, processor: 'quick_magick').to_s_without_spaces).to eql('HW9W')
-
     # NoneMagick
     expect(RTesseract.new(@image_tif, processor: 'none').to_s_without_spaces).to eql('43XF')
   end
@@ -132,9 +128,6 @@ describe 'Rtesseract' do
     expect(MiniMagickProcessor.a_name?('teste')).to eql(false)
     expect(MiniMagickProcessor.a_name?('mini_magick')).to eql(true)
     expect(MiniMagickProcessor.a_name?('MiniMagickProcessor')).to eql(true)
-    expect(QuickMagickProcessor.a_name?('teste')).to eql(false)
-    expect(QuickMagickProcessor.a_name?('quick_magick')).to eql(true)
-    expect(QuickMagickProcessor.a_name?('QuickMagickProcessor')).to eql(true)
     expect(NoneProcessor.a_name?('none')).to eql(true)
     expect(NoneProcessor.a_name?('NoneProcessor')).to eql(true)
   end
@@ -188,39 +181,35 @@ describe 'Rtesseract' do
 
   it ' support  default config processors' do
     # Rmagick
-    RTesseract.configure {|config| config.processor = 'rmagick' }
+    RTesseract.configure { |config| config.processor = 'rmagick' }
     expect(RTesseract.new(@image_tif).processor.a_name?('rmagick')).to eql(true)
 
     # MiniMagick
-    RTesseract.configure {|config| config.processor = 'mini_magick' }
+    RTesseract.configure { |config| config.processor = 'mini_magick' }
     expect(RTesseract.new(@image_tif).processor.a_name?('mini_magick')).to eql(true)
 
-    # QuickMagick
-    RTesseract.configure {|config| config.processor = 'quick_magick' }
-    expect(RTesseract.new(@image_tif).processor.a_name?('quick_magick')).to eql(true)
-
     # NoneMagick
-    RTesseract.configure {|config| config.processor = 'none' }
+    RTesseract.configure { |config| config.processor = 'none' }
     expect(RTesseract.new(@image_tif).processor.a_name?('none')).to eql(true)
 
     # overwrite default
-    RTesseract.configure {|config| config.processor = 'mini_magick' }
-    expect(RTesseract.new(@image_tif, processor: 'quick_magick').processor.a_name?('quick_magick')).to eql(true)
+    RTesseract.configure { |config| config.processor = 'rmagick' }
+    expect(RTesseract.new(@image_tif, processor: 'mini_magick').processor.a_name?('mini_magick')).to eql(true)
 
-    RTesseract.configure {|config| config.lang = 'portuguese' }
+    RTesseract.configure { |config| config.lang = 'portuguese' }
     expect(RTesseract.new(@image_tif).lang).to eql(' -l por ')
 
-    RTesseract.configure {|config| config.psm = 7 }
+    RTesseract.configure { |config| config.psm = 7 }
     expect(RTesseract.new(@image_tif).psm).to eql(' -psm 7 ')
 
 
-    RTesseract.configure {|config| config.tessdata_dir = '/tmp/test' }
+    RTesseract.configure { |config| config.tessdata_dir = '/tmp/test' }
     expect(RTesseract.new(@image_tif).tessdata_dir).to eql(' --tessdata-dir /tmp/test ')
 
-    RTesseract.configure {|config| config.user_words = '/tmp/test' }
+    RTesseract.configure { |config| config.user_words = '/tmp/test' }
     expect(RTesseract.new(@image_tif).user_words).to eql(' --user-words /tmp/test ')
 
-    RTesseract.configure {|config| config.user_patterns = '/tmp/test' }
+    RTesseract.configure { |config| config.user_patterns = '/tmp/test' }
     expect(RTesseract.new(@image_tif).user_patterns).to eql(' --user-patterns /tmp/test ')
   end
 

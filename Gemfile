@@ -15,5 +15,4 @@ end
 group :test do
   gem 'rmagick'
   gem 'mini_magick'
-  gem 'quick_magick'
 end
