@@ -136,29 +136,29 @@ describe 'Rtesseract' do
     expect(test.class).to eql(RTesseract)
 
     test = RTesseract.new(@image_tif)
-    test.read do |image|
-      image = image.quantize(256, Magick::GRAYColorspace)
+    test.read do |_image|
+      _image = _image.quantize(256, Magick::GRAYColorspace)
     end
     expect(test.to_s_without_spaces).to eql('43XF')
 
     test = RTesseract.new(@path.join('images', 'blank.tif').to_s)
-    test.read do |image|
-      image
+    test.read do |_image|
+      _image
     end
     expect(test.to_s_without_spaces).to eql('')
 
-    test = RTesseract.read(@path.join('images', 'test.png').to_s) do |image|
-      image.rotate(90)
+    test = RTesseract.read(@path.join('images', 'test.png').to_s) do |_image|
+      _image.rotate(90)
     end
     expect(test.to_s_without_spaces).to eql('HW9W')
 
-    test = RTesseract.read(@path.join('images', 'test.jpg').to_s, lang: 'en') do |image|
-      image = image.white_threshold(245).quantize(256, Magick::GRAYColorspace)
+    test = RTesseract.read(@path.join('images', 'test.jpg').to_s, lang: 'en') do |_image|
+      _image = _image.white_threshold(245).quantize(256, Magick::GRAYColorspace)
     end
     expect(test.to_s_without_spaces).to eql('3R8F')
 
-    test = RTesseract.read(@path.join('images', 'test.jpg').to_s, lang: 'en', processor: 'mini_magick') do |image|
-      image.gravity 'south'
+    test = RTesseract.read(@path.join('images', 'test.jpg').to_s, lang: 'en', processor: 'mini_magick') do |_image|
+      _image.gravity 'south'
     end
     expect(test.to_s_without_spaces).to eql('3R8F')
   end

@@ -32,6 +32,7 @@ class RTesseract
     'tesseract'
   end
 
+  # Local config to instance
   def self.local_config(options = {})
     parent_config = RTesseract.configuration || RTesseract::Configuration.new
     RTesseract::Configuration.new.tap do |config|
