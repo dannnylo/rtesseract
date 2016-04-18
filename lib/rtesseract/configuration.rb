@@ -32,22 +32,26 @@ class RTesseract
     'tesseract'
   end
 
+  def self.local_or_global(options, option)
+    parent_config = RTesseract.configuration || RTesseract::Configuration.new
+    options.option(option, parent_config.send(option))
+  end
+
   # Local config to instance
   def self.local_config(options = {})
-    parent_config = RTesseract.configuration || RTesseract::Configuration.new
     RTesseract::Configuration.new.tap do |config|
-      config.command = options.option(:command, parent_config.command) || RTesseract.default_command
-      config.processor = options.option(:processor, parent_config.processor) || 'rmagick'
+      config.command = local_or_global(options, :command) || RTesseract.default_command
+      config.processor = local_or_global(options, :processor) || 'rmagick'
 
-      config.lang = options.option(:lang, parent_config.lang)
-      config.psm = options.option(:psm, parent_config.psm)
+      config.lang = local_or_global(options, :lang)
+      config.psm = local_or_global(options, :psm)
 
-      config.tessdata_dir = options.option(:tessdata_dir, parent_config.tessdata_dir)
-      config.user_words = options.option(:user_words, parent_config.user_words)
-      config.user_patterns = options.option(:user_patterns, parent_config.user_patterns)
+      config.tessdata_dir = local_or_global(options, :tessdata_dir)
+      config.user_words = local_or_global(options, :user_words)
+      config.user_patterns = local_or_global(options, :user_patterns)
 
-      config.debug = options.option(:debug, parent_config.debug) || false
-      config.options_cmd = [options.option(:options, parent_config.options_cmd)].flatten.compact
+      config.debug = local_or_global(options, :debug) || false
+      config.options_cmd = [options.option(:options, nil)].flatten.compact
     end
   end
 end
