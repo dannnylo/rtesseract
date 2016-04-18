@@ -8,7 +8,7 @@ module NoneProcessor
     %w(none NoneProcessor).include?(name.to_s)
   end
 
-  def self.image_to_tif(source, _x = nil, _y = nil, _w = nil, _h = nil)
+  def self.image_to_tif(source, _points = {})
     tmp_file = Tempfile.new(['', '.tif'])
     tmp_file.write(read_with_processor(source))
     tmp_file

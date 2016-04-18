@@ -35,7 +35,7 @@ describe 'Rtesseract' do
   end
 
   it ' should not error with depth > 32' do
-    #expect(RTesseract.new(@path.join('images', 'README.pdf').to_s, debug: true).to_s_without_spaces).to eql('')
+    # expect(RTesseract.new(@path.join('images', 'README.pdf').to_s, debug: true).to_s_without_spaces).to eql('')
   end
 
   it ' support  different processors' do
@@ -51,7 +51,6 @@ describe 'Rtesseract' do
     # NoneMagick
     expect(RTesseract.new(@image_tif, processor: 'none').to_s_without_spaces).to eql('43XF')
   end
-
 
   it ' change the image' do
     image = RTesseract.new(@image_tif)
@@ -102,10 +101,10 @@ describe 'Rtesseract' do
   end
 
   it ' crop image' do
-    expect(RTesseract.new(@image_tif, psm: 7).crop!(140, 10, 36, 40).to_s_without_spaces).to eql('4')
-    expect(RTesseract.new(@image_tif, psm: 7).crop!(180, 10, 36, 40).to_s_without_spaces).to eql('3')
-    expect(RTesseract.new(@image_tif, psm: 7).crop!(216, 10, 20, 40).to_s_without_spaces).to eql('X')
-    expect(RTesseract.new(@image_tif, psm: 7).crop!(240, 10, 30, 40).to_s_without_spaces).to eql('F')
+    expect(RTesseract.new(@image_tif, psm: 7).crop!( w: 36, h: 40, x: 140, y: 10 ).to_s_without_spaces).to eql('4')
+    expect(RTesseract.new(@image_tif, psm: 7).crop!( w: 36, h: 40, x: 180, y: 10 ).to_s_without_spaces).to eql('3')
+    expect(RTesseract.new(@image_tif, psm: 7).crop!( w: 20, h: 40, x: 216, y: 10 ).to_s_without_spaces).to eql('X')
+    expect(RTesseract.new(@image_tif, psm: 7).crop!( w: 30, h: 40, x: 240, y: 10 ).to_s_without_spaces).to eql('F')
   end
 
   it ' read image from blob' do

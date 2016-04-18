@@ -16,22 +16,14 @@ require 'processors/none.rb'
 
 # Ruby wrapper for Tesseract OCR
 class RTesseract
-  attr_accessor :image_object
   attr_accessor :configuration
-  attr_accessor :options
-  attr_accessor :options_cmd
-  attr_writer :lang
-  attr_writer :psm
-  attr_writer :tessdata_dir
-  attr_writer :user_words
-  attr_writer :user_patterns
   attr_reader :processor
   attr_reader :source
 
   def initialize(src = '', options = {})
     self.configuration = RTesseract.local_config(options)
-    command_line_options(options)
-    @value, @x, @y, @w, @h = [nil]
+    @options = options || {}
+    @value, @points = [nil, {}]
     @processor = RTesseract.choose_processor!(self.configuration.processor)
     @source = @processor.image?(src) ? src : Pathname.new(src)
     initialize_hook
@@ -39,24 +31,6 @@ class RTesseract
 
   def initialize_hook
   end
-
-  def command_line_options(options)
-    default_config = RTesseract.configuration ? RTesseract.configuration.to_hash : {}
-    @options = default_config.merge(options)
-
-    @options.option(:command, nil)
-    @options.option(:lang, '')
-    @options.option(:psm, nil)
-    @options.option(:tessdata_dir, nil)
-    @options.option(:user_words, nil)
-    @options.option(:user_patterns, nil)
-    @options.option(:processor, 'rmagick')
-
-    @debug = @options.option(:debug, false)
-    @options_cmd = @options.option(:options, [])
-    @options_cmd = [@options_cmd] unless @options_cmd.is_a?(Array)
-  end
-
 
   def self.read(src = nil, options = {})
     fail RTesseract::ImageNotSelectedError if src.nil?
@@ -80,9 +54,9 @@ class RTesseract
   end
 
   # Crop image to convert
-  def crop!(x, y, width, height)
+  def crop!(_points = {})
     @value = nil
-    @x, @y, @w, @h = x.to_i, y.to_i, width.to_i, height.to_i
+    @points = _points
     self
   end
 
@@ -152,6 +126,11 @@ class RTesseract
     ''
   end
 
+  # Options on line
+  def options_cmd
+    self.configuration.options_cmd
+  end
+
   def config_hook
   end
 
@@ -172,12 +151,12 @@ class RTesseract
 
   # TODO: Clear console for MacOS or Windows
   def clear_console_output
-    return '' if @debug
+    return '' if self.configuration.debug
     return '2>/dev/null' if File.exist?('/dev/null') # Linux console clear
   end
 
   def image
-    (@image = @processor.image_to_tif(@source, @x, @y, @w, @h)).path
+    (@image = @processor.image_to_tif(@source, @points)).path
   end
 
   def file_ext
@@ -193,7 +172,7 @@ class RTesseract
   end
 
   def convert_command
-    `#{self.configuration.command} "#{image}" "#{text_file}" #{lang} #{psm} #{tessdata_dir} #{user_words} #{user_patterns} #{config_file} #{clear_console_output} #{@options_cmd.join(' ')}`
+    `#{self.configuration.command} "#{image}" "#{text_file}" #{lang} #{psm} #{tessdata_dir} #{user_words} #{user_patterns} #{config_file} #{clear_console_output} #{self.configuration.options_cmd.join(' ')}`
   end
 
   def convert_text

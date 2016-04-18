@@ -76,7 +76,6 @@ describe 'Rtesseract::BoxChar' do
 
     expect { RTesseract::BoxChar.new(@image_tiff, command: 'tesseract_error').to_s }.to raise_error(RTesseract::ConversionError)
     expect { RTesseract::BoxChar.new(@image_tiff + '_not_exist').to_s }.to raise_error(RTesseract::ImageNotSelectedError)
-
-    #expect(RTesseract::BoxChar.new(@path.join('images', 'blank.tif').to_s, options: :digits).characters).to eql([])
+    # expect(RTesseract::BoxChar.new(@path.join('images', 'blank.tif').to_s, options: :digits).characters).to eql([])
   end
 end

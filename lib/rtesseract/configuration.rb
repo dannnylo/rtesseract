@@ -8,15 +8,12 @@ class RTesseract
     'spa' => %w(sp)
   }
 
+  # Configuration class
   class Configuration
-    attr_accessor :processor, :lang, :psm, :tessdata_dir, :user_words, :user_patterns, :command
+    attr_accessor :processor, :lang, :psm, :tessdata_dir, :user_words, :user_patterns, :command, :debug, :options_cmd
 
     def initialize
       @processor = 'rmagick'
-    end
-
-    def to_hash
-      {processor: @processor, lang: lang, psm: psm, tessdata_dir: tessdata_dir, user_words: user_words, user_patterns: user_patterns}
     end
   end
 
@@ -37,19 +34,19 @@ class RTesseract
 
   def self.local_config(options = {})
     parent_config = RTesseract.configuration || RTesseract::Configuration.new
+    RTesseract::Configuration.new.tap do |config|
+      config.command = options.option(:command, parent_config.command) || RTesseract.default_command
+      config.processor = options.option(:processor, parent_config.processor) || 'rmagick'
 
-    current_config = RTesseract::Configuration.new
-    current_config.command = options.option(:command, parent_config.command) || RTesseract.default_command
-    current_config.processor = options.option(:processor, parent_config.processor) || 'rmagick'
+      config.lang = options.option(:lang, parent_config.lang)
+      config.psm = options.option(:psm, parent_config.psm)
 
-    current_config.lang = options.option(:lang, parent_config.lang)
-    current_config.psm = options.option(:psm, parent_config.psm)
+      config.tessdata_dir = options.option(:tessdata_dir, parent_config.tessdata_dir)
+      config.user_words = options.option(:user_words, parent_config.user_words)
+      config.user_patterns = options.option(:user_patterns, parent_config.user_patterns)
 
-    current_config.tessdata_dir = options.option(:tessdata_dir, parent_config.tessdata_dir)
-    current_config.user_words = options.option(:user_words, parent_config.user_words)
-    current_config.user_patterns = options.option(:user_patterns, parent_config.user_patterns)
-
-    current_config
+      config.debug = options.option(:debug, parent_config.debug) || false
+      config.options_cmd = [options.option(:options, parent_config.options_cmd)].flatten.compact
+    end
   end
-
 end

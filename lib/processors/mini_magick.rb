@@ -9,14 +9,14 @@ module MiniMagickProcessor
     %w(mini_magick MiniMagickProcessor).include?(name.to_s)
   end
 
-  def self.image_to_tif(source, x = nil, y = nil, w = nil, h = nil)
+  def self.image_to_tif(source, _points = {})
     tmp_file = Tempfile.new(['', '.tif'])
     cat = source.is_a?(Pathname) ? read_with_processor(source.to_s) : source
     cat.format('tif') do |c|
       c.compress 'None'
       c.alpha 'off'
     end
-    cat.crop("#{w}x#{h}+#{x}+#{y}") unless [x, y, w, h].compact == []
+    cat.crop("#{_points[:w]}x#{_points[:h]}+#{_points[:x]}+#{_points[:y]}") if _points.is_a?(Hash) && _points.values.compact != []
     cat.alpha 'off'
     cat.write tmp_file.path.to_s
     tmp_file

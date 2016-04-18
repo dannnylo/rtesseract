@@ -12,9 +12,9 @@ class RTesseract
       yield self if block_given?
     end
 
-    def area(x, y, width, height)
+    def area(_points)
       @value = ''
-      @areas << { x: x,  y: y, width: width, height: height }
+      @areas << _points # { x: x,  y: y, width: width, height: height }
     end
 
     def clear_areas
@@ -25,7 +25,7 @@ class RTesseract
     def convert
       @value = []
       @areas.each_with_object(RTesseract.new(@source.to_s, @options.dup)) do |area, image|
-        image.crop!(area[:x], area[:y], area[:width], area[:height])
+        image.crop!(area) #area[:x], area[:y], area[:width], area[:height])
         @value << image.to_s
       end
     rescue => error
