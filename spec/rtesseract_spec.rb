@@ -101,10 +101,10 @@ describe 'Rtesseract' do
   end
 
   it ' crop image' do
-    expect(RTesseract.new(@image_tif, psm: 7).crop!( w: 36, h: 40, x: 140, y: 10 ).to_s_without_spaces).to eql('4')
-    expect(RTesseract.new(@image_tif, psm: 7).crop!( w: 36, h: 40, x: 180, y: 10 ).to_s_without_spaces).to eql('3')
-    expect(RTesseract.new(@image_tif, psm: 7).crop!( w: 20, h: 40, x: 216, y: 10 ).to_s_without_spaces).to eql('X')
-    expect(RTesseract.new(@image_tif, psm: 7).crop!( w: 30, h: 40, x: 240, y: 10 ).to_s_without_spaces).to eql('F')
+    expect(RTesseract.new(@image_tif, psm: 7).crop!(w: 36, h: 40, x: 140, y: 10).to_s_without_spaces).to eql('4')
+    expect(RTesseract.new(@image_tif, psm: 7).crop!(w: 36, h: 40, x: 180, y: 10).to_s_without_spaces).to eql('3')
+    expect(RTesseract.new(@image_tif, psm: 7).crop!(w: 20, h: 40, x: 216, y: 10).to_s_without_spaces).to eql('X')
+    expect(RTesseract.new(@image_tif, psm: 7).crop!(w: 30, h: 40, x: 240, y: 10).to_s_without_spaces).to eql('F')
   end
 
   it ' read image from blob' do

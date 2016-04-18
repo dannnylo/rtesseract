@@ -15,10 +15,10 @@ describe 'Rtesseract::Mixed' do
 
   it 'should translate parts of the image to text' do
     mix_block = RTesseract::Mixed.new(@image_tif, psm: 7) do |image|
-      image.area( x: 28, y: 19, w: 25, h: 25 ) # position of 4
-      image.area( x: 180, y: 22, w: 20, h: 28 ) # position of 3
-      image.area( x: 218, y: 22, w: 24, h: 28 ) # position of F
-      image.area( x: 248, y: 24, w: 22, h: 22 ) # position of F
+      image.area(x: 28, y: 19, w: 25, h: 25) # position of 4
+      image.area(x: 180, y: 22, w: 20, h: 28) # position of 3
+      image.area(x: 218, y: 22, w: 24, h: 28) # position of F
+      image.area(x: 248, y: 24, w: 22, h: 22) # position of F
     end
     expect(mix_block.to_s_without_spaces).to eql('43FF')
     mix_block.clear_areas
