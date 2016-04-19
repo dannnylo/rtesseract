@@ -12,7 +12,7 @@ Ruby library for working with the Tesseract OCR.
 To work properly rtesseract are needed:
 * Tesseract - Program
 * ImageMagick - Program
-* RMagick or mini_magick or quick_magick - Gem
+* RMagick or mini_magick - Gem
 
 Atention: Version 1.0.0 works fine with Ruby 2.0 and tesseract 3.0 and lower versions of rtesseract works fine with Ruby 1.8 and tesseract 2.0.4.
 
@@ -52,10 +52,10 @@ It's very simple to use rtesseract:
   OR
 
   mix_block = RTesseract::Mixed.new("test.jpg",{:areas => [
-    {:x => 28,  :y=>19, :width=>25, :height=>25 },
-    {:x => 180,  :y=>22, :width=>20, :height=>28},
-    {:x => 218,  :y=>22, :width=>24, :height=>28},
-    {:x => 248,  :y=>24, :width=>22, :height=>22}
+    {:x => 28,  :y=>19, :w=>25, :h=>25 },
+    {:x => 180,  :y=>22, :w=>20, :h=>28},
+    {:x => 218,  :y=>22, :w=>24, :h=>28},
+    {:x => 248,  :y=>24, :w=>22, :h=>22}
   ]})
   mix_block.to_s
 
@@ -64,7 +64,6 @@ It's very simple to use rtesseract:
 Processors Options  (_Rmagick_ is default)
 
   RTesseract.new("test.jpg", :processor => "mini_magick")
-  RTesseract.new("test.jpg", :processor => "quick_magick")
 
   Note: For non process the image use NoneProcessor
 
