@@ -6,7 +6,7 @@ class RTesseract
   # Class to read char positions from an image
   class Box < RTesseract
     def initialize_hook
-      @value, @x, @y, @w, @h = [[]]
+      @value, @points = [[], {}]
     end
 
     def config_hook

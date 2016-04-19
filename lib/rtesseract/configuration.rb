@@ -15,6 +15,18 @@ class RTesseract
     def initialize
       @processor = 'rmagick'
     end
+
+    def parent
+      @parent ||= RTesseract.configuration || RTesseract::Configuration.new
+    end
+
+    def option(options, name, default = nil)
+      self.instance_variable_set("@#{name}", options.option(name, parent.send(name)) || default)
+    end
+
+    def load_options(options, names = [])
+      names.each{ |name| option(options, name, nil) }
+    end
   end
 
   class << self
@@ -32,25 +44,13 @@ class RTesseract
     'tesseract'
   end
 
-  def self.local_or_global(options, option)
-    parent_config = RTesseract.configuration || RTesseract::Configuration.new
-    options.option(option, parent_config.send(option))
-  end
-
   # Local config to instance
   def self.local_config(options = {})
     RTesseract::Configuration.new.tap do |config|
-      config.command = local_or_global(options, :command) || RTesseract.default_command
-      config.processor = local_or_global(options, :processor) || 'rmagick'
-
-      config.lang = local_or_global(options, :lang)
-      config.psm = local_or_global(options, :psm)
-
-      config.tessdata_dir = local_or_global(options, :tessdata_dir)
-      config.user_words = local_or_global(options, :user_words)
-      config.user_patterns = local_or_global(options, :user_patterns)
-
-      config.debug = local_or_global(options, :debug) || false
+      config.command = config.option(options, :command, RTesseract.default_command)
+      config.processor = config.option(options, :processor, 'rmagick')
+      config.load_options(options, [ :lang, :psm, :tessdata_dir, :user_words, :user_patterns ])
+      config.debug = config.option(options, :debug, false)
       config.options_cmd = [options.option(:options, nil)].flatten.compact
     end
   end
