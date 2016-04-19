@@ -98,32 +98,30 @@ class RTesseract
     ''
   end
 
-  # Page Segment Mode
-  def psm
-    (self.configuration.psm.nil? ? '' : " -psm #{self.configuration.psm} ")
+  def option_to_string(prefix, value = nil)
+    (value.nil? ? '' : " #{prefix} #{value} ")
   rescue
     ''
+  end
+
+  # Page Segment Mode
+  def psm
+    option_to_string('-psm', self.configuration.psm)
   end
 
   # Tessdata Dir
   def tessdata_dir
-    (self.configuration.tessdata_dir.nil? ? '' : " --tessdata-dir #{self.configuration.tessdata_dir} ")
-  rescue
-    ''
+    option_to_string('--tessdata-dir', self.configuration.tessdata_dir)
   end
 
   # User Words
   def user_words
-    (self.configuration.user_words.nil? ? '' : " --user-words #{self.configuration.user_words} ")
-  rescue
-    ''
+    option_to_string('--user-words', self.configuration.user_words)
   end
 
   # User Patterns
   def user_patterns
-    (self.configuration.user_patterns.nil? ? '' : " --user-patterns #{self.configuration.user_patterns} ")
-  rescue
-    ''
+    option_to_string('--user-patterns', self.configuration.user_patterns)
   end
 
   # Options on line
