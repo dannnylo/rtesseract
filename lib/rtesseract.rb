@@ -5,6 +5,7 @@ require 'utils'
 
 require 'rtesseract/configuration'
 require 'rtesseract/errors'
+require 'rtesseract/utils'
 
 # Ruby wrapper for Tesseract OCR
 class RTesseract
@@ -36,21 +37,6 @@ class RTesseract
     self
   end
 
-  # Remove files
-  def remove_file(files = [])
-    files.each do |file|
-      if file.is_a?(Tempfile)
-        file.close
-        file.unlink
-      else
-        File.unlink(file)
-      end
-    end
-    true
-  rescue => error
-    raise RTesseract::TempFilesNotRemovedError.new(error: error, files: files)
-  end
-
   # Select the language
   # ===Languages
   ## * eng   - English
@@ -64,8 +50,7 @@ class RTesseract
   ## * vie   - Vietnamese
   ## Note: Make sure you have installed the language to tesseract
   def lang
-    language = "#{configuration.lang}".strip.downcase
-    return '' if language.size == 0
+    language = (configuration.lang || 'eng').to_s.strip.downcase
     " -l #{LANGUAGES[language] || language} "
   rescue
     ''
@@ -158,7 +143,7 @@ class RTesseract
     convert_command
     after_convert_hook
     convert_text
-    remove_file([@image, text_file_with_ext])
+    RTesseract::Utils.remove_file([@image, text_file_with_ext])
   rescue => error
     raise RTesseract::ConversionError.new(error), error, caller
   end

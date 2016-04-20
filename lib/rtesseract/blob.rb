@@ -26,7 +26,7 @@ class RTesseract
     blob_file.flush
     self.source = blob_file.path
     convert
-    remove_file([blob_file])
+    RTesseract::Utils.remove_file([blob_file])
     self
   rescue => error
     raise RTesseract::ConversionError.new(error), error, caller

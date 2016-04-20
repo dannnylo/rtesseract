@@ -173,10 +173,9 @@ describe 'Rtesseract' do
   end
 
   it 'remove a file' do
-    rtesseract = RTesseract.new('.')
-    rtesseract.remove_file(Tempfile.new('config'))
+    RTesseract::Utils.remove_file(Tempfile.new('config'))
 
-    expect { rtesseract.remove_file(Pathname.new(Dir.tmpdir).join('test_not_exists')) }.to raise_error(RTesseract::TempFilesNotRemovedError)
+    expect { RTesseract::Utils.remove_file(Pathname.new(Dir.tmpdir).join('test_not_exists')) }.to raise_error(RTesseract::TempFilesNotRemovedError)
   end
 
   it ' support  default config processors' do
