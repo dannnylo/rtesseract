@@ -121,14 +121,14 @@ describe 'Rtesseract' do
 
   it ' use a instance' do
     expect(RTesseract.new(Magick::Image.read(@image_tif.to_s).first).to_s_without_spaces).to eql('43XF')
-    expect(RMagickProcessor.a_name?('teste')).to eql(false)
-    expect(RMagickProcessor.a_name?('rmagick')).to eql(true)
-    expect(RMagickProcessor.a_name?('RMagickProcessor')).to eql(true)
-    expect(MiniMagickProcessor.a_name?('teste')).to eql(false)
-    expect(MiniMagickProcessor.a_name?('mini_magick')).to eql(true)
-    expect(MiniMagickProcessor.a_name?('MiniMagickProcessor')).to eql(true)
-    expect(NoneProcessor.a_name?('none')).to eql(true)
-    expect(NoneProcessor.a_name?('NoneProcessor')).to eql(true)
+    expect(RTesseract::Processor::RMagickProcessor.a_name?('teste')).to eql(false)
+    expect(RTesseract::Processor::RMagickProcessor.a_name?('rmagick')).to eql(true)
+    expect(RTesseract::Processor::RMagickProcessor.a_name?('RMagickProcessor')).to eql(true)
+    expect(RTesseract::Processor::MiniMagickProcessor.a_name?('teste')).to eql(false)
+    expect(RTesseract::Processor::MiniMagickProcessor.a_name?('mini_magick')).to eql(true)
+    expect(RTesseract::Processor::MiniMagickProcessor.a_name?('MiniMagickProcessor')).to eql(true)
+    expect(RTesseract::Processor::NoneProcessor.a_name?('none')).to eql(true)
+    expect(RTesseract::Processor::NoneProcessor.a_name?('NoneProcessor')).to eql(true)
   end
 
   it ' change image in a block' do

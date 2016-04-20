@@ -1,6 +1,6 @@
 # encoding: UTF-8
 # Add to rtesseract a image without manipulation
-module NoneProcessor
+module RTesseract::Processor::NoneProcessor
   def self.setup
   end
 

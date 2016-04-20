@@ -6,17 +6,7 @@ describe 'Rtesseract::BoxChar' do
     @path = Pathname.new(__FILE__.gsub('rtesseract_box_char_spec.rb', '')).expand_path
     @image_tiff = @path.join('images', 'test.tif').to_s
     @words_image = @path.join('images', 'test_words.png').to_s
-  end
-
-  it 'bounding box by char' do
-    expect(RTesseract::BoxChar.new(@image_tiff).characters.is_a?(Array)).to eql(true)
-    expect(RTesseract::BoxChar.new(@image_tiff).characters).to eql([
-      { char: '4', x_start: 145, y_start: 14, x_end: 159, y_end: 33 },
-      { char: '3', x_start: 184, y_start: 14, x_end: 196, y_end: 33 },
-      { char: 'X', x_start: 222, y_start: 14, x_end: 238, y_end: 32 },
-      { char: 'F', x_start: 260, y_start: 14, x_end: 273, y_end: 32 }])
-
-    expect(RTesseract::BoxChar.new(@words_image).characters).to eql([
+    @values = [
       { char: 'I', x_start: 52, y_start: 91, x_end: 54, y_end: 104 },
       { char: 'f', x_start: 56, y_start: 91, x_end: 63, y_end: 105 },
       { char: 'y', x_start: 69, y_start: 87, x_end: 79, y_end: 101 },
@@ -72,7 +62,18 @@ describe 'Rtesseract::BoxChar' do
       { char: 'p', x_start: 228, y_start: 43, x_end: 237, y_end: 57 },
       { char: 'e', x_start: 238, y_start: 47, x_end: 248, y_end: 57 },
       { char: 'n', x_start: 250, y_start: 47, x_end: 258, y_end: 57 },
-      { char: '.', x_start: 261, y_start: 47, x_end: 263, y_end: 49 }])
+      { char: '.', x_start: 261, y_start: 47, x_end: 263, y_end: 49 }]
+  end
+
+  it 'bounding box by char' do
+    expect(RTesseract::BoxChar.new(@image_tiff).characters.is_a?(Array)).to eql(true)
+    expect(RTesseract::BoxChar.new(@image_tiff).characters).to eql([
+      { char: '4', x_start: 145, y_start: 14, x_end: 159, y_end: 33 },
+      { char: '3', x_start: 184, y_start: 14, x_end: 196, y_end: 33 },
+      { char: 'X', x_start: 222, y_start: 14, x_end: 238, y_end: 32 },
+      { char: 'F', x_start: 260, y_start: 14, x_end: 273, y_end: 32 }])
+
+    expect(RTesseract::BoxChar.new(@words_image).characters).to eql(@values)
 
     expect { RTesseract::BoxChar.new(@image_tiff, command: 'tesseract_error').to_s }.to raise_error(RTesseract::ConversionError)
     expect { RTesseract::BoxChar.new(@image_tiff + '_not_exist').to_s }.to raise_error(RTesseract::ImageNotSelectedError)

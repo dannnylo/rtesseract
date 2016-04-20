@@ -3,6 +3,7 @@ addons:
   apt:
     packages:
     - tesseract-ocr
+
 sudo: false
 rvm:
   - 1.9.3

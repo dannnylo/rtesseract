@@ -5,14 +5,6 @@ require 'utils'
 
 require 'rtesseract/configuration'
 require 'rtesseract/errors'
-require 'rtesseract/mixed'
-require 'rtesseract/box'
-require 'rtesseract/box_char'
-
-# Processors
-require 'processors/rmagick.rb'
-require 'processors/mini_magick.rb'
-require 'processors/none.rb'
 
 # Ruby wrapper for Tesseract OCR
 class RTesseract
@@ -24,28 +16,12 @@ class RTesseract
     self.configuration = RTesseract.local_config(options)
     @options = options || {}
     @value, @points = [nil, {}]
-    @processor = RTesseract.choose_processor!(self.configuration.processor)
+    @processor = RTesseract::Processor.choose_processor!(configuration.processor)
     @source = @processor.image?(src) ? src : Pathname.new(src)
     initialize_hook
   end
 
   def initialize_hook
-  end
-
-  def self.read(src = nil, options = {})
-    fail RTesseract::ImageNotSelectedError if src.nil?
-    processor = RTesseract.choose_processor!(options.option(:processor, nil))
-    image = processor.read_with_processor(src.to_s)
-    yield(image)
-    object = RTesseract.new('', options).from_blob(image.to_blob)
-    object
-  end
-
-  def read
-    image = @processor.read_with_processor(@source.to_s)
-    new_image = yield(image)
-    from_blob(new_image.to_blob, File.extname(@source.to_s))
-    self
   end
 
   def source=(src)
@@ -88,7 +64,7 @@ class RTesseract
   ## * vie   - Vietnamese
   ## Note: Make sure you have installed the language to tesseract
   def lang
-    language = "#{self.configuration.lang}".strip.downcase
+    language = "#{configuration.lang}".strip.downcase
     LANGUAGES.each do |value, names|
       return " -l #{value} " if names.include? language
     end
@@ -106,27 +82,27 @@ class RTesseract
 
   # Page Segment Mode
   def psm
-    option_to_string('-psm', self.configuration.psm)
+    option_to_string('-psm', configuration.psm)
   end
 
   # Tessdata Dir
   def tessdata_dir
-    option_to_string('--tessdata-dir', self.configuration.tessdata_dir)
+    option_to_string('--tessdata-dir', configuration.tessdata_dir)
   end
 
   # User Words
   def user_words
-    option_to_string('--user-words', self.configuration.user_words)
+    option_to_string('--user-words', configuration.user_words)
   end
 
   # User Patterns
   def user_patterns
-    option_to_string('--user-patterns', self.configuration.user_patterns)
+    option_to_string('--user-patterns', configuration.user_patterns)
   end
 
   # Options on line
   def options_cmd
-    self.configuration.options_cmd
+    configuration.options_cmd
   end
 
   def config_hook
@@ -149,7 +125,7 @@ class RTesseract
 
   # TODO: Clear console for MacOS or Windows
   def clear_console_output
-    return '' if self.configuration.debug
+    return '' if configuration.debug
     return '2>/dev/null' if File.exist?('/dev/null') # Linux console clear
   end
 
@@ -170,7 +146,7 @@ class RTesseract
   end
 
   def convert_command
-    `#{self.configuration.command} "#{image}" "#{text_file}" #{lang} #{psm} #{tessdata_dir} #{user_words} #{user_patterns} #{config_file} #{clear_console_output} #{self.configuration.options_cmd.join(' ')}`
+    `#{configuration.command} "#{image}" "#{text_file}" #{lang} #{psm} #{tessdata_dir} #{user_words} #{user_patterns} #{config_file} #{clear_console_output} #{configuration.options_cmd.join(' ')}`
   end
 
   def convert_text
@@ -186,20 +162,6 @@ class RTesseract
     after_convert_hook
     convert_text
     remove_file([@image, text_file_with_ext])
-  rescue => error
-    raise RTesseract::ConversionError.new(error), error, caller
-  end
-
-  # Read image from memory blob
-  def from_blob(blob, ext = '')
-    blob_file = Tempfile.new(['blob', ext], encoding: 'ascii-8bit')
-    blob_file.binmode.write(blob)
-    blob_file.rewind
-    blob_file.flush
-    self.source = blob_file.path
-    convert
-    remove_file([blob_file])
-    self
   rescue => error
     raise RTesseract::ConversionError.new(error), error, caller
   end
@@ -220,17 +182,15 @@ class RTesseract
   def to_s_without_spaces
     to_s.gsub(' ', '').gsub("\n", '').gsub("\r", '')
   end
-
-  def self.choose_processor!(processor)
-    processor =
-    if MiniMagickProcessor.a_name?(processor.to_s)
-      MiniMagickProcessor
-    elsif NoneProcessor.a_name?(processor.to_s)
-      NoneProcessor
-    else
-      RMagickProcessor
-    end
-    processor.setup
-    processor
-  end
 end
+
+require 'rtesseract/mixed'
+require 'rtesseract/box'
+require 'rtesseract/box_char'
+require 'rtesseract/blob'
+require 'rtesseract/processor'
+
+# Processors
+require 'processors/rmagick.rb'
+require 'processors/mini_magick.rb'
+require 'processors/none.rb'

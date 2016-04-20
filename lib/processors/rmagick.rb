@@ -1,6 +1,6 @@
 # encoding: UTF-8
 # Add to rtesseract a image manipulation with RMagick
-module RMagickProcessor
+module RTesseract::Processor::RMagickProcessor
   def self.setup
     require 'rmagick'
   rescue LoadError
