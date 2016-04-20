@@ -65,11 +65,8 @@ class RTesseract
   ## Note: Make sure you have installed the language to tesseract
   def lang
     language = "#{configuration.lang}".strip.downcase
-    LANGUAGES.each do |value, names|
-      return " -l #{value} " if names.include? language
-    end
-    return " -l #{language} " if language.size > 0
-    ''
+    return '' if language.size == 0
+    " -l #{LANGUAGES[language] || language} "
   rescue
     ''
   end

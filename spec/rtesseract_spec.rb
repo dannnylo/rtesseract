@@ -81,6 +81,7 @@ describe 'Rtesseract' do
     expect(RTesseract.new(@image_tif, lang: 'eng').to_s_without_spaces).to eql('43XF')
 
     expect(RTesseract.new(@image_tif, lang: 'eng').lang).to eql(' -l eng ')
+    expect(RTesseract.new(@image_tif, lang: 'it').lang).to eql(' -l ita ')
 
     # Invalid lang object
     expect(RTesseract.new(@image_tif, lang: MakeStringError.new).lang).to eql('')

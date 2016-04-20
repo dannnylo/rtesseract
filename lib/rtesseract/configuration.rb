@@ -2,10 +2,14 @@
 class RTesseract
   # Aliases to languages names
   LANGUAGES = {
-    'eng' => %w(en en-us english),
-    'ita' => %w(it),
-    'por' => %w(pt pt-br portuguese),
-    'spa' => %w(sp)
+    'en' => 'eng',
+    'en-us' => 'eng',
+    'english' => 'eng',
+    'pt' => 'por',
+    'pt-br' => 'por',
+    'portuguese' => 'por',
+    'it' => 'ita',
+    'sp' => 'spa'
   }
 
   # Configuration class
