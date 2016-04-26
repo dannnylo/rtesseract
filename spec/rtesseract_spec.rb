@@ -173,9 +173,9 @@ describe 'Rtesseract' do
   end
 
   it 'remove a file' do
-    RTesseract::Utils.remove_file(Tempfile.new('config'))
+    RTesseract::Utils.remove_files(Tempfile.new('config'))
 
-    expect { RTesseract::Utils.remove_file(Pathname.new(Dir.tmpdir).join('test_not_exists')) }.to raise_error(RTesseract::TempFilesNotRemovedError)
+    expect { RTesseract::Utils.remove_files(Pathname.new(Dir.tmpdir).join('test_not_exists')) }.to raise_error(RTesseract::TempFilesNotRemovedError)
   end
 
   it ' support  default config processors' do
@@ -220,5 +220,7 @@ describe 'Rtesseract' do
     expect(RTesseract.new(@image_tif, tessdata_dir: MakeStringError.new).tessdata_dir).to eql('')
     expect(RTesseract.new(@image_tif, user_words: MakeStringError.new).user_words).to eql('')
     expect(RTesseract.new(@image_tif, user_patterns: MakeStringError.new).user_patterns).to eql('')
+
+    #expect(RTesseract.new(@path.join('images', 'test_words.png').to_s, psm: 3, user_words: @path.join('configs', 'eng.user-words.txt').to_s).to_s).to eql("If you are a friend,\nyou speak the password,\nand the doors will open.\n\n")
   end
 end

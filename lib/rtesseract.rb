@@ -1,11 +1,10 @@
 # encoding: UTF-8
 require 'pathname'
 require 'tempfile'
-require 'utils'
 
+require 'rtesseract/utils'
 require 'rtesseract/configuration'
 require 'rtesseract/errors'
-require 'rtesseract/utils'
 
 # Ruby wrapper for Tesseract OCR
 class RTesseract
@@ -16,24 +15,27 @@ class RTesseract
   def initialize(src = '', options = {})
     self.configuration = RTesseract.local_config(options)
     @options = options || {}
-    @value, @points = [nil, {}]
+    @value = nil
+    @points = {}
     @processor = RTesseract::Processor.choose_processor!(configuration.processor)
     @source = @processor.image?(src) ? src : Pathname.new(src)
     initialize_hook
   end
 
+  # Hook to end of initialize method
   def initialize_hook
   end
 
+  # Define the source
   def source=(src)
     @value = nil
     @source = @processor.image?(src) ? src : Pathname.new(src)
   end
 
   # Crop image to convert
-  def crop!(_points = {})
+  def crop!(points = {})
     @value = nil
-    @points = _points
+    @points = points
     self
   end
 
@@ -56,6 +58,7 @@ class RTesseract
     ''
   end
 
+  # Convert option to command
   def option_to_string(prefix, value = nil)
     (value.nil? ? '' : " #{prefix} #{value} ")
   rescue
@@ -87,15 +90,18 @@ class RTesseract
     configuration.options_cmd
   end
 
+  # Hook to before config
   def config_hook
   end
 
+  # Convert configurations
   def config
     @options ||= {}
     config_hook
     @options.map { |k, v| "#{k} #{v}" }.join("\n")
   end
 
+  # Write config to file
   def config_file
     config_hook
     return '' if @options == {}
@@ -111,30 +117,37 @@ class RTesseract
     return '2>/dev/null' if File.exist?('/dev/null') # Linux console clear
   end
 
+  # Get image
   def image
     (@image = @processor.image_to_tif(@source, @points)).path
   end
 
+  # Extension of file
   def file_ext
     '.txt'
   end
 
+  # Rand file path
   def text_file
     @text_file = Pathname.new(Dir.tmpdir).join("#{Time.now.to_f}#{rand(1500)}").to_s
   end
 
+  # Full path of file with extension
   def text_file_with_ext(ext = nil)
     [@text_file, ext || file_ext].join('')
   end
 
+  # Run command
   def convert_command
     `#{configuration.command} "#{image}" "#{text_file}" #{lang} #{psm} #{tessdata_dir} #{user_words} #{user_patterns} #{config_file} #{clear_console_output} #{configuration.options_cmd.join(' ')}`
   end
 
+  # Read result file
   def convert_text
     @value = File.read(text_file_with_ext).to_s
   end
 
+  # Hook to convert
   def after_convert_hook
   end
 
@@ -143,7 +156,7 @@ class RTesseract
     convert_command
     after_convert_hook
     convert_text
-    RTesseract::Utils.remove_file([@image, text_file_with_ext])
+    RTesseract::Utils.remove_files([@image, text_file_with_ext])
   rescue => error
     raise RTesseract::ConversionError.new(error), error, caller
   end
@@ -162,7 +175,7 @@ class RTesseract
 
   # Remove spaces and break-lines
   def to_s_without_spaces
-    to_s.gsub(' ', '').gsub("\n", '').gsub("\r", '')
+    to_s.delete(' ').delete("\n").delete("\r")
   end
 end
 

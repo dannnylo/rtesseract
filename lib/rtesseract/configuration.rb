@@ -1,4 +1,4 @@
-# Configuration
+# RTesseract
 class RTesseract
   # Aliases to languages names
   LANGUAGES = {
@@ -10,7 +10,7 @@ class RTesseract
     'portuguese' => 'por',
     'it' => 'ita',
     'sp' => 'spa'
-  }
+  }.freeze
 
   # Configuration class
   class Configuration
@@ -20,16 +20,19 @@ class RTesseract
       @processor = 'rmagick'
     end
 
+    # Global configuration
     def parent
       @parent ||= RTesseract.configuration || RTesseract::Configuration.new
     end
 
+    # Set value of option
     def option(options, name, default = nil)
       self.instance_variable_set("@#{name}", options.option(name, parent.send(name)) || default)
     end
 
+    # Return the values of options
     def load_options(options, names = [])
-      names.each{ |name| option(options, name, nil) }
+      names.each { |name| option(options, name, nil) }
     end
   end
 
@@ -42,6 +45,7 @@ class RTesseract
     yield(configuration)
   end
 
+  # Default command
   def self.default_command
     TesseractBin::Executables[:tesseract] || 'tesseract'
   rescue
@@ -53,7 +57,7 @@ class RTesseract
     RTesseract::Configuration.new.tap do |config|
       config.command = config.option(options, :command, RTesseract.default_command)
       config.processor = config.option(options, :processor, 'rmagick')
-      config.load_options(options, [ :lang, :psm, :tessdata_dir, :user_words, :user_patterns ])
+      config.load_options(options, [:lang, :psm, :tessdata_dir, :user_words, :user_patterns])
       config.debug = config.option(options, :debug, false)
       config.options_cmd = [options.option(:options, nil)].flatten.compact
     end

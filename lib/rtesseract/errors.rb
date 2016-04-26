@@ -1,3 +1,4 @@
+# RTesseract
 class RTesseract
   # Class of error with storage of normal errors
   class ErrorWithMemory < StandardError

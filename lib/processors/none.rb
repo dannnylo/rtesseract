@@ -1,26 +1,34 @@
 # encoding: UTF-8
-# Add to rtesseract a image without manipulation
-module RTesseract::Processor::NoneProcessor
-  def self.setup
-  end
+# RTesseract class
+class RTesseract
+  # Processor Module
+  module Processor
+    # Add to rtesseract a image without manipulation
+    module NoneProcessor
+      # Setup Processor
+      def self.setup
+      end
 
-  def self.a_name?(name)
-    %w(none NoneProcessor).include?(name.to_s)
-  end
+      # Check if is this Processor
+      def self.a_name?(name)
+        %w(none NoneProcessor).include?(name.to_s)
+      end
 
-  def self.image_to_tif(source, _points = {})
-    tmp_file = Tempfile.new(['', '.tif'])
-    tmp_file.write(read_with_processor(source))
-    tmp_file
-  end
+      # Convert Image to Tiff
+      def self.image_to_tif(source, _points = {})
+        tmp_file = Tempfile.new(['', '.tif'])
+        tmp_file.write(read_with_processor(source))
+        tmp_file
+      end
 
-  def self.need_crop?(*)
-  end
+      # Cast instance of image
+      def self.read_with_processor(path)
+        File.read(path)
+      end
 
-  def self.read_with_processor(path)
-    File.read(path)
-  end
-
-  def self.image?(*)
+      # Check if is a image
+      def self.image?(*)
+      end
+    end
   end
 end

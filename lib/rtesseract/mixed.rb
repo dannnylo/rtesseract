@@ -1,4 +1,5 @@
 # encoding: UTF-8
+# RTesseract
 class RTesseract
   # Class to read an image from specified areas
   class Mixed
@@ -12,11 +13,13 @@ class RTesseract
       yield self if block_given?
     end
 
-    def area(_points)
+    # Add areas
+    def area(points)
       @value = ''
-      @areas << _points
+      @areas << points
     end
 
+    # Clear areas
     def clear_areas
       @areas = []
     end
@@ -45,7 +48,7 @@ class RTesseract
 
     # Remove spaces and break-lines
     def to_s_without_spaces
-      to_s.gsub(' ', '').gsub("\n", '').gsub("\r", '')
+      to_s.delete(' ').delete("\n").delete("\r")
     end
   end
 end

@@ -1,4 +1,5 @@
 # encoding: UTF-8
+# RTesseract
 class RTesseract
   # Class to read char positions from an image
   class BoxChar < Box
@@ -8,10 +9,12 @@ class RTesseract
 
     alias_method :characters, :words
 
+    # Extension of file
     def file_ext
       '.box'
     end
 
+    # Read the result file
     def parse_file
       File.read(text_file_with_ext).to_s
     end
