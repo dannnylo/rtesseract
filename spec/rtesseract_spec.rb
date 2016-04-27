@@ -201,7 +201,6 @@ describe 'Rtesseract' do
     RTesseract.configure { |config| config.psm = 7 }
     expect(RTesseract.new(@image_tif).psm).to eql(' -psm 7 ')
 
-
     RTesseract.configure { |config| config.tessdata_dir = '/tmp/test' }
     expect(RTesseract.new(@image_tif).tessdata_dir).to eql(' --tessdata-dir /tmp/test ')
 
@@ -221,6 +220,6 @@ describe 'Rtesseract' do
     expect(RTesseract.new(@image_tif, user_words: MakeStringError.new).user_words).to eql('')
     expect(RTesseract.new(@image_tif, user_patterns: MakeStringError.new).user_patterns).to eql('')
 
-    #expect(RTesseract.new(@path.join('images', 'test_words.png').to_s, psm: 3, user_words: @path.join('configs', 'eng.user-words.txt').to_s).to_s).to eql("If you are a friend,\nyou speak the password,\nand the doors will open.\n\n")
+    # expect(RTesseract.new(@path.join('images', 'test_words.png').to_s, psm: 3, user_words: @path.join('configs', 'eng.user-words.txt').to_s).to_s).to eql("If you are a friend,\nyou speak the password,\nand the doors will open.\n\n")
   end
 end
