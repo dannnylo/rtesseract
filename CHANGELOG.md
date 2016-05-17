@@ -1,3 +1,9 @@
+## v2.0.1
+
+#### Changed
+
+* Refactoring of some small classes
+
 ## v2.0.0
 
 #### Added
