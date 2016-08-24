@@ -13,6 +13,7 @@ describe 'Rtesseract' do
   before do
     @path = Pathname.new(__FILE__.gsub('rtesseract_spec.rb', '')).expand_path
     @image_tif = @path.join('images', 'test.tif').to_s
+    @image_for_pdf = @path.join('images', 'test-pdf.png').to_s
   end
 
   it ' be instantiable' do
@@ -92,6 +93,21 @@ describe 'Rtesseract' do
     expect(RTesseract.new(@image_tif, options: 'digits').options_cmd).to eql(['digits'])
     expect(RTesseract.new(@image_tif, options: :digits).options_cmd).to eql([:digits])
     expect(RTesseract.new(@image_tif, options: [:digits, :quiet]).options_cmd).to eql([:digits, :quiet])
+  end
+
+  it ' support pdf output mode' do
+    expect(RTesseract.new(@image_tif, options: 'pdf').options_cmd).to eql(['pdf'])
+    expect(RTesseract.new(@image_for_pdf, options: :pdf).options_cmd).to eql([:pdf])
+    expect(RTesseract.new(@image_tif, options: :pdf).pdf?).to eql(true)
+    expect(RTesseract.new(@image_for_pdf, options: 'pdf').pdf?).to eql(true)
+
+    pdf_ocr = RTesseract.new(@image_for_pdf, options: :pdf)
+    expect(File.exists?(pdf_ocr.to_pdf)).to eql(true)
+    expect(File.extname(pdf_ocr.to_pdf)).to eql('.pdf')
+    # comment next #clean call and go to tmp dir to see the generated pdf.
+    # puts pdf_ocr.to_pdf
+    pdf_ocr.clean
+    expect(File.exists?(pdf_ocr.to_pdf)).to eql(false)
   end
 
   it ' be configurable' do
