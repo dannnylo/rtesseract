@@ -127,23 +127,33 @@ class RTesseract
   end
 
   # Rand file path
-  def text_file
-    @text_file = Pathname.new(Dir.tmpdir).join("#{Time.now.to_f}#{rand(1500)}").to_s
+  def file_dest
+    @file_dest = Pathname.new(Dir.tmpdir).join("#{Time.now.to_f}#{rand(1500)}").to_s
   end
 
-  # Full path of file with extension
-  def text_file_with_ext(ext = nil)
-    [@text_file, ext || file_ext].join('')
+  # Full path of file with txt extension
+  def file_with_ext(ext = nil)
+    [@file_dest, ext || file_ext].join('')
+  end
+
+  # Is pdf output?
+  def pdf?
+    options_cmd.map(&:to_sym).include? :pdf
   end
 
   # Run command
   def convert_command
-    `#{configuration.command} "#{image}" "#{text_file}" #{lang} #{psm} #{tessdata_dir} #{user_words} #{user_patterns} #{config_file} #{clear_console_output} #{configuration.options_cmd.join(' ')}`
+    `#{configuration.command} "#{image}" "#{file_dest}" #{lang} #{psm} #{tessdata_dir} #{user_words} #{user_patterns} #{config_file} #{clear_console_output} #{configuration.options_cmd.join(' ')}`
   end
 
   # Read result file
   def convert_text
-    @value = File.read(text_file_with_ext).to_s
+    @value = File.read(file_with_ext).to_s
+  end
+
+  # Store pdf result path
+  def obtain_pdf
+    @pdf_path = file_with_ext('.pdf')
   end
 
   # Hook to convert
@@ -154,15 +164,19 @@ class RTesseract
   def convert
     convert_command
     after_convert_hook
-    convert_text
-    RTesseract::Utils.remove_files([@image, text_file_with_ext])
+    if pdf?
+      obtain_pdf
+    else
+      convert_text
+      RTesseract::Utils.remove_files([@image, file_with_ext])
+    end
   rescue => error
     raise RTesseract::ConversionError.new(error), error, caller
   end
 
   # Output value
   def to_s
-    return @value if @value != nil
+    return @value if @value != nil || pdf?
 
     if @processor.image?(@source) || @source.file?
       convert
@@ -176,6 +190,23 @@ class RTesseract
   def to_s_without_spaces
     to_s.gsub(/\s/, '')
   end
+
+  # Output pdf path
+  def to_pdf
+    return @pdf_path if @pdf_path != nil && pdf?
+
+    if @processor.image?(@source) || @source.file?
+      convert
+    else
+      fail RTesseract::ImageNotSelectedError.new(@source)
+    end
+  end
+
+  # Destroy pdf file
+  def clean
+    RTesseract::Utils.remove_files([@pdf_path])
+  end
+
 end
 
 require 'rtesseract/mixed'

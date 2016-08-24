@@ -16,7 +16,7 @@ class RTesseract
 
     # Read the result file
     def parse_file
-      File.read(text_file_with_ext).to_s
+      File.read(file_with_ext).to_s
     end
 
     def convert_text
