@@ -15,10 +15,9 @@ class RTesseract
   def initialize(src = '', options = {})
     self.configuration = RTesseract.local_config(options)
     @options = options || {}
-    @value = nil
     @points = {}
     @processor = RTesseract::Processor.choose_processor!(configuration.processor)
-    @source = @processor.image?(src) ? src : Pathname.new(src)
+    self.source = src
     initialize_hook
   end
 
@@ -175,7 +174,7 @@ class RTesseract
 
   # Remove spaces and break-lines
   def to_s_without_spaces
-    to_s.delete(' ').delete("\n").delete("\r")
+    to_s.gsub(/\s/, '')
   end
 end
 
