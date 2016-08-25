@@ -30,6 +30,8 @@ It's very simple to use rtesseract:
 
   image = RTesseract.new("my_image.jpg", options: 'pdf')
   image.to_pdf # Getting the pdf path
+  # ... some stuff
+  image.clean # to delete file once finished.
 
 This will preserve the document colors, pictures and structure.
 Pleas note that (#to_s) does not work with a RTesseract instance configured with option: 'pdf'. You need another instantiation without 'pdf' option to get the raw text by #to_s.
