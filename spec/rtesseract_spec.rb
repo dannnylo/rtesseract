@@ -99,7 +99,7 @@ describe 'Rtesseract' do
     expect(RTesseract.new(@image_tif, chop_enable: 0).config).to eql('chop_enable 0')
     expect(RTesseract.new(@image_tif, chop_enable: 0, enable_assoc: 0).config).to eql("chop_enable 0\nenable_assoc 0")
     expect(RTesseract.new(@image_tif, chop_enable: 0).to_s_without_spaces).to eql('43XF')
-    expect(RTesseract.new(@image_tif, tessedit_char_whitelist: "ABCDEF12345").to_s_without_spaces).to eql('43F')
+    expect(RTesseract.new(@image_tif, tessedit_char_whitelist: 'ABCDEF12345').to_s_without_spaces).to eql('43F')
   end
 
   it ' crop image' do

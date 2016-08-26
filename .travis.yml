@@ -1,10 +1,11 @@
+sudo: required
+dist: trusty
 language: ruby
 addons:
   apt:
     packages:
     - tesseract-ocr
 
-sudo: false
 rvm:
   - 1.9.3
   - 2.0.0

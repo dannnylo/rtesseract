@@ -89,6 +89,7 @@ Language Options
      * por   - Portuguese
      * spa   - Spanish
      * vie   - Vietnamese
+     * or any other supported by tesseract.
   Note: Make sure you have installed the language to tesseract
 
 Other Options
