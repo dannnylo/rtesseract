@@ -29,7 +29,7 @@ class RTesseract
 
     # Read the result file
     def parse_file
-      html = Nokogiri::HTML(File.read(text_file_with_ext))
+      html = Nokogiri::HTML(File.read(file_with_ext))
       html.css('span.ocrx_word, span.ocr_word')
     end
 
@@ -42,7 +42,7 @@ class RTesseract
 
     # Move file html to hocr
     def after_convert_hook
-      FileUtils.mv(text_file_with_ext('.html'), text_file_with_ext) rescue nil
+      FileUtils.mv(file_with_ext('.html'), file_with_ext) rescue nil
     end
 
     # Output value
