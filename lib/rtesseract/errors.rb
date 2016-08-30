@@ -12,4 +12,10 @@ class RTesseract
   class ConversionError < ErrorWithMemory; end
   class ImageNotSelectedError < ErrorWithMemory; end
   class TempFilesNotRemovedError < ErrorWithMemory; end
+  
+  class TesseractVersionError < StandardError 
+    def initialize 
+      super "Tesseract version is unknown or below 3.03 which is required for pdf output."
+    end
+  end
 end

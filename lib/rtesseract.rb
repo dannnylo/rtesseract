@@ -195,6 +195,9 @@ class RTesseract
   def to_pdf
     return @pdf_path if @pdf_path != nil && pdf?
 
+    tess_version = RTesseract::Utils.version_number
+    fail TesseractVersionError.new if tess_version && tess_version < 3.03
+
     if @processor.image?(@source) || @source.file?
       convert
     else

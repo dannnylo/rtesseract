@@ -195,6 +195,10 @@ describe 'Rtesseract' do
     expect { RTesseract::Utils.remove_files(Pathname.new(Dir.tmpdir).join('test_not_exists')) }.to raise_error(RTesseract::TempFilesNotRemovedError)
   end
 
+  it ' get a numeric value for tesseract version' do
+    expect(RTesseract::Utils.version_number).to be_a Float
+  end
+
   it ' support  default config processors' do
     # Rmagick
     RTesseract.configure { |config| config.processor = 'rmagick' }
