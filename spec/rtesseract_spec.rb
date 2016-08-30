@@ -116,6 +116,16 @@ describe 'Rtesseract' do
     expect(File.exists?(pdf_ocr.to_pdf)).to eql(false)
   end
 
+  it ' warn when tesseract cannot give pdf' do
+    rtesseract = RTesseract.new(@image_for_pdf)
+
+    allow(rtesseract).to receive(:tesseract_version).and_return(3.02)
+    expect { rtesseract.to_pdf }.to raise_error(RTesseract::TesseractVersionError)
+
+    allow(rtesseract).to receive(:tesseract_version).and_return(3.03)
+    expect { rtesseract.to_pdf }.not_to raise_error
+  end
+
   it ' be configurable' do
     expect(RTesseract.new(@image_tif, chop_enable: 0, enable_assoc: 0, display_text: 0).config).to eql("chop_enable 0\nenable_assoc 0\ndisplay_text 0")
     expect(RTesseract.new(@image_tif, chop_enable: 0).config).to eql('chop_enable 0')

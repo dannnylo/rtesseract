@@ -25,13 +25,13 @@ It's very simple to use rtesseract:
 === CONVERT IMAGE TO STRING
 
   image = RTesseract.new("my_image.jpg")
-  image.to_s #Getting the value
+  image.to_s # Getting the value
 
 === CONVERT IMAGE TO SEARCHABLE PDF
 
   image = RTesseract.new("my_image.jpg")
   image.to_pdf  # Getting the pdf path
-  image.to_s    # to get the text only
+  image.to_s    # Still can get the value only.
   # ...
   # some stuff
   # ...
