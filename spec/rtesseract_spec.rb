@@ -96,18 +96,34 @@ describe 'Rtesseract' do
   end
 
   it ' support pdf output mode' do
-    expect(RTesseract.new(@image_tif, options: 'pdf').options_cmd).to eql(['pdf'])
-    expect(RTesseract.new(@image_for_pdf, options: :pdf).options_cmd).to eql([:pdf])
-    expect(RTesseract.new(@image_tif, options: :pdf).pdf?).to eql(true)
-    expect(RTesseract.new(@image_for_pdf, options: 'pdf').pdf?).to eql(true)
+    # Internal test. Consider 'pdf' option only when #to_pdf is called.
+    expect(RTesseract.new(@image_tif, options: 'pdf').options_cmd).to eql([])
+    expect(RTesseract.new(@image_for_pdf, options: :pdf).options_cmd).to eql([])
 
-    pdf_ocr = RTesseract.new(@image_for_pdf, options: :pdf)
+    pdf_ocr = RTesseract.new(@image_for_pdf)
     expect(File.exists?(pdf_ocr.to_pdf)).to eql(true)
     expect(File.extname(pdf_ocr.to_pdf)).to eql('.pdf')
-    # comment next #clean call and go to tmp dir to see the generated pdf.
-    # puts pdf_ocr.to_pdf
-    pdf_ocr.clean
+    # Comment next line and go to tmp dir to see generated pdf.
+    expect(pdf_ocr.clean).to eq(true)
     expect(File.exists?(pdf_ocr.to_pdf)).to eql(false)
+
+    # Still have original functionality (i.e. #to_s, #to_s_without_spaces).
+    pdf_ocr = RTesseract.new(@image_tif)
+    expect(File.exists?(pdf_ocr.to_pdf)).to eql(true)
+    expect(File.extname(pdf_ocr.to_pdf)).to eql('.pdf')
+    expect(pdf_ocr.to_s_without_spaces).to eql('43XF')
+    expect(pdf_ocr.clean).to eq(true)
+    expect(File.exists?(pdf_ocr.to_pdf)).to eql(false)
+  end
+
+  it ' warn when tesseract cannot give pdf' do
+    rtesseract = RTesseract.new(@image_for_pdf)
+
+    allow(rtesseract).to receive(:tesseract_version).and_return(3.02)
+    expect { rtesseract.to_pdf }.to raise_error(RTesseract::TesseractVersionError)
+
+    allow(rtesseract).to receive(:tesseract_version).and_return(3.03)
+    expect { rtesseract.to_pdf }.not_to raise_error
   end
 
   it ' be configurable' do
@@ -195,7 +211,11 @@ describe 'Rtesseract' do
     expect { RTesseract::Utils.remove_files(Pathname.new(Dir.tmpdir).join('test_not_exists')) }.to raise_error(RTesseract::TempFilesNotRemovedError)
   end
 
-  it ' support  default config processors' do
+  it ' get a numeric value for tesseract version' do
+    expect(RTesseract::Utils.version_number).to be_a Float
+  end
+
+  it ' support default config processors' do
     # Rmagick
     RTesseract.configure { |config| config.processor = 'rmagick' }
     expect(RTesseract.new(@image_tif).processor.a_name?('rmagick')).to eql(true)
@@ -226,6 +246,18 @@ describe 'Rtesseract' do
 
     RTesseract.configure { |config| config.user_patterns = '/tmp/test' }
     expect(RTesseract.new(@image_tif).user_patterns).to eql(' --user-patterns /tmp/test ')
+  end
+
+  it ' configure pdf has no effect and kept in-house' do
+    # So it does not interfere with #to_s outputting.
+    RTesseract.configure { |config| config.options_cmd =  ['pdf'] }
+    expect(RTesseract.new(@image_tif).options_cmd).to eql([])
+
+    RTesseract.configure { |config| config.options_cmd = [:pdf] }
+    expect(RTesseract.new(@image_tif).options_cmd).to eql([])
+
+    RTesseract.configure { |config| config.options_cmd = [:pdf, 'pdf'] }
+    expect(RTesseract.new(@image_tif).options_cmd).to eql([])
   end
 
   it ' support new configs' do

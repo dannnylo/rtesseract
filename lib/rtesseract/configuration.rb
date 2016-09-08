@@ -43,6 +43,15 @@ class RTesseract
   def self.configure
     self.configuration ||= Configuration.new
     yield(configuration)
+    self.clear_pdf_option
+  end
+
+  # Clear pdf option
+  def self.clear_pdf_option
+    if self.configuration.options_cmd
+      self.configuration.options_cmd.delete('pdf')
+      self.configuration.options_cmd.delete(:pdf)
+    end
   end
 
   # Default command
@@ -59,7 +68,8 @@ class RTesseract
       config.processor = config.option(options, :processor, 'rmagick')
       config.load_options(options, [:lang, :psm, :tessdata_dir, :user_words, :user_patterns])
       config.debug = config.option(options, :debug, false)
-      config.options_cmd = [options.option(:options, nil)].flatten.compact
+      pdf_opts = lambda { |o| o == 'pdf' || o == :pdf }
+      config.options_cmd = [options.option(:options, nil)].delete_if(&pdf_opts).flatten.compact
     end
   end
 end

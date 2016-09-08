@@ -15,6 +15,7 @@ To work properly rtesseract are needed:
 * RMagick or mini_magick - Gem
 
 Atention: Version 1.0.0 works fine with Ruby 2.0 and tesseract 3.0 and lower versions of rtesseract works fine with Ruby 1.8 and tesseract 2.0.4.
+
 PDF support requires a newer version of tesseract, specifically V.3.03 or above.
 
 == EXAMPLE USAGE
@@ -24,17 +25,19 @@ It's very simple to use rtesseract:
 === CONVERT IMAGE TO STRING
 
   image = RTesseract.new("my_image.jpg")
-  image.to_s #Getting the value
+  image.to_s # Getting the value
 
-=== CONVERT IMAGE TO SEARCHABLE PDF (needs tesseract versions >=3.03)
+=== CONVERT IMAGE TO SEARCHABLE PDF
 
-  image = RTesseract.new("my_image.jpg", options: 'pdf')
-  image.to_pdf # Getting the pdf path
-  # ... some stuff
-  image.clean # to delete file once finished.
+  image = RTesseract.new("my_image.jpg")
+  image.to_pdf  # Getting the pdf path
+  image.to_s    # Still can get the value only.
+  # ...
+  # some stuff
+  # ...
+  image.clean   # to delete file once finished
 
-This will preserve the document colors, pictures and structure.
-Pleas note that (#to_s) does not work with a RTesseract instance configured with option: 'pdf'. You need another instantiation without 'pdf' option to get the raw text by #to_s.
+This will preserve the image colors, pictures and structure in the generated pdf.
 
 === CHANGE THE IMAGE
 

@@ -28,6 +28,7 @@ class RTesseract
   # Define the source
   def source=(src)
     @value = nil
+    @pdf_path = nil
     @source = @processor.image?(src) ? src : Pathname.new(src)
   end
 
@@ -126,6 +127,12 @@ class RTesseract
     '.txt'
   end
 
+  # Detect version number
+  def tesseract_version
+    RTesseract::Utils.version_number
+  end
+
+
   # Rand file path
   def file_dest
     @file_dest = Pathname.new(Dir.tmpdir).join("#{Time.now.to_f}#{rand(1500)}").to_s
@@ -136,14 +143,14 @@ class RTesseract
     [@file_dest, ext || file_ext].join('')
   end
 
-  # Is pdf output?
-  def pdf?
-    options_cmd.map(&:to_sym).include? :pdf
-  end
-
   # Run command
   def convert_command
-    `#{configuration.command} "#{image}" "#{file_dest}" #{lang} #{psm} #{tessdata_dir} #{user_words} #{user_patterns} #{config_file} #{clear_console_output} #{configuration.options_cmd.join(' ')}`
+    `#{configuration.command} "#{image}" "#{file_dest}" #{lang} #{psm} #{tessdata_dir} #{user_words} #{user_patterns} #{config_file} #{clear_console_output} #{options_cmd.join(' ')}`
+  end
+
+  # Is pdf output?
+  def pdf?
+    options_cmd.include? 'pdf'
   end
 
   # Read result file
@@ -152,8 +159,18 @@ class RTesseract
   end
 
   # Store pdf result path
-  def obtain_pdf
+  def convert_pdf
     @pdf_path = file_with_ext('.pdf')
+  end
+
+  # Convert result to proper type
+  def convert_result
+    if pdf?
+      convert_pdf
+    else
+      convert_text
+      RTesseract::Utils.remove_files([@image, file_with_ext])
+    end
   end
 
   # Hook to convert
@@ -164,19 +181,14 @@ class RTesseract
   def convert
     convert_command
     after_convert_hook
-    if pdf?
-      obtain_pdf
-    else
-      convert_text
-      RTesseract::Utils.remove_files([@image, file_with_ext])
-    end
+    convert_result
   rescue => error
     raise RTesseract::ConversionError.new(error), error, caller
   end
 
   # Output value
   def to_s
-    return @value if @value != nil || pdf?
+    return @value if @value
 
     if @processor.image?(@source) || @source.file?
       convert
@@ -193,10 +205,15 @@ class RTesseract
 
   # Output pdf path
   def to_pdf
-    return @pdf_path if @pdf_path != nil && pdf?
+    return @pdf_path if @pdf_path
+
+    fail TesseractVersionError.new if tesseract_version.nil? || tesseract_version < 3.03
 
     if @processor.image?(@source) || @source.file?
+      options_cmd << 'pdf'
       convert
+      options_cmd.delete('pdf')
+      @pdf_path
     else
       fail RTesseract::ImageNotSelectedError.new(@source)
     end
