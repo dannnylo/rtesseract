@@ -1,3 +1,9 @@
+## v2.1.0
+
+#### Added
+
+* Support to generate searchable PDF
+
 ## v2.0.1
 
 #### Changed
