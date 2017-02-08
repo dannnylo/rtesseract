@@ -197,6 +197,13 @@ describe 'Rtesseract' do
     expect(test.to_s_without_spaces).to eql('3R8F')
   end
 
+  it 'does not raise on read with image_magick processor' do
+    expect {
+      instance = RTesseract.read(@image_tif, processor: 'mini_magick') {}
+      expect(instance.processor.a_name?('mini_magick')).to be_truthy
+    }.not_to raise_error
+  end
+
   it ' get a error' do
     expect { RTesseract.new(@path.join('images', 'test.jpg').to_s, command: 'tesseract_error').to_s }.to raise_error(RTesseract::ConversionError)
     expect { RTesseract.new(@path.join('images', 'test_not_exists.png').to_s).to_s }.to raise_error(RTesseract::ImageNotSelectedError)
