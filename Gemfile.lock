@@ -35,7 +35,7 @@ GEM
       rake
       rdoc
       semver
-    json (1.8.3)
+    json (1.8.5)
     jwt (1.5.1)
     mini_magick (4.5.1)
     mini_portile2 (2.0.0)
@@ -87,6 +87,7 @@ DEPENDENCIES
   bundler
   coveralls
   jeweler (~> 2.1.1)
+  json (= 1.8.5)
   mini_magick
   nokogiri
   rdoc
@@ -95,4 +96,4 @@ DEPENDENCIES
   simplecov
 
 BUNDLED WITH
-   1.11.2
+   1.14.3
