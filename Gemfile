@@ -9,6 +9,7 @@ group :development do
   gem 'bundler'
   gem 'jeweler', '~> 2.1.1'
   gem 'simplecov'
+  gem 'json', '1.8.5'
   gem 'coveralls', require: false
 end
 
