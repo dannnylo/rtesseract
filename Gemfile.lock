@@ -87,7 +87,7 @@ DEPENDENCIES
   bundler
   coveralls
   jeweler (~> 2.1.1)
-  json (= 1.8.5)
+  json
   mini_magick
   nokogiri
   rdoc
