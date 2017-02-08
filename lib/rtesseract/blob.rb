@@ -3,7 +3,7 @@ class RTesseract
   # Read image from memory blob
   def self.read(src = nil, options = {})
     fail RTesseract::ImageNotSelectedError if src.nil?
-    processor = RTesseract::Processor.choose_processor!(options.option(:processor, nil))
+    processor = RTesseract::Processor.choose_processor!(options[:processor])
     image = processor.read_with_processor(src.to_s)
     yield(image)
     object = RTesseract.new('', options).from_blob(image.to_blob)
