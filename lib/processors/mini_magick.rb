@@ -21,10 +21,10 @@ class RTesseract
         cat = source.is_a?(Pathname) ? read_with_processor(source.to_s) : source
         cat.format('tif') do |c|
           c.compress 'None'
-          c.alpha 'off'
+          c.alpha 'off' if MiniMagick.cli != :graphicsmagick
         end
         cat.crop("#{points[:w]}x#{points[:h]}+#{points[:x]}+#{points[:y]}") if points.is_a?(Hash) && points.values.compact != []
-        cat.alpha 'off'
+        cat.alpha 'off' if MiniMagick.cli != :graphicsmagick
         cat.write tmp_file.path.to_s
         tmp_file
       end
