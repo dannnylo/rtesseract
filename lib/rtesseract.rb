@@ -227,6 +227,7 @@ class RTesseract
 end
 
 require 'rtesseract/mixed'
+require 'rtesseract/uzn'
 require 'rtesseract/box'
 require 'rtesseract/box_char'
 require 'rtesseract/blob'
