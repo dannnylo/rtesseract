@@ -14,5 +14,8 @@ require 'rtesseract'
 # in ./support/ and its subdirectories.
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
-RSpec.configure do # |config|
+RSpec.configure do |config|
+  config.after(:each) do
+    RTesseract.configuration = RTesseract::Configuration.new
+  end
 end
