@@ -51,6 +51,6 @@ describe 'Rtesseract::Uzn' do
     expect { uzn_block.to_s_without_spaces }.to raise_error(RTesseract::ImageNotSelectedError)
 
     uzn_block = RTesseract::Uzn.new(@image_tif, areas: @areas, psm: 7, command: 'tesseract_error')
-    expect { uzn_block.to_s }.to raise_error(RTesseract::ConversionError)
+    expect { uzn_block.to_s }.to raise_error(RTesseract::TesseractNotInstalledError)
   end
 end

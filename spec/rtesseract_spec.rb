@@ -205,11 +205,14 @@ describe 'Rtesseract' do
   end
 
   it ' get a error' do
-    expect { RTesseract.new(@path.join('images', 'test.jpg').to_s, command: 'tesseract_error').to_s }.to raise_error(RTesseract::ConversionError)
     expect { RTesseract.new(@path.join('images', 'test_not_exists.png').to_s).to_s }.to raise_error(RTesseract::ImageNotSelectedError)
 
     # Invalid psm object
     expect(RTesseract.new(@image_tif, psm:  MakeStringError.new).psm).to eql('')
+  end
+
+  it 'tesseract not installed' do
+    expect { RTesseract.new(@path.join('images', 'test.jpg').to_s, command: 'tesseract_error').to_s }.to raise_error(RTesseract::TesseractNotInstalledError)
   end
 
   it 'remove a file' do

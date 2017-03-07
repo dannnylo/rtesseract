@@ -31,6 +31,8 @@ class RTesseract
         image.crop!(area)
         @value << image.to_s
       end
+    rescue RTesseract::TesseractCommandError
+      raise
     rescue => error
       raise RTesseract::ConversionError.new(error), error, caller
     end

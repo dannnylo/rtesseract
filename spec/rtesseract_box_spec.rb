@@ -29,7 +29,7 @@ describe 'Rtesseract::Box' do
 
     expect(RTesseract::Box.new(@image_tiff).words.is_a?(Array)).to eql(true)
     expect(RTesseract::Box.new(@words_image).to_s).to eql('If you are a friend, you speak the password, and the doors will open.')
-    expect { RTesseract::Box.new(@image_tiff, command: 'tesseract_error').to_s }.to raise_error(RTesseract::ConversionError)
+    expect { RTesseract::Box.new(@image_tiff, command: 'tesseract_error').to_s }.to raise_error(RTesseract::TesseractNotInstalledError)
     expect { RTesseract::Box.new(@image_tiff + '_not_exist').to_s }.to raise_error(RTesseract::ImageNotSelectedError)
     # expect(RTesseract::Box.new(@path.join('images', 'blank.tif').to_s, options: :digits).words).to eql([])
   end

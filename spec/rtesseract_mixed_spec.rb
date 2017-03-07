@@ -44,6 +44,6 @@ describe 'Rtesseract::Mixed' do
     expect { mix_block.to_s_without_spaces }.to raise_error(RTesseract::ImageNotSelectedError)
 
     mix_block = RTesseract::Mixed.new(@image_tif, areas: @areas, psm: 7, command: 'tesseract_error')
-    expect { mix_block.to_s }.to raise_error(RTesseract::ConversionError)
+    expect { mix_block.to_s }.to raise_error(RTesseract::TesseractNotInstalledError)
   end
 end

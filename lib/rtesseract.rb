@@ -180,10 +180,15 @@ class RTesseract
   # Convert image to string
   def convert
     convert_command
-    after_convert_hook
-    convert_result
-  rescue => error
-    raise RTesseract::ConversionError.new(error), error, caller
+    if $? && !$?.success?
+      failed_command!
+    end
+    begin
+      after_convert_hook
+      convert_result
+    rescue => error
+      raise RTesseract::ConversionError.new(error), error, caller
+    end
   end
 
   # Output value
@@ -222,6 +227,16 @@ class RTesseract
   # Destroy pdf file
   def clean
     RTesseract::Utils.remove_files([@pdf_path])
+  end
+
+  private
+
+  def failed_command!
+    if $?.exitstatus == 127
+      raise TesseractNotInstalledError
+    else
+      raise TesseractCommandError, $?.to_s
+    end
   end
 
 end

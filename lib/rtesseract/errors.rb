@@ -12,6 +12,8 @@ class RTesseract
   class ConversionError < ErrorWithMemory; end
   class ImageNotSelectedError < ErrorWithMemory; end
   class TempFilesNotRemovedError < ErrorWithMemory; end
+  class TesseractCommandError < StandardError; end
+  class TesseractNotInstalledError < TesseractCommandError; end
   
   class TesseractVersionError < StandardError 
     def initialize 
