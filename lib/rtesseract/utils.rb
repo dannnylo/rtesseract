@@ -27,9 +27,9 @@ class RTesseract
 
     # Extract tesseract version number
     def self.version_number
-      out, err, st = Open3.capture3(RTesseract.default_command, "--version")
-      
-      version = err.split("\n")[0].split(" ")[1].split('.')[0, 2].join('.')
+      output, st = Open3.capture2e(RTesseract.default_command, "--version")
+
+      version = output.split("\n")[0].split(" ")[1].split('.')[0, 2].join('.')
       Float(version) rescue nil
     end
   end
