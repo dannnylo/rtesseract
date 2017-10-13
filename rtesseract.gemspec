@@ -41,6 +41,7 @@ Gem::Specification.new do |s|
     "lib/rtesseract/mixed.rb",
     "lib/rtesseract/processor.rb",
     "lib/rtesseract/utils.rb",
+    "lib/rtesseract/uzn.rb",
     "rtesseract.gemspec",
     "spec/configs/eng.user-words.txt",
     "spec/images/README.pdf",
