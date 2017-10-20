@@ -70,6 +70,11 @@ class RTesseract
     option_to_string('-psm', configuration.psm)
   end
 
+  # Engine Mode
+  def oem
+    option_to_string '--oem', configuration.oem
+  end
+
   # Tessdata Dir
   def tessdata_dir
     option_to_string('--tessdata-dir', configuration.tessdata_dir)
@@ -145,7 +150,7 @@ class RTesseract
 
   # Run command
   def convert_command
-    `#{configuration.command} "#{image}" "#{file_dest}" #{lang} #{psm} #{tessdata_dir} #{user_words} #{user_patterns} #{config_file} #{clear_console_output} #{options_cmd.join(' ')}`
+    `#{configuration.command} "#{image}" "#{file_dest}" #{lang} #{oem} #{psm} #{tessdata_dir} #{user_words} #{user_patterns} #{config_file} #{clear_console_output} #{options_cmd.join(' ')}`
   end
 
   # Is pdf output?
