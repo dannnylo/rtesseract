@@ -1,7 +1,8 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 # encoding: UTF-8
 require 'pathname'
-require 'RMagick'
+RTesseract::Processor::RMagickProcessor.setup
+
 # Class to rise error
 class MakeStringError
   def to_s

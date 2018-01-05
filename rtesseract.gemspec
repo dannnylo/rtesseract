@@ -5,15 +5,15 @@
 # stub: rtesseract 2.1.1 ruby lib
 
 Gem::Specification.new do |s|
-  s.name = "rtesseract"
+  s.name = "rtesseract".freeze
   s.version = "2.1.1"
 
-  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.require_paths = ["lib"]
-  s.authors = ["Danilo Jeremias da Silva"]
-  s.date = "2017-02-08"
-  s.description = "Ruby library for working with the Tesseract OCR."
-  s.email = "dannnylo@gmail.com"
+  s.required_rubygems_version = Gem::Requirement.new(">= 0".freeze) if s.respond_to? :required_rubygems_version=
+  s.require_paths = ["lib".freeze]
+  s.authors = ["Danilo Jeremias da Silva".freeze]
+  s.date = "2018-01-05"
+  s.description = "Ruby library for working with the Tesseract OCR.".freeze
+  s.email = "dannnylo@gmail.com".freeze
   s.extra_rdoc_files = [
     "LICENSE.txt",
     "README.rdoc"
@@ -60,44 +60,45 @@ Gem::Specification.new do |s|
     "spec/rtesseract_box_spec.rb",
     "spec/rtesseract_mixed_spec.rb",
     "spec/rtesseract_spec.rb",
+    "spec/rtesseract_uzn_spec.rb",
     "spec/spec_helper.rb"
   ]
-  s.homepage = "http://github.com/dannnylo/rtesseract"
-  s.licenses = ["MIT"]
-  s.rubygems_version = "2.4.8"
-  s.summary = "Ruby library for working with the Tesseract OCR."
+  s.homepage = "http://github.com/dannnylo/rtesseract".freeze
+  s.licenses = ["MIT".freeze]
+  s.rubygems_version = "2.6.14".freeze
+  s.summary = "Ruby library for working with the Tesseract OCR.".freeze
 
   if s.respond_to? :specification_version then
     s.specification_version = 4
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<nokogiri>, [">= 0"])
-      s.add_development_dependency(%q<rspec>, [">= 0"])
-      s.add_development_dependency(%q<rdoc>, [">= 0"])
-      s.add_development_dependency(%q<bundler>, [">= 0"])
-      s.add_development_dependency(%q<jeweler>, ["~> 2.1.1"])
-      s.add_development_dependency(%q<simplecov>, [">= 0"])
-      s.add_development_dependency(%q<json>, [">= 0"])
-      s.add_development_dependency(%q<coveralls>, [">= 0"])
+      s.add_runtime_dependency(%q<nokogiri>.freeze, [">= 0"])
+      s.add_development_dependency(%q<rspec>.freeze, [">= 0"])
+      s.add_development_dependency(%q<rdoc>.freeze, [">= 0"])
+      s.add_development_dependency(%q<bundler>.freeze, [">= 0"])
+      s.add_development_dependency(%q<jeweler>.freeze, [">= 0"])
+      s.add_development_dependency(%q<simplecov>.freeze, [">= 0"])
+      s.add_development_dependency(%q<json>.freeze, [">= 0"])
+      s.add_development_dependency(%q<coveralls>.freeze, [">= 0"])
     else
-      s.add_dependency(%q<nokogiri>, [">= 0"])
-      s.add_dependency(%q<rspec>, [">= 0"])
-      s.add_dependency(%q<rdoc>, [">= 0"])
-      s.add_dependency(%q<bundler>, [">= 0"])
-      s.add_dependency(%q<jeweler>, ["~> 2.1.1"])
-      s.add_dependency(%q<simplecov>, [">= 0"])
-      s.add_dependency(%q<json>, [">= 0"])
-      s.add_dependency(%q<coveralls>, [">= 0"])
+      s.add_dependency(%q<nokogiri>.freeze, [">= 0"])
+      s.add_dependency(%q<rspec>.freeze, [">= 0"])
+      s.add_dependency(%q<rdoc>.freeze, [">= 0"])
+      s.add_dependency(%q<bundler>.freeze, [">= 0"])
+      s.add_dependency(%q<jeweler>.freeze, [">= 0"])
+      s.add_dependency(%q<simplecov>.freeze, [">= 0"])
+      s.add_dependency(%q<json>.freeze, [">= 0"])
+      s.add_dependency(%q<coveralls>.freeze, [">= 0"])
     end
   else
-    s.add_dependency(%q<nokogiri>, [">= 0"])
-    s.add_dependency(%q<rspec>, [">= 0"])
-    s.add_dependency(%q<rdoc>, [">= 0"])
-    s.add_dependency(%q<bundler>, [">= 0"])
-    s.add_dependency(%q<jeweler>, ["~> 2.1.1"])
-    s.add_dependency(%q<simplecov>, [">= 0"])
-    s.add_dependency(%q<json>, [">= 0"])
-    s.add_dependency(%q<coveralls>, [">= 0"])
+    s.add_dependency(%q<nokogiri>.freeze, [">= 0"])
+    s.add_dependency(%q<rspec>.freeze, [">= 0"])
+    s.add_dependency(%q<rdoc>.freeze, [">= 0"])
+    s.add_dependency(%q<bundler>.freeze, [">= 0"])
+    s.add_dependency(%q<jeweler>.freeze, [">= 0"])
+    s.add_dependency(%q<simplecov>.freeze, [">= 0"])
+    s.add_dependency(%q<json>.freeze, [">= 0"])
+    s.add_dependency(%q<coveralls>.freeze, [">= 0"])
   end
 end
 

@@ -7,7 +7,7 @@ group :development do
   gem 'rspec'
   gem 'rdoc'
   gem 'bundler'
-  gem 'jeweler', '~> 2.1.1'
+  gem 'jeweler'
   gem 'simplecov'
   gem 'json'
   gem 'coveralls', require: false
