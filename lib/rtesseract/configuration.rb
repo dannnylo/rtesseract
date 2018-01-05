@@ -14,7 +14,7 @@ class RTesseract
 
   # Configuration class
   class Configuration
-    attr_accessor :processor, :lang, :psm, :tessdata_dir, :user_words, :user_patterns, :command, :debug, :options_cmd
+    attr_accessor :processor, :lang, :psm, :oem, :tessdata_dir, :user_words, :user_patterns, :command, :debug, :options_cmd
 
     def initialize
       @processor = 'rmagick'
@@ -66,7 +66,7 @@ class RTesseract
     RTesseract::Configuration.new.tap do |config|
       config.command = config.option(options, :command, RTesseract.default_command)
       config.processor = config.option(options, :processor, 'rmagick')
-      config.load_options(options, [:lang, :psm, :tessdata_dir, :user_words, :user_patterns])
+      config.load_options(options, [:lang, :psm, :oem, :tessdata_dir, :user_words, :user_patterns])
       config.debug = config.option(options, :debug, false)
       pdf_opts = lambda { |o| o == 'pdf' || o == :pdf }
       config.options_cmd = [options.option(:options, nil)].delete_if(&pdf_opts).flatten.compact
