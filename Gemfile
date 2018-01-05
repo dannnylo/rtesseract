@@ -11,6 +11,7 @@ group :development do
   gem 'simplecov'
   gem 'json'
   gem 'coveralls', require: false
+  gem 'rest-client', '~> 1.7.3'
 end
 
 group :test do
