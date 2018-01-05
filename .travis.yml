@@ -1,5 +1,5 @@
 sudo: required
-dist: trusty
+# dist: trusty
 language: ruby
 addons:
   apt:
@@ -7,7 +7,7 @@ addons:
     - tesseract-ocr
 
 rvm:
-  - 2.1.10
+  # - 2.1.10
   - 2.2.6
   - 2.3.3
   - 2.4.0
