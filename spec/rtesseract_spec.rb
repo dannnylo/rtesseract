@@ -244,7 +244,7 @@ describe 'Rtesseract' do
     expect(RTesseract.new(@image_tif).lang).to eql(' -l por ')
 
     RTesseract.configure { |config| config.psm = 7 }
-    expect(RTesseract.new(@image_tif).psm).to eql(' -psm 7 ')
+    expect(RTesseract.new(@image_tif).psm).to eql(' --psm 7 ')
 
     RTesseract.configure { |config| config.tessdata_dir = '/tmp/test' }
     expect(RTesseract.new(@image_tif).tessdata_dir).to eql(' --tessdata-dir /tmp/test ')
