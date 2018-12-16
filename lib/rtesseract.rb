@@ -67,7 +67,7 @@ class RTesseract
 
   # Page Segment Mode
   def psm
-    option_to_string('-psm', configuration.psm)
+    option_to_string('--psm', configuration.psm)
   end
 
   # Engine Mode
