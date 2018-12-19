@@ -1,11 +1,13 @@
-sudo: required
+---
+sudo: false
 language: ruby
+cache: bundler
 addons:
   apt:
     packages:
     - tesseract-ocr
 
 rvm:
-  - 2.2.6
-  - 2.3.3
   - 2.4.2
+  - 2.5.3
+before_install: gem install bundler -v 1.17.1

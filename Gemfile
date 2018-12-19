@@ -1,20 +1,6 @@
-source 'http://rubygems.org'
-# Add dependencies to develop your gem here.
-# Include everything needed to run rake, tests, features, etc.
-gem 'nokogiri'
+source "https://rubygems.org"
 
-group :development do
-  gem 'rspec'
-  gem 'rdoc'
-  gem 'bundler'
-  gem 'jeweler'
-  gem 'simplecov'
-  gem 'json'
-  gem 'coveralls', require: false
-  gem 'rest-client', '~> 1.7.3'
-end
+git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
-group :test do
-  gem 'rmagick'
-  gem 'mini_magick'
-end
+# Specify your gem's dependencies in rtesseract.gemspec
+gemspec
