@@ -9,7 +9,7 @@ require "rtesseract/tsv"
 class RTesseract
   class Error < StandardError; end
 
-  check_version!
+  # check_version!
 
   def initialize(src = '', options = {})
     @source = src
