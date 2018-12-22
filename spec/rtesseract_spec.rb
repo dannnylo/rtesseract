@@ -1,7 +1,7 @@
 RSpec.describe RTesseract do
-  let(:path) { Pathname.new(__FILE__.gsub('rtesseract_spec.rb', '')).expand_path }
-  let(:image_path) { path.join('images', 'test.tif').to_s }
-  let(:pdf_path) { path.join('images', 'test.tif').to_s }
+  let(:path) {  Pathname.new(__dir__) }
+  let(:image_path) { path.join('resources', 'test.tif').to_s }
+  let(:pdf_path) { path.join('resources', 'test.tif').to_s }
 
   it "has a version number" do
     expect(RTesseract::VERSION).not_to be nil
@@ -16,18 +16,14 @@ RSpec.describe RTesseract do
   it 'translate image to text' do
     expect(RTesseract.new(image_path).to_s_without_spaces).to eql('43XF')
     expect(RTesseract.new(image_path, processor: 'mini_magick').to_s_without_spaces).to eql('43XF')
-    expect(RTesseract.new(path.join('images', 'test1.tif').to_s).to_s_without_spaces).to eql('V2V4')
-    expect(RTesseract.new(path.join('images', 'test with spaces.tif').to_s).to_s_without_spaces).to eql('V2V4')
-  end
+    expect(RTesseract.new(path.join('resources', 'test1.tif').to_s).to_s_without_spaces).to eql('V2V4')
+    expect(RTesseract.new(path.join('resources', 'test with spaces.tif').to_s).to_s_without_spaces).to eql('V2V4')
 
-  it "does something useful" do
-    expect(false).to eq(true)
+    expect(RTesseract.new(path.join('resources', 'test.png').to_s, psm: 4).to_s_without_spaces).to eql('HW9W')
+    expect(RTesseract.new(path.join('resources', 'test.jpg').to_s).to_s_without_spaces).to eql('3R8F')
   end
 end
 
-# require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
-# # encoding: UTF-8
-# require 'pathname'
 # RTesseract::Processor::RMagickProcessor.setup
 
 # # Class to rise error
@@ -40,8 +36,8 @@ end
 # describe 'Rtesseract' do
 #   before do
 #     path = Pathname.new(__FILE__.gsub('rtesseract_spec.rb', '')).expand_path
-#     image_path = path.join('images', 'test.tif').to_s
-#     @image_for_pdf = path.join('images', 'test-pdf.png').to_s
+#     image_path = path.join('resources', 'test.tif').to_s
+#     @image_for_pdf = path.join('resources', 'test-pdf.png').to_s
 #   end
 
 #   it ' be instantiable' do
@@ -53,29 +49,29 @@ end
 #   it ' translate image to text' do
 #     expect(RTesseract.new(image_path).to_s_without_spaces).to eql('43XF')
 #     expect(RTesseract.new(image_path, processor: 'mini_magick').to_s_without_spaces).to eql('43XF')
-#     expect(RTesseract.new(path.join('images', 'test1.tif').to_s).to_s_without_spaces).to eql('V2V4')
-#     expect(RTesseract.new(path.join('images', 'test with spaces.tif').to_s).to_s_without_spaces).to eql('V2V4')
+#     expect(RTesseract.new(path.join('resources', 'test1.tif').to_s).to_s_without_spaces).to eql('V2V4')
+#     expect(RTesseract.new(path.join('resources', 'test with spaces.tif').to_s).to_s_without_spaces).to eql('V2V4')
 #   end
 
-#   it ' translate images .png, .jpg, .bmp' do
-#     expect(RTesseract.new(path.join('images', 'test.png').to_s).to_s_without_spaces).to eql('HW9W')
-#     expect(RTesseract.new(path.join('images', 'test.jpg').to_s).to_s_without_spaces).to eql('3R8F')
-#     expect(RTesseract.new(path.join('images', 'test.bmp').to_s).to_s_without_spaces).to eql('FLA6')
+#   it ' translate resources .png, .jpg, .bmp' do
+#     expect(RTesseract.new(path.join('resources', 'test.png').to_s).to_s_without_spaces).to eql('HW9W')
+#     expect(RTesseract.new(path.join('resources', 'test.jpg').to_s).to_s_without_spaces).to eql('3R8F')
+#     expect(RTesseract.new(path.join('resources', 'test.bmp').to_s).to_s_without_spaces).to eql('FLA6')
 #   end
 
 #   it ' should not error with depth > 32' do
-#     # expect(RTesseract.new(path.join('images', 'README.pdf').to_s, debug: true).to_s_without_spaces).to eql('')
+#     # expect(RTesseract.new(path.join('resources', 'README.pdf').to_s, debug: true).to_s_without_spaces).to eql('')
 #   end
 
 #   it ' support  different processors' do
 #     # Rmagick
 #     expect(RTesseract.new(image_path).to_s_without_spaces).to eql('43XF')
 #     expect(RTesseract.new(image_path, processor: 'rmagick').to_s_without_spaces).to eql('43XF')
-#     expect(RTesseract.new(path.join('images', 'test.png').to_s, processor: 'rmagick').to_s_without_spaces).to eql('HW9W')
+#     expect(RTesseract.new(path.join('resources', 'test.png').to_s, processor: 'rmagick').to_s_without_spaces).to eql('HW9W')
 
 #     # MiniMagick
 #     expect(RTesseract.new(image_path, processor: 'mini_magick').to_s_without_spaces).to eql('43XF')
-#     expect(RTesseract.new(path.join('images', 'test.png').to_s, processor: 'mini_magick').to_s_without_spaces).to eql('HW9W')
+#     expect(RTesseract.new(path.join('resources', 'test.png').to_s, processor: 'mini_magick').to_s_without_spaces).to eql('HW9W')
 
 #     # NoneMagick
 #     expect(RTesseract.new(image_path, processor: 'none').to_s_without_spaces).to eql('43XF')
@@ -84,7 +80,7 @@ end
 #   it ' change the image' do
 #     image = RTesseract.new(image_path)
 #     expect(image.to_s_without_spaces).to eql('43XF')
-#     image.source = path.join('images', 'test1.tif').to_s
+#     image.source = path.join('resources', 'test1.tif').to_s
 #     expect(image.to_s_without_spaces).to eql('V2V4')
 #   end
 
@@ -170,7 +166,7 @@ end
 #   end
 
 #   it ' read image from blob' do
-#     image = Magick::Image.read(path.join('images', 'test.png').to_s).first
+#     image = Magick::Image.read(path.join('resources', 'test.png').to_s).first
 #     blob = image.quantize(256, Magick::GRAYColorspace).to_blob
 
 #     test = RTesseract.new('', psm: 7)
@@ -194,7 +190,7 @@ end
 #   end
 
 #   it ' change image in a block' do
-#     test = RTesseract.read(path.join('images', 'test.png').to_s) {}
+#     test = RTesseract.read(path.join('resources', 'test.png').to_s) {}
 #     expect(test.class).to eql(RTesseract)
 
 #     test = RTesseract.new(image_path)
@@ -203,23 +199,23 @@ end
 #     end
 #     expect(test.to_s_without_spaces).to eql('43XF')
 
-#     test = RTesseract.new(path.join('images', 'blank.tif').to_s)
+#     test = RTesseract.new(path.join('resources', 'blank.tif').to_s)
 #     test.read do |_image|
 #       _image
 #     end
 #     expect(test.to_s_without_spaces).to eql('')
 
-#     test = RTesseract.read(path.join('images', 'test.png').to_s) do |_image|
+#     test = RTesseract.read(path.join('resources', 'test.png').to_s) do |_image|
 #       _image.rotate(90)
 #     end
 #     expect(test.to_s_without_spaces).to eql('HW9W')
 
-#     test = RTesseract.read(path.join('images', 'test.jpg').to_s, lang: 'en') do |_image|
+#     test = RTesseract.read(path.join('resources', 'test.jpg').to_s, lang: 'en') do |_image|
 #       _image = _image.white_threshold(245).quantize(256, Magick::GRAYColorspace)
 #     end
 #     expect(test.to_s_without_spaces).to eql('3R8F')
 
-#     test = RTesseract.read(path.join('images', 'test.jpg').to_s, lang: 'en', processor: 'mini_magick') do |_image|
+#     test = RTesseract.read(path.join('resources', 'test.jpg').to_s, lang: 'en', processor: 'mini_magick') do |_image|
 #       _image.gravity 'south'
 #     end
 #     expect(test.to_s_without_spaces).to eql('3R8F')
@@ -233,8 +229,8 @@ end
 #   end
 
 #   it ' get a error' do
-#     expect { RTesseract.new(path.join('images', 'test.jpg').to_s, command: 'tesseract_error').to_s }.to raise_error(RTesseract::ConversionError)
-#     expect { RTesseract.new(path.join('images', 'test_not_exists.png').to_s).to_s }.to raise_error(RTesseract::ImageNotSelectedError)
+#     expect { RTesseract.new(path.join('resources', 'test.jpg').to_s, command: 'tesseract_error').to_s }.to raise_error(RTesseract::ConversionError)
+#     expect { RTesseract.new(path.join('resources', 'test_not_exists.png').to_s).to_s }.to raise_error(RTesseract::ImageNotSelectedError)
 
 #     # Invalid psm object
 #     expect(RTesseract.new(image_path, psm:  MakeStringError.new).psm).to eql('')
@@ -304,6 +300,6 @@ end
 #     expect(RTesseract.new(image_path, user_words: MakeStringError.new).user_words).to eql('')
 #     expect(RTesseract.new(image_path, user_patterns: MakeStringError.new).user_patterns).to eql('')
 
-#     # expect(RTesseract.new(path.join('images', 'test_words.png').to_s, psm: 3, user_words: path.join('configs', 'eng.user-words.txt').to_s).to_s).to eql("If you are a friend,\nyou speak the password,\nand the doors will open.\n\n")
+#     # expect(RTesseract.new(path.join('resources', 'test_words.png').to_s, psm: 3, user_words: path.join('configs', 'eng.user-words.txt').to_s).to_s).to eql("If you are a friend,\nyou speak the password,\nand the doors will open.\n\n")
 #   end
 # end

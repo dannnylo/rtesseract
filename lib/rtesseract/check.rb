@@ -2,7 +2,9 @@
 class RTesseract
   class << self
     def tesseract_version
-      Open3.capture2e('tesseract', "--version").first.to_s.match(/\d.\d{2}/)[0].to_f
+      Open3.capture2e('tesseract', "--version").first.to_s.match(/\d+.\d+/)[0].to_f
+    rescue Errno::ENOENT
+      0
     end
 
     def check!

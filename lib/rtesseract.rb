@@ -1,16 +1,35 @@
-require "rtesseract/version"
+# require "rtesseract/version"
 require "rtesseract/check"
+require "rtesseract/command"
 require "rtesseract/text"
+require "rtesseract/pdf"
+require "rtesseract/box"
+require "rtesseract/tsv"
 
 class RTesseract
-  VERSION = '3.0.0'.freeze
   class Error < StandardError; end
 
-  # check_version!
+  check_version!
 
   def initialize(src = '', options = {})
     @source = src
     @options = options
+  end
+
+  def to_box
+    Box.run(@source, @options)
+  end
+
+  def words
+    to_box.map { |word| word[:word] }
+  end
+
+  def to_pdf
+    Pdf.run(@source, @options)
+  end
+
+  def to_tsv
+    Tsv.run(@source, @options)
   end
 
   # Output value
@@ -23,248 +42,3 @@ class RTesseract
     to_s.gsub(/\s/, '')
   end
 end
-
-
-# require 'pathname'
-# require 'tempfile'
-
-# require 'rtesseract/utils'
-# require 'rtesseract/configuration'
-# require 'rtesseract/errors'
-
-# # Ruby wrapper for Tesseract OCR
-# class RTesseract
-#   attr_accessor :configuration
-#   attr_reader :processor
-#   attr_reader :source
-
-#   def initialize(src = '', options = {})
-#     self.configuration = RTesseract.local_config(options)
-#     @options = options || {}
-#     @points = {}
-#     @processor = RTesseract::Processor.choose_processor!(configuration.processor)
-#     self.source = src
-#     initialize_hook
-#   end
-
-#   # Hook to end of initialize method
-#   def initialize_hook
-#   end
-
-#   # Define the source
-#   def source=(src)
-#     @value = nil
-#     @pdf_path = nil
-#     @source = @processor.image?(src) ? src : Pathname.new(src)
-#   end
-
-#   # Crop image to convert
-#   def crop!(points = {})
-#     @value = nil
-#     @points = points
-#     self
-#   end
-
-#   # Select the language
-#   # ===Languages
-#   ## * eng   - English
-#   ## * deu   - German
-#   ## * deu-f - German fraktur
-#   ## * fra   - French
-#   ## * ita   - Italian
-#   ## * nld   - Dutch
-#   ## * por   - Portuguese
-#   ## * spa   - Spanish
-#   ## * vie   - Vietnamese
-#   ## Note: Make sure you have installed the language to tesseract
-#   def lang
-#     language = (configuration.lang || 'eng').to_s.strip.downcase
-#     " -l #{LANGUAGES[language] || language} "
-#   rescue
-#     ''
-#   end
-
-#   # Convert option to command
-#   def option_to_string(prefix, value = nil)
-#     (value.nil? ? '' : " #{prefix} #{value} ")
-#   rescue
-#     ''
-#   end
-
-#   # Page Segment Mode
-#   def psm
-#     option_to_string('-psm', configuration.psm)
-#   end
-
-#   # Engine Mode
-#   def oem
-#     option_to_string '--oem', configuration.oem
-#   end
-
-#   # Tessdata Dir
-#   def tessdata_dir
-#     option_to_string('--tessdata-dir', configuration.tessdata_dir)
-#   end
-
-#   # User Words
-#   def user_words
-#     option_to_string('--user-words', configuration.user_words)
-#   end
-
-#   # User Patterns
-#   def user_patterns
-#     option_to_string('--user-patterns', configuration.user_patterns)
-#   end
-
-#   # Options on line
-#   def options_cmd
-#     configuration.options_cmd
-#   end
-
-#   # Hook to before config
-#   def config_hook
-#   end
-
-#   # Convert configurations
-#   def config
-#     @options ||= {}
-#     config_hook
-#     @options.map { |k, v| "#{k} #{v}" }.join("\n")
-#   end
-
-#   # Write config to file
-#   def config_file
-#     config_hook
-#     return '' if @options == {}
-#     conf = Tempfile.new('config')
-#     conf.write(config)
-#     conf.flush
-#     conf.path
-#   end
-
-#   # TODO: Clear console for MacOS or Windows
-#   def clear_console_output
-#     return '' if configuration.debug
-#     return '2>/dev/null' if File.exist?('/dev/null') # Linux console clear
-#   end
-
-#   # Get image
-#   def image
-#     (@image = @processor.image_to_tif(@source, @points)).path
-#   end
-
-#   # Extension of file
-#   def file_ext
-#     '.txt'
-#   end
-
-#   # Detect version number
-#   def tesseract_version
-#     RTesseract::Utils.version_number
-#   end
-
-
-#   # Rand file path
-#   def file_dest
-#     @file_dest = Pathname.new(Dir.tmpdir).join("#{Time.now.to_f}#{rand(1500)}").to_s
-#   end
-
-#   # Full path of file with txt extension
-#   def file_with_ext(ext = nil)
-#     [@file_dest, ext || file_ext].join('')
-#   end
-
-#   # Run command
-#   def convert_command
-#     `#{configuration.command} "#{image}" "#{file_dest}" #{lang} #{oem} #{psm} #{tessdata_dir} #{user_words} #{user_patterns} #{config_file} #{clear_console_output} #{options_cmd.join(' ')}`
-#   end
-
-#   # Is pdf output?
-#   def pdf?
-#     options_cmd.include? 'pdf'
-#   end
-
-#   # Read result file
-#   def convert_text
-#     @value = File.read(file_with_ext).to_s
-#   end
-
-#   # Store pdf result path
-#   def convert_pdf
-#     @pdf_path = file_with_ext('.pdf')
-#   end
-
-#   # Convert result to proper type
-#   def convert_result
-#     if pdf?
-#       convert_pdf
-#     else
-#       convert_text
-#       RTesseract::Utils.remove_files([@image, file_with_ext])
-#     end
-#   end
-
-#   # Hook to convert
-#   def after_convert_hook
-#   end
-
-#   # Convert image to string
-#   def convert
-#     convert_command
-#     after_convert_hook
-#     convert_result
-#   rescue => error
-#     raise RTesseract::ConversionError.new(error), error, caller
-#   end
-
-#   # Output value
-#   def to_s
-#     return @value if @value
-
-#     if @processor.image?(@source) || @source.file?
-#       convert
-#       @value
-#     else
-#       fail RTesseract::ImageNotSelectedError.new(@source)
-#     end
-#   end
-
-#   # Remove spaces and break-lines
-#   def to_s_without_spaces
-#     to_s.gsub(/\s/, '')
-#   end
-
-#   # Output pdf path
-#   def to_pdf
-#     return @pdf_path if @pdf_path
-
-#     fail TesseractVersionError.new if tesseract_version.nil? || tesseract_version < 3.03
-
-#     if @processor.image?(@source) || @source.file?
-#       options_cmd << 'pdf'
-#       convert
-#       options_cmd.delete('pdf')
-#       @pdf_path
-#     else
-#       fail RTesseract::ImageNotSelectedError.new(@source)
-#     end
-#   end
-
-#   # Destroy pdf file
-#   def clean
-#     RTesseract::Utils.remove_files([@pdf_path])
-#   end
-
-# end
-
-# require 'rtesseract/mixed'
-# require 'rtesseract/uzn'
-# require 'rtesseract/box'
-# require 'rtesseract/box_char'
-# require 'rtesseract/blob'
-# require 'rtesseract/processor'
-
-# # Processors
-# require 'processors/rmagick.rb'
-# require 'processors/mini_magick.rb'
-# require 'processors/none.rb'
