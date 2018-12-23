@@ -1,4 +1,6 @@
 ---
+
+sudo: false
 dist: bionic
 language: ruby
 cache: bundler
@@ -6,6 +8,7 @@ addons:
   apt:
     packages:
     - tesseract-ocr
+    - tesseract-ocr-eng
 
 rvm:
   - 2.4.2
