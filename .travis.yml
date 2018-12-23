@@ -1,5 +1,5 @@
 ---
-dist: xenial
+dist: bionic
 language: ruby
 cache: bundler
 addons:
