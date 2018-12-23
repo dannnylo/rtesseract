@@ -5,6 +5,8 @@ RSpec.describe RTesseract do
 
   it "has a version number" do
     expect(RTesseract::VERSION).not_to be nil
+
+    expect(RTesseract.tesseract_version).to be > 3.05
   end
 
   it 'be instantiable' do
