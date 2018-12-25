@@ -1,6 +1,5 @@
 RSpec.describe RTesseract::Box do
   let(:path) { Pathname.new(File.dirname(__FILE__)).join('..') }
-  let(:image_tiff) { path.join('resources', 'test.tif').to_s }
   let(:words_image) { path.join('resources', 'test_words.png').to_s }
 
   it 'bounding box' do
