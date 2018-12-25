@@ -7,10 +7,6 @@ class RTesseract
       0
     end
 
-    def check!
-      check_version!
-    end
-
     def check_version!
       raise 'Tesseract OCR 3.5 or later not installed' if RTesseract.tesseract_version < 3.05
     end
