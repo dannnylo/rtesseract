@@ -60,29 +60,6 @@ It's very simple to use rtesseract.
 
 This will preserve the image colors, pictures and structure in the generated pdf.
 
-### Convert parts of image to string
-
-```ruby
-  mix_block = RTesseract::Mixed.new("test.jpg") do |image|
-    image.area(28,  19, 25, 25)
-    image.area(180, 22, 20, 28)
-    image.area(218, 22, 24, 28)
-    image.area(248, 24, 22, 22)
-  end
-  mix_block.to_s
-```
-Or
-
-```ruby
-  mix_block = RTesseract::Mixed.new("test.jpg",{:areas => [
-    {:x => 28,  :y=>19, :w=>25, :h=>25 },
-    {:x => 180,  :y=>22, :w=>20, :h=>28},
-    {:x => 218,  :y=>22, :w=>24, :h=>28},
-    {:x => 248,  :y=>24, :w=>22, :h=>22}
-  ]})
-  mix_block.to_s
-```
-
 ## Options
 
 ### Language
@@ -118,7 +95,7 @@ Or
 
 ### BOUNDING BOX: TO GET WORDS WITH THEIR POSITIONS
   ```ruby
-    RTesseract::Box.new('test_words.png').words
+    RTesseract::Box.new('test_words.png').to_box
   ```
 
   # => [
