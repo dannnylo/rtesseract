@@ -1,14 +1,11 @@
 require "bundler/setup"
-require "rtesseract"
-
 require 'coveralls'
 require 'simplecov'
 
-SimpleCov.start do
-  add_filter '/spec/'
-end
-
 Coveralls.wear!
+SimpleCov.start :test_frameworks
+
+require "rtesseract"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

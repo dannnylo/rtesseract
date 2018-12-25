@@ -1,4 +1,3 @@
-# require "rtesseract/version"
 require "rtesseract/check"
 require "rtesseract/command"
 require "rtesseract/text"
