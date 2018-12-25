@@ -1,16 +1,14 @@
 ---
 
 sudo: false
-dist: cosmic
+dist: bionic
 language: ruby
 cache: bundler
-addons:
-  apt:
-    packages:
-    - tesseract-ocr
-    - tesseract-ocr-eng
 
 before_install:
+  - sudo add-apt-repository ppa:alex-p/tesseract-ocr -y
+  - sudo apt-get update -q
+  - sudo apt-get install tesseract tesseract-lang -y
   - gem install bundler -v 1.17.1
 
 rvm:
