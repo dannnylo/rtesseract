@@ -1,15 +1,18 @@
-class RTesseract
-  class Configuration
-    attr_accessor :command, :lang, :psm, :oem, :tessdata_dir, :user_words, :user_patterns, :debug, :config_file, :options_cmd
+require 'ostruct'
 
-    def initialize
-      @command = 'tesseract'
+class RTesseract
+  class Configuration < OpenStruct
+    def merge(options)
+      RTesseract::Configuration.new(self.to_h.merge(options))
     end
   end
 
   class << self
     def config
-      @config ||= Configuration.new
+      @config ||= RTesseract::Configuration.new(
+                    command: 'tesseract',
+                    debug_file: '/dev/null'
+                  )
     end
 
     def configure

@@ -7,14 +7,11 @@ class RTesseract
       @file_path = Pathname.new(Dir.tmpdir)
     end
 
-    def self.default
-      { tessedit_create_hocr: 1 }
-    end
-
     def self.run(source, options)
       name = "rtesseract_#{SecureRandom.uuid}"
+      options.tessedit_create_hocr = 1
 
-      RTesseract::Command.new(source, temp_dir.join(name).to_s, default.merge(options)).run
+      RTesseract::Command.new(source, temp_dir.join(name).to_s, options).run
 
       parse(temp_dir.join("#{name}.hocr").read)
     end

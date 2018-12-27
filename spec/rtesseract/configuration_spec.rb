@@ -1,6 +1,4 @@
-require 'csv'
-
-RSpec.describe RTesseract::Configuration do
+RSpec.describe RTesseract do
   let(:path) { Pathname.new(File.dirname(__FILE__)).join('..') }
 
   # it ' be configurable' do
@@ -14,6 +12,9 @@ RSpec.describe RTesseract::Configuration do
   it ' support default config processors' do
     RTesseract.configure { |config| config.psm = 7 }
     expect(RTesseract.config.psm).to eql(7)
+    expect(RTesseract.new(path, psm: 2).config.psm).to eql(2)
+
+    expect(RTesseract.config.command).to eql('tesseract')
 
     # RTesseract.configure { |config| config.tessdata_dir = '/tmp/test' }
     # expect(RTesseract.new(path).tessdata_dir).to eql(' --tessdata-dir /tmp/test ')

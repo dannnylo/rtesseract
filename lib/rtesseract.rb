@@ -11,15 +11,15 @@ class RTesseract
 
   check_version!
 
-  attr_reader :options, :source
+  attr_reader :config, :source
 
   def initialize(src = '', options = {})
     @source = src
-    @options = options
+    @config = RTesseract.config.merge(options)
   end
 
   def to_box
-    Box.run(@source, @options)
+    Box.run(@source, config)
   end
 
   def words
@@ -27,16 +27,16 @@ class RTesseract
   end
 
   def to_pdf
-    Pdf.run(@source, @options)
+    Pdf.run(@source, config)
   end
 
   def to_tsv
-    Tsv.run(@source, @options)
+    Tsv.run(@source, config)
   end
 
   # Output value
   def to_s
-    Text.run(@source, @options)
+    Text.run(@source, config)
   end
 
   # Remove spaces and break-lines
