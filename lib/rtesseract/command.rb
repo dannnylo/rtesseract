@@ -6,15 +6,19 @@ class RTesseract
       @source = source
       @output = output
 
-      @psm = options.delete(:psm)
-      @oem = options.delete(:oem)
-      @lang = options.delete(:lang)
+      @psm = options.delete(:psm) || default.psm
+      @oem = options.delete(:oem) || default.oem
+      @lang = options.delete(:lang) || default.lang
 
-      @tessdata_dir = options.delete(:tessdata_dir)
-      @user_words = options.delete(:user_words)
-      @user_patterns = options.delete(:user_patterns)
+      @tessdata_dir = options.delete(:tessdata_dir) || default.tessdata_dir
+      @user_words = options.delete(:user_words) || default.user_words
+      @user_patterns = options.delete(:user_patterns) || default.user_patterns
 
       @options = { debug_file: '/dev/null' }.merge(options)
+    end
+
+    def default
+      RTesseract.config
     end
 
     def configs
@@ -24,8 +28,8 @@ class RTesseract
     def full_command
       command = ['tesseract', @source, @output]
 
-      command << ['--psm', @psm] if @psm
-      command << ['--oem', @oem] if @oem
+      command << ['--psm', @psm.to_s] if @psm
+      command << ['--oem', @oem.to_s] if @oem
       command << ['-l', @lang] if @lang
 
       command << ['--tessdata_dir', @tessdata_dir] if @tessdata_dir

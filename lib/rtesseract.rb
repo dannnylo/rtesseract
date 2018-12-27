@@ -1,4 +1,5 @@
 require "rtesseract/check"
+require "rtesseract/configuration"
 require "rtesseract/command"
 require "rtesseract/text"
 require "rtesseract/pdf"
@@ -9,6 +10,8 @@ class RTesseract
   class Error < StandardError; end
 
   check_version!
+
+  attr_reader :options, :source
 
   def initialize(src = '', options = {})
     @source = src
