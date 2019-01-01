@@ -8,5 +8,11 @@ RSpec.describe RTesseract do
     expect(RTesseract.new(path, psm: 2).config.psm).to eql(2)
 
     expect(RTesseract.config.command).to eql('tesseract')
+    expect(RTesseract.new(path, command: '/usr/bin/tesseract4').config.command).to eql('/usr/bin/tesseract4')
+
+    expect(RTesseract.new(path, psm: 2).config.psm).to eql(2)
+    expect(RTesseract.new(path, oem: 1).config.oem).to eql(1)
+    expect(RTesseract.new(path, lang: 'eng').config.lang).to eql('eng')
+    expect(RTesseract.new(path, lang: 'eng+por').config.lang).to eql('eng+por')
   end
 end

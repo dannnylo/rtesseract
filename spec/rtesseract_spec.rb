@@ -25,6 +25,6 @@ RSpec.describe RTesseract do
   end
 
   it 'translate image to text with options' do
-    expect(RTesseract.new(image_path, config_file: 'digits').to_s_without_spaces).to eql('43XF')
+    expect(RTesseract.new(image_path, psm: 7, oem: 1).to_s_without_spaces).to eql('43XF')
   end
 end
