@@ -50,12 +50,14 @@ It's very simple to use rtesseract.
 
 ```ruby
   image = RTesseract.new("my_image.jpg")
-  image.to_pdf  # Getting the pdf path
-  image.to_s    # Still can get the value only.
-  # ...
-  # some stuff
-  # ...
-  image.clean   # to delete file once finished
+  image.to_pdf  # Getting open file of pdf
+```
+
+### Convert image to TSV
+
+```ruby
+  image = RTesseract.new("my_image.jpg")
+  image.to_tsv  # Getting open file of pdf
 ```
 
 This will preserve the image colors, pictures and structure in the generated pdf.
@@ -84,18 +86,18 @@ This will preserve the image colors, pictures and structure in the generated pdf
 ### Other options
 
   ```ruby
-    RTesseract.new('test.jpg', options: :digits)  # Only digit recognition
+    RTesseract.new('test.jpg', config_file: :digits)  # Only digit recognition
   ```
 
   OR
 
   ```ruby
-    RTesseract.new('test.jpg', options: [:digits, :quiet])
+    RTesseract.new('test.jpg', config_file: 'digits quiet')
   ```
 
 ### BOUNDING BOX: TO GET WORDS WITH THEIR POSITIONS
   ```ruby
-    RTesseract::Box.new('test_words.png').to_box
+    RTesseract.new('test_words.png').to_box
   ```
 
   # => [
