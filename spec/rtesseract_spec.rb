@@ -27,4 +27,19 @@ RSpec.describe RTesseract do
   it 'translate image to text with options' do
     expect(RTesseract.new(image_path, psm: 7, oem: 1).to_s_without_spaces).to eql('43XF')
   end
+
+  it 'get tesseract version' do
+
+    expect(RTesseract.tesseract_version).to be > 0
+
+    RTesseract.configure { |config| config.command = 'tesseract_not_installed' }
+
+    expect(RTesseract.tesseract_version).to eql(0)
+  end
+
+  it 'raise a error if tesseract version < 3.05' do
+    RTesseract.configure { |config| config.command = 'tesseract_not_installed' }
+
+    expect{ RTesseract.check_version! }.to raise_error(RTesseract::Error)
+  end
 end
