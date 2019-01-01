@@ -1,11 +1,16 @@
-sudo: required
+---
+
+sudo: false
+dist: bionic
 language: ruby
-addons:
-  apt:
-    packages:
-    - tesseract-ocr
+cache: bundler
+
+before_install:
+  - sudo add-apt-repository ppa:alex-p/tesseract-ocr -y
+  - sudo apt-get update -q
+  - sudo apt-get install tesseract-ocr tesseract-ocr-eng ghostscript -y
+  - gem install bundler -v 1.17.1
 
 rvm:
-  - 2.2.6
-  - 2.3.3
-  - 2.4.2
+  - 2.4.5
+  - 2.5.3

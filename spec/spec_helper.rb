@@ -1,21 +1,24 @@
-# encoding: UTF-8
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-$LOAD_PATH.unshift(File.dirname(__FILE__))
-require 'rspec'
+require "bundler/setup"
 require 'coveralls'
 require 'simplecov'
-SimpleCov.start do
-  add_filter '/spec/'
-end
-Coveralls.wear!
 
-require 'rtesseract'
-# Requires supporting files with custom matchers and macros, etc,
-# in ./support/ and its subdirectories.
-Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
+Coveralls.wear!
+SimpleCov.start :test_frameworks
+
+require "rtesseract"
 
 RSpec.configure do |config|
-  config.after(:each) do
-    RTesseract.configuration = RTesseract::Configuration.new
+  # Enable flags like --only-failures and --next-failure
+  config.example_status_persistence_file_path = ".rspec_status"
+
+  # Disable RSpec exposing methods globally on `Module` and `main`
+  config.disable_monkey_patching!
+
+  config.expect_with :rspec do |c|
+    c.syntax = :expect
+  end
+
+  config.before(:each) do
+    RTesseract.reset_config!
   end
 end
