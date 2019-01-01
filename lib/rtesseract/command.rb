@@ -2,7 +2,7 @@ require 'tmpdir'
 
 class RTesseract
   class Command
-    FIXED = [:command, :psm, :oem, :lang, :tessdata_dir, :user_words, :user_patterns]
+    FIXED = [:command, :psm, :oem, :lang, :tessdata_dir, :user_words, :user_patterns, :config_file]
 
     attr_reader :options
 
@@ -28,6 +28,8 @@ class RTesseract
       command << ['--user_patterns', options.user_patterns] if options.user_patterns
 
       command << configs
+
+      command << options.config_file.to_s if options.config_file
 
       command.flatten
     end

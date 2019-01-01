@@ -17,11 +17,14 @@ RSpec.describe RTesseract do
 
   it 'translate image to text' do
     expect(RTesseract.new(image_path).to_s_without_spaces).to eql('43XF')
-    expect(RTesseract.new(image_path, processor: 'mini_magick').to_s_without_spaces).to eql('43XF')
     expect(RTesseract.new(path.join('resources', 'test1.tif').to_s).to_s_without_spaces).to eql('V2V4')
     expect(RTesseract.new(path.join('resources', 'test with spaces.tif').to_s).to_s_without_spaces).to eql('V2V4')
 
     expect(RTesseract.new(path.join('resources', 'test.png').to_s, psm: 4).to_s_without_spaces).to eql('HW9W')
     expect(RTesseract.new(path.join('resources', 'test.jpg').to_s).to_s_without_spaces).to eql('3R8F')
+  end
+
+  it 'translate image to text with options' do
+    expect(RTesseract.new(image_path, config_file: 'digits').to_s_without_spaces).to eql('43XF')
   end
 end
