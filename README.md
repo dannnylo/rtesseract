@@ -57,7 +57,7 @@ It's very simple to use rtesseract.
 
 ```ruby
   image = RTesseract.new("my_image.jpg")
-  image.to_tsv  # Getting open file of pdf
+  image.to_tsv  # Getting open file of tsv
 ```
 
 This will preserve the image colors, pictures and structure in the generated pdf.
