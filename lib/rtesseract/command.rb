@@ -1,5 +1,3 @@
-require 'tmpdir'
-
 class RTesseract
   class Command
     FIXED = [:command, :psm, :oem, :lang, :tessdata_dir, :user_words, :user_patterns, :config_file]
@@ -10,32 +8,44 @@ class RTesseract
       @source = source
       @output = output
       @options = options
-    end
-
-    def configs
-      @options.to_h.map { |key, value| ['-c', "#{key}=#{value}"] unless FIXED.include?(key) }.compact
+      @full_command = [ options.command, @source, @output]
     end
 
     def full_command
-      command = [options.command, @source, @output]
+      add_option('--psm', options.psm)
+      add_option('--oem', options.oem)
+      add_option('-l', options.lang)
+      add_option('--tessdata_dir', options.tessdata_dir)
+      add_option('--user_words', options.user_words)
+      add_option('--user_patterns', options.user_patterns)
 
-      command << ['--psm', options.psm.to_s] if options.psm
-      command << ['--oem', options.oem.to_s] if options.oem
-      command << ['-l', options.lang] if options.lang
+      other_configs
 
-      command << ['--tessdata_dir', options.tessdata_dir] if options.tessdata_dir
-      command << ['--user_words', options.user_words] if options.user_words
-      command << ['--user_patterns', options.user_patterns] if options.user_patterns
+      add_option(options.config_file)
 
-      command << configs
+      @full_command
+    end
 
-      command << options.config_file.to_s if options.config_file
+    def add_option(*args)
+      return unless args.last
 
-      command.flatten
+      @full_command << args.map(&:to_s)
+    end
+
+    def other_configs
+      @options.to_h.map do |key, value|
+        next if FIXED.include?(key)
+
+        add_option('-c', "#{key}=#{value}")
+      end
     end
 
     def run
-      Open3.capture2e(*full_command)
+      output, status = Open3.capture2e(*full_command.flatten)
+
+      return output if status.success?
+
+      raise RTesseract::Error.new(output)
     end
   end
 end

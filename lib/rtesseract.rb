@@ -1,6 +1,7 @@
 require "rtesseract/check"
 require "rtesseract/configuration"
 require "rtesseract/command"
+require "rtesseract/base"
 require "rtesseract/text"
 require "rtesseract/pdf"
 require "rtesseract/box"
@@ -8,8 +9,6 @@ require "rtesseract/tsv"
 
 class RTesseract
   class Error < StandardError; end
-
-  check_version!
 
   attr_reader :config, :source
 
