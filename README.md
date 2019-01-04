@@ -66,22 +66,22 @@ This will preserve the image colors, pictures and structure in the generated pdf
 
 ### Language
 
-    ```ruby
-        RTesseract.new('test.jpg', lang: 'deu')
-    ```
+  ```ruby
+      RTesseract.new('test.jpg', lang: 'deu')
+  ```
 
-    * eng   - English
-    * deu   - German
-    * deu-f - German fraktur
-    * fra   - French
-    * ita   - Italian
-    * nld   - Dutch
-    * por   - Portuguese
-    * spa   - Spanish
-    * vie   - Vietnamese
-    * or any other supported by tesseract.
+  * eng   - English
+  * deu   - German
+  * deu-f - German fraktur
+  * fra   - French
+  * ita   - Italian
+  * nld   - Dutch
+  * por   - Portuguese
+  * spa   - Spanish
+  * vie   - Vietnamese
+  * or any other supported by tesseract.
 
-    Note: Make sure you have installed the language to tesseract
+  Note: Make sure you have installed the language to tesseract
 
 ### Other options
 
@@ -96,11 +96,9 @@ This will preserve the image colors, pictures and structure in the generated pdf
   ```
 
 ### BOUNDING BOX: TO GET WORDS WITH THEIR POSITIONS
-  ```ruby
-    RTesseract.new('test_words.png').to_box
-  ```
 
   ```ruby
+    RTesseract.new('test_words.png').to_box
     => [
       {:word => 'If',  :x_start=>52, :y_start=>13, :x_end=>63, :y_end=>27},
       {:word => 'you', :x_start=>69, :y_start=>17, :x_end=>100, :y_end=>31},
