@@ -42,4 +42,8 @@ RSpec.describe RTesseract do
 
     expect{ RTesseract.check_version! }.to raise_error(RTesseract::Error)
   end
+
+  it 'raise a error when tesseract raise a error' do
+    expect{ RTesseract.new().to_s }.to raise_error(RTesseract::Error)
+  end
 end
