@@ -1,5 +1,6 @@
 require 'tmpdir'
 require 'securerandom'
+require 'pathname'
 
 class RTesseract
   module Base
