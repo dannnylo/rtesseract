@@ -52,7 +52,7 @@ RSpec.describe RTesseract do
   it 'store the error on a variable to debug' do
     instance = RTesseract.new
     expect { instance.to_s }.to raise_error(RTesseract::Error)
-    expect(instance.errors).to eql(["Error in findFileFormatStream: failed to read first 12 bytes of file\nError during processing.\n"])
+    expect(instance.errors.first).to include("Error during processing")
 
     error_intance = RTesseract.new(path.join('resources', 'image_with_error.png').to_s)
 
