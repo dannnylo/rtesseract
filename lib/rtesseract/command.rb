@@ -1,14 +1,15 @@
 class RTesseract
   class Command
-    FIXED = [:command, :psm, :oem, :lang, :tessdata_dir, :user_words, :user_patterns, :config_file]
+    FIXED = %i[command psm oem lang tessdata_dir user_words user_patterns config_file].freeze
 
     attr_reader :options
 
-    def initialize(source, output, options)
+    def initialize(source, output, errors, options)
       @source = source
       @output = output
       @options = options
-      @full_command = [ options.command, @source, @output]
+      @errors = errors
+      @full_command = [options.command, @source, @output]
     end
 
     def full_command
@@ -41,11 +42,13 @@ class RTesseract
     end
 
     def run
-      output, status = Open3.capture2e(*full_command.flatten)
+      output, error, status = Open3.capture3(*full_command.flatten)
+
+      @errors.push(error)
 
       return output if status.success?
 
-      raise RTesseract::Error.new(output)
+      raise RTesseract::Error, error
     end
   end
 end
