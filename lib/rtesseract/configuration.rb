@@ -5,6 +5,10 @@ class RTesseract
     def merge(options)
       RTesseract::Configuration.new(to_h.merge(options))
     end
+
+    def command
+      @table[:command]
+    end
   end
 
   class << self
