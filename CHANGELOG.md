@@ -1,3 +1,15 @@
+## v3.0.3
+
+#### Changed
+
+* Fix some problems with commanders gem
+
+## v3.0.0
+
+#### Changed
+
+* Refactoring all gem to working with tesseract version 4  or above
+
 ## v2.1.0
 
 #### Added
