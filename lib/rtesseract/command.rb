@@ -16,9 +16,9 @@ class RTesseract
       add_option('--psm', options.psm)
       add_option('--oem', options.oem)
       add_option('-l', options.lang)
-      add_option('--tessdata_dir', options.tessdata_dir)
-      add_option('--user_words', options.user_words)
-      add_option('--user_patterns', options.user_patterns)
+      add_option('--tessdata-dir', options.tessdata_dir)
+      add_option('--user-words', options.user_words)
+      add_option('--user-patterns', options.user_patterns)
 
       other_configs
 
