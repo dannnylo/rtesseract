@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rtesseract (3.0.4)
+    rtesseract (3.0.5)
       nokogiri
 
 GEM
