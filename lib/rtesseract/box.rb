@@ -12,23 +12,28 @@ class RTesseract
 
     def self.parse(content)
       content.lines.map do |line|
-        self.word_info(line) if line.match?(/oc(rx|r)_word/)
+        next unless line.match?(/oc(rx|r)_word/)
+
+        word = line.match(/(?<=>)(.*?)(?=<)/).to_s
+
+        next if word.strip == ''
+
+        word_info(word, parse_position(line))
       end.compact
     end
 
-    def self.word_info(line)
-      data = line.match(/(?<=title)(.*?)(?=;)/).to_s.split(" ")
-      word = line.match(/(?<=>)(.*?)(?=<)/).to_s
-
-      return if word.strip == ''
-
+    def self.word_info(word, positions)
       {
         word: word,
-        x_start: data[1].to_i,
-        y_start: data[2].to_i,
-        x_end: data[3].to_i,
-        y_end: data[4].to_i
+        x_start: positions[1].to_i,
+        y_start: positions[2].to_i,
+        x_end: positions[3].to_i,
+        y_end: positions[4].to_i
       }
+    end
+
+    def self.parse_position(line)
+      line.match(/(?<=title)(.*?)(?=;)/).to_s.split(' ')
     end
   end
 end
