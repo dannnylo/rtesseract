@@ -1,5 +1,3 @@
-require 'nokogiri'
-
 class RTesseract
   module Box
     extend RTesseract::Base
@@ -13,16 +11,19 @@ class RTesseract
     end
 
     def self.parse(content)
-      html = Nokogiri::HTML(content)
-      html.css('span.ocrx_word, span.ocr_word').map do |word|
-        attributes = word.attributes['title'].value.to_s.delete(';').split(' ')
-        word_info(word, attributes)
-      end
+      content.lines.map do |line|
+        self.word_info(line) if line.match?(/oc(rx|r)_word/)
+      end.compact
     end
 
-    def self.word_info(word, data)
+    def self.word_info(line)
+      data = line.match(/(?<=title)(.*?)(?=;)/).to_s.split(" ")
+      word = line.match(/(?<=>)(.*?)(?=<)/).to_s
+
+      return if word.strip == ''
+
       {
-        word: word.text,
+        word: word,
         x_start: data[1].to_i,
         y_start: data[2].to_i,
         x_end: data[3].to_i,
