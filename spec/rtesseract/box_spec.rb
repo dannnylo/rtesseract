@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe RTesseract::Box do
   let(:path) { Pathname.new(File.dirname(__FILE__)).join('..') }
   let(:words_image) { path.join('resources', 'test_words.png').to_s }

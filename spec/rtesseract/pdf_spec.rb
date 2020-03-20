@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe RTesseract::Pdf do
   let(:path) { Pathname.new(File.dirname(__FILE__)).join('..') }
 

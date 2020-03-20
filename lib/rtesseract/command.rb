@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RTesseract
   class Command
     FIXED = %i[command psm oem lang tessdata_dir user_words user_patterns config_file].freeze

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RTesseract
   class << self
     def tesseract_version
