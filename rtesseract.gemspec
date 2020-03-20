@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'rtesseract/version'
@@ -8,9 +10,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Danilo Jeremias da Silva']
   spec.email         = ['dannnylo@gmail.com']
 
-  spec.summary       = 'Ruby library for working with the Tesseract OCR.'.freeze
-  spec.description   = 'Ruby library for working with the Tesseract OCR.'.freeze
-  spec.homepage      = 'http://github.com/dannnylo/rtesseract'.freeze
+  spec.summary       = 'Ruby library for working with the Tesseract OCR.'
+  spec.description   = 'Ruby library for working with the Tesseract OCR.'
+  spec.homepage      = 'http://github.com/dannnylo/rtesseract'
   spec.license       = 'MIT'
 
   # Specify which files should be added to the gem when it is released.

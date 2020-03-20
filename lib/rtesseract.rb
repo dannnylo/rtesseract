@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rtesseract/check'
 require 'rtesseract/configuration'
 require 'rtesseract/command'

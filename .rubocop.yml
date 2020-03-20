@@ -1,8 +1,20 @@
-Documentation:
-  Enabled: false
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 150
 
 Metrics/BlockLength:
   Max: 50
+
+Metrics/AbcSize:
+  Max: 30
+
+Style/Documentation:
+  Enabled: false
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
