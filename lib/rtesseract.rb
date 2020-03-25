@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'tmpdir'
+require 'securerandom'
+require 'pathname'
 require 'rtesseract/check'
 require 'rtesseract/configuration'
 require 'rtesseract/command'
@@ -21,7 +24,8 @@ class RTesseract
   end
 
   def to_box
-    Box.run(@source, @errors, config)
+    temp_file_path = new_temp_file_path
+    Box.run(@source, temp_file_path, @errors, config)
   end
 
   def words
@@ -29,11 +33,13 @@ class RTesseract
   end
 
   def to_pdf
-    Pdf.run(@source, @errors, config)
+    temp_file_path = new_temp_file_path
+    Pdf.run(@source, temp_file_path, @errors, config)
   end
 
   def to_tsv
-    Tsv.run(@source, @errors, config)
+    temp_file_path = new_temp_file_path
+    Tsv.run(@source, temp_file_path, @errors, config)
   end
 
   # Output value
@@ -44,6 +50,11 @@ class RTesseract
   # Remove spaces and break-lines
   def to_s_without_spaces
     to_s.gsub(/\s/, '')
+  end
+
+  def new_temp_file_path
+    rand_file ||= "rtesseract_#{SecureRandom.uuid}"
+    Pathname.new(Dir.tmpdir).join("#{rand_file}").to_s
   end
 
   attr_reader :errors

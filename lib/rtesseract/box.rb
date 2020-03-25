@@ -5,12 +5,12 @@ class RTesseract
     extend RTesseract::Base
 
     class << self
-      def run(source, errors, options)
+      def run(source, temp_file_path, errors, options)
         options.tessedit_create_hocr = 1
 
-        RTesseract::Command.new(source, temp_file, errors, options).run
+        RTesseract::Command.new(source, temp_file_path, errors, options).run
 
-        parse(File.read(temp_file('.hocr')))
+        parse(File.read("#{temp_file_path}.hocr"))
       end
 
       def parse(content)
