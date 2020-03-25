@@ -54,7 +54,7 @@ class RTesseract
 
   def new_temp_file_path
     rand_file ||= "rtesseract_#{SecureRandom.uuid}"
-    Pathname.new(Dir.tmpdir).join("#{rand_file}").to_s
+    Pathname.new(Dir.tmpdir).join(rand_file).to_s
   end
 
   attr_reader :errors
