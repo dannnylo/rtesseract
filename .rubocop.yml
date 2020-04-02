@@ -18,6 +18,3 @@ Style/HashTransformKeys:
 
 Style/HashTransformValues:
   Enabled: true
-
-RSpec/FilePath:
-  Enabled: false
