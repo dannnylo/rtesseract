@@ -3,7 +3,9 @@
 <a href='http://badge.fury.io/rb/rtesseract'>
     <img src="https://badge.fury.io/rb/rtesseract.png" alt="Gem Version" />
 </a>
-<img src="https://github.com/dannnylo/rtesseract/workflows/CI/badge.svg" alt="Build Status" />
+<a href='https://github.com/dannnylo/rtesseract/workflows/CI/badge.svg'>
+  <img src="https://github.com/dannnylo/rtesseract/workflows/CI/badge.svg" alt="Build Status" />
+</a>
 <a href='https://coveralls.io/r/dannnylo/rtesseract?branch=master'>
     <img src="https://coveralls.io/repos/dannnylo/rtesseract/badge.png?branch=master" alt="Coverage Status" />
 </a>
