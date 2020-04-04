@@ -6,12 +6,12 @@ class RTesseract
 
     attr_reader :options
 
-    def initialize(source, output, errors, options)
+    def initialize(source, output_path, errors, options)
       @source = source
-      @output = output
+      @output_path = output_path
       @options = options
       @errors = errors
-      @full_command = [options.command, @source, @output]
+      @full_command = [options.command, @source, @output_path]
     end
 
     def full_command
@@ -48,7 +48,11 @@ class RTesseract
 
       @errors.push(error)
 
-      return output if status.success?
+      if status.success?
+        return yield(@output_path) if block_given?
+
+        return output
+      end
 
       raise RTesseract::Error, error
     end
