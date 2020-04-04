@@ -10,8 +10,7 @@ jobs:
           - '2.6.x'
           - '2.7.x'
     steps:
-      steps:
-        - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
       - name: Install tesseract-ocr
         run: |
           sudo add-apt-repository ppa:alex-p/tesseract-ocr -y
