@@ -1,0 +1,31 @@
+name: CI
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby:
+          - '2.5.x'
+          - '2.6.x'
+          - '2.7.x'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install tesseract-ocr
+        run: |
+          sudo add-apt-repository ppa:alex-p/tesseract-ocr -y
+          sudo apt-get update -q
+          sudo apt-get install tesseract-ocr tesseract-ocr-eng ghostscript -y
+      - name: Setup Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+      - name: Bundle
+        env:
+          MTSR_RAILS_VERSION: ${{ matrix.rails }}
+        run: |
+          gem uninstall -aIx bundler
+          gem install bundler
+          bundle install --jobs 4 --retry 3
+      - name: Test
+        run: bundle exec rake

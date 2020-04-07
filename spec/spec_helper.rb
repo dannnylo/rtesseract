@@ -20,7 +20,7 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 
-  config.before(:each) do
+  config.before do
     RTesseract.reset_config!
   end
 end
