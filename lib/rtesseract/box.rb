@@ -30,11 +30,11 @@ class RTesseract
       def word_info(word, positions, confidence)
         {
           word: word,
+          confidence: confidence[-1].to_i,
           x_start: positions[1].to_i,
           y_start: positions[2].to_i,
           x_end: positions[3].to_i,
-          y_end: positions[4].to_i,
-          confidence: confidence[-1].to_i,
+          y_end: positions[4].to_i
         }
       end
 
