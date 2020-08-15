@@ -24,21 +24,26 @@ class RTesseract
 
         return if word.strip == ''
 
-        word_info(word, parse_position(line))
+        word_info(word, parse_position(line), parse_confidence(line))
       end
 
-      def word_info(word, positions)
+      def word_info(word, positions, confidence)
         {
           word: word,
           x_start: positions[1].to_i,
           y_start: positions[2].to_i,
           x_end: positions[3].to_i,
-          y_end: positions[4].to_i
+          y_end: positions[4].to_i,
+          confidence: confidence[-1].to_i,
         }
       end
 
       def parse_position(line)
         line.match(/(?<=title)(.*?)(?=;)/).to_s.split(' ')
+      end
+
+      def parse_confidence(line)
+        line.match(/(?<=;)(.*?)(?=')/).to_s.split(' ')
       end
     end
   end
