@@ -1,3 +1,39 @@
+## v3.1.2
+
+#### Added
+
+* Added confidence for each word in box mode
+
+## v3.1.1
+
+#### Changed
+
+* Changed RTesseract::Command to receive a block when success run
+
+## v3.1.0
+
+#### Changed
+
+* Removed nokogi dependency.
+
+## v3.0.4
+
+#### Changed
+
+* Updated dependencies by security alerts.
+
+## v3.0.5
+
+#### Changed
+
+* Updated dependencies by security alerts.
+
+## v3.0.4
+
+#### Changed
+
+* Updated dependencies by security alerts.
+
 ## v3.0.3
 
 #### Changed

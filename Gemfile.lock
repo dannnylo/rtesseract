@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rtesseract (3.1.1)
+    rtesseract (3.1.2)
 
 GEM
   remote: https://rubygems.org/
