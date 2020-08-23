@@ -11,6 +11,6 @@ RSpec.describe RTesseract::Box do
   end
 
   it 'bounding box' do
-    expect(instance.to_box).to include(word: 'you', x_start: 69, y_start: 17, x_end: 100, y_end: 31)
+    expect(instance.to_box).to include(word: 'you', x_start: 69, y_start: 17, x_end: 100, y_end: 31, confidence: 96)
   end
 end
