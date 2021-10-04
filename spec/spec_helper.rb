@@ -1,11 +1,19 @@
 # frozen_string_literal: true
 
 require 'bundler/setup'
-require 'coveralls'
 require 'simplecov'
+require 'simplecov-lcov'
 
-Coveralls.wear!
-SimpleCov.start :test_frameworks
+SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new([
+  SimpleCov::Formatter::HTMLFormatter,
+  SimpleCov::Formatter::LcovFormatter
+])
+
+SimpleCov.start :test_frameworks do
+  enable_coverage :branch
+
+  minimum_coverage line: 100, branch: 85
+end
 
 require 'rtesseract'
 

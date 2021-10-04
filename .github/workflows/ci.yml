@@ -6,9 +6,8 @@ jobs:
     strategy:
       matrix:
         ruby:
-          - '2.5.x'
-          - '2.6.x'
           - '2.7.x'
+          - '3.0.x'
     steps:
       - uses: actions/checkout@v2
       - name: Install tesseract-ocr
@@ -16,6 +15,7 @@ jobs:
           sudo add-apt-repository ppa:alex-p/tesseract-ocr -y
           sudo apt-get update -q
           sudo apt-get install tesseract-ocr tesseract-ocr-eng ghostscript -y
+          tesseract --version
       - name: Setup Ruby
         uses: actions/setup-ruby@v1
         with:
@@ -29,3 +29,8 @@ jobs:
           bundle install --jobs 4 --retry 3
       - name: Test
         run: bundle exec rake
+      - name: Coverage
+        env:
+          CODACY_API_TOKEN: ed605cdf8bf647f09ee3556af2e1c80a
+        run: bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r coverage/lcov/*
+

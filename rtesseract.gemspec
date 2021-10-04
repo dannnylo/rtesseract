@@ -25,7 +25,10 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_development_dependency 'bundler', '~> 2'
-  spec.add_development_dependency 'coveralls'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec'
+
+  spec.add_development_dependency 'simplecov'
+  spec.add_development_dependency 'simplecov-cobertura'
+  spec.add_development_dependency 'simplecov-lcov'
 end
