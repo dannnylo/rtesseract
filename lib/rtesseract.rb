@@ -12,7 +12,7 @@ require 'rtesseract/tsv'
 class RTesseract
   class Error < StandardError; end
 
-  attr_reader :config, :source
+  attr_reader :config, :source, :errors
 
   def initialize(src = '', options = {})
     @source = src
@@ -45,6 +45,4 @@ class RTesseract
   def to_s_without_spaces
     to_s.gsub(/\s/, '')
   end
-
-  attr_reader :errors
 end

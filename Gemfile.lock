@@ -43,7 +43,6 @@ DEPENDENCIES
   simplecov
   simplecov-cobertura
   simplecov-lcov
-  simplecov_json_formatter
 
 BUNDLED WITH
    2.2.22
