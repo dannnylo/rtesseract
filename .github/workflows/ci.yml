@@ -31,7 +31,5 @@ jobs:
       - name: Test
         run: bundle exec rake
       - name: Coverage
-        env:
-          CODACY_PROJECT_TOKEN: ed605cdf8bf647f09ee3556af2e1c80a
         run: bash <(curl -Ls https://coverage.codacy.com/get.sh) report -l Ruby -r coverage/lcov/*
 
