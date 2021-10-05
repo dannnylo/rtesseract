@@ -31,5 +31,7 @@ jobs:
       - name: Test
         run: bundle exec rake
       - name: Coverage
+        env:
+          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
         run: bash <(curl -Ls https://coverage.codacy.com/get.sh) report -l Ruby -r coverage/lcov/*
 
