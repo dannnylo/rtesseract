@@ -20,7 +20,7 @@ jobs:
           sudo apt-get install tesseract-ocr tesseract-ocr-eng ghostscript -y
           tesseract --version
       - name: Setup Ruby
-        uses: actions/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
       - name: Bundle
