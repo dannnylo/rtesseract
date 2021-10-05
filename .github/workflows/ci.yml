@@ -6,8 +6,8 @@ jobs:
     strategy:
       matrix:
         ruby:
-          - '2.7.x'
-          - '3.0.x'
+          - '2.7.4'
+          - '3.0.0'
         repository:
           - 'ppa:alex-p/tesseract-ocr'
           - 'ppa:alex-p/tesseract-ocr-devel'
