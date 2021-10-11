@@ -35,6 +35,26 @@ RSpec.describe RTesseract do
     end
   end
 
+  context 'when tesseract installed version is less then 3' do
+    before do
+      allow(RTesseract).to receive(:tesseract_version).and_return(2)
+    end
+
+    it 'raise a error if tesseract version < 3.05' do
+      expect { described_class.check_version! }.to raise_error(RTesseract::Error)
+    end
+  end
+
+  context 'when tesseract installed version is greather then 3' do
+    before do
+      allow(RTesseract).to receive(:tesseract_version).and_return(4)
+    end
+
+    it 'raise a error if tesseract version < 3.05' do
+      expect(described_class.check_version!).to eq(nil)
+    end
+  end
+
   context 'without source' do
     let(:instance) { described_class.new }
 
