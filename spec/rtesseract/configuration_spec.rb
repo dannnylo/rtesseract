@@ -38,4 +38,8 @@ RSpec.describe RTesseract do
       expect(described_class.new(path, lang: 'eng+por').config.lang).to eql('eng+por')
     end
   end
+
+  context 'when block not given' do
+    it { expect(described_class.configure).to eq(nil) }
+  end
 end
