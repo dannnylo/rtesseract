@@ -6,8 +6,11 @@
 <a href='https://github.com/dannnylo/rtesseract/workflows/CI/badge.svg'>
   <img src="https://github.com/dannnylo/rtesseract/workflows/CI/badge.svg" alt="Build Status" />
 </a>
-<a href='https://coveralls.io/r/dannnylo/rtesseract?branch=master'>
-    <img src="https://coveralls.io/repos/dannnylo/rtesseract/badge.png?branch=master" alt="Coverage Status" />
+<a href='https://app.codacy.com/project/badge/Grade/316a48934db8415d84d2f9a318b0f837'>
+  <img src="https://app.codacy.com/project/badge/Grade/316a48934db8415d84d2f9a318b0f837" alt="Coverage Status" />
+</a>
+<a href='https://app.codacy.com/project/badge/Coverage/316a48934db8415d84d2f9a318b0f837'>
+  <img src="https://app.codacy.com/project/badge/Coverage/316a48934db8415d84d2f9a318b0f837" alt="Coverage" />
 </a>
 <a href='https://codeclimate.com/github/dannnylo/rtesseract'>
     <img src="https://codeclimate.com/github/dannnylo/rtesseract.png" />
