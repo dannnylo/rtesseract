@@ -20,7 +20,7 @@ class RTesseract
       def parse_line(line)
         return unless line.match?(/oc(rx|r)_word/)
 
-        word = line.match(/(?<=>)(.*?)(?=<)/).to_s
+        word = line.to_s.scan(/>(.*)</).flatten.first.to_s
 
         return if word.strip == ''
 
@@ -39,11 +39,11 @@ class RTesseract
       end
 
       def parse_position(line)
-        line.match(/(?<=title)(.*?)(?=;)/).to_s.split(' ')
+        line.match(/(?<=title)(.*?)(?=;)/).to_s.split
       end
 
       def parse_confidence(line)
-        line.match(/(?<=;)(.*?)(?=')/).to_s.split(' ')
+        line.match(/(?<=;)(.*?)(?=')/).to_s.split
       end
     end
   end
