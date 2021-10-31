@@ -24,6 +24,8 @@ Check if tesseract ocr programs is installed:
 
     $ tesseract --version
 
+(if not, try `brew install tesseract`)
+
 Add this line to your application's Gemfile:
 
 ```ruby
