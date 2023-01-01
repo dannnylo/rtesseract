@@ -6,7 +6,7 @@ class RTesseract
 
     class << self
       def run(source, errors, options)
-        options.tessedit_create_hocr = 1
+        options = options.merge({tessedit_create_hocr: 1})
 
         RTesseract::Command.new(source, temp_file_path, errors, options).run do |output_path|
           parse(File.read("#{output_path}.hocr"))

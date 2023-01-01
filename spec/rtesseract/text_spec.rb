@@ -34,4 +34,15 @@ RSpec.describe RTesseract::Text do
   it 'tests output text' do
     expect(RTesseract.new(words_image).to_s).to eql("If you are a friend,\nyou speak the password,\nand the doors will open.\n\f")
   end
+
+  it 'tests config errors' do
+    tesseract = RTesseract.new(words_image)
+    # Check that none of the other options affects the config, making text error out.
+    box = tesseract.to_box
+    pdf = tesseract.to_pdf
+    tsv = tesseract.to_tsv
+    result = tesseract.to_s
+    expect(result).to eql("If you are a friend,\nyou speak the password,\nand the doors will open.\n\f")
+  end
 end
+

@@ -5,7 +5,7 @@ class RTesseract
     extend Base
 
     def self.run(source, errors, options)
-      options.tessedit_create_tsv = 1
+      options = options.merge({tessedit_create_tsv: 1})
 
       RTesseract::Command.new(
         source,
