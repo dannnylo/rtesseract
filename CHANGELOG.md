@@ -1,4 +1,10 @@
 # Changes
+## v3.1.3
+
+#### Added
+
+* Temporary hocr file is deleted after the file is processed.
+
 ## v3.1.2
 
 #### Added
