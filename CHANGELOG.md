@@ -1,4 +1,8 @@
 # Changes
+## v3.1.3
+
+* Fixed a configuration error that wouldn't allow you to do different kinds of calls on the same object, for example calling .to_box and then .to_s would result in unexpected behavior.
+
 ## v3.1.2
 
 #### Added
