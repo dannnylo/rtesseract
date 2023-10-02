@@ -1,5 +1,6 @@
 AllCops:
   NewCops: enable
+  SuggestExtensions: false
 
 Layout/LineLength:
   Max: 150

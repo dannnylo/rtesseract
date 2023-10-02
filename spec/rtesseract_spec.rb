@@ -4,6 +4,7 @@ RSpec.describe RTesseract do
   let(:path) { Pathname.new(__dir__) }
   let(:image_path) { path.join('resources', 'test.tif').to_s }
   let(:pdf_path) { path.join('resources', 'test.tif').to_s }
+  let(:words_image) { path.join('resources', 'test_words.png').to_s }
 
   it 'returns the tesseract version' do
     expect(described_class.tesseract_version).to be > 3.05
@@ -77,5 +78,26 @@ RSpec.describe RTesseract do
         expect(error_intance.errors).to eql(["Error in boxClipToRectangle: box outside rectangle\nError in pixScanForForeground: invalid box\n"])
       end
     end
+  end
+
+  it 'runs multiple types' do
+    tesseract = RTesseract.new(words_image)
+    # Check that none of the other options affects the config, making text error out.
+    box = tesseract.to_box
+    pdf = tesseract.to_pdf
+    tsv = tesseract.to_tsv
+
+    result = tesseract.to_s
+    expect(result).to eql("If you are a friend,\nyou speak the password,\nand the doors will open.\n")
+    expect(box).to be_a(Array)
+
+    expect(pdf).to be_a(File)
+    expect(File.extname(pdf.path)).to eq('.pdf')
+
+    expect(tsv).to be_a(File)
+    expect(File.extname(tsv.path)).to eq('.tsv')
+
+    pdf.close
+    tsv.close
   end
 end
