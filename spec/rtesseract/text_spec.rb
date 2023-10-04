@@ -32,6 +32,6 @@ RSpec.describe RTesseract::Text do
   end
 
   it 'tests output text' do
-    expect(RTesseract.new(words_image).to_s).to eql("If you are a friend,\nyou speak the password,\nand the doors will open.\n\f")
+    expect(RTesseract.new(words_image).to_s).to eql("If you are a friend,\nyou speak the password,\nand the doors will open.\n")
   end
 end
