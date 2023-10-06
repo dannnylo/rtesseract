@@ -32,6 +32,9 @@ or
 
     $ brew install tesseract
 
+or for Heroku 22 to add the buildpack https://github.com/pathwaysmedical/heroku-buildpack-tesseract
+
+
 Add this line to your application's Gemfile:
 
 ```ruby
