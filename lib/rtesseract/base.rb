@@ -10,13 +10,8 @@ class RTesseract
       Pathname.new(Dir.tmpdir).join("rtesseract_#{SecureRandom.uuid}").to_s
     end
 
-    def remove_tmp_file(output_path)
-      Dir["#{Dir.tmpdir}/*"].each do |filename|
-        if filename.include?(output_path)
-          File.delete(filename)
-          break
-        end
-      end
+    def remove_tmp_file(absolute_file_path)
+      File.delete(absolute_file_path) if File.file?(absolute_file_path)
     end
   end
 end
