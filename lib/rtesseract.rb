@@ -21,7 +21,7 @@ class RTesseract
   end
 
   def to_box
-    Box.run(@source, @errors, config)
+    Box.run(@source, @errors, @config)
   end
 
   def words
@@ -29,16 +29,16 @@ class RTesseract
   end
 
   def to_pdf
-    Pdf.run(@source, @errors, config)
+    Pdf.run(@source, @errors, @config)
   end
 
   def to_tsv
-    Tsv.run(@source, @errors, config)
+    Tsv.run(@source, @errors, @config)
   end
 
   # Output value
   def to_s
-    Text.run(@source, @errors, config)
+    Text.run(@source, @errors, @config)
   end
 
   # Remove spaces and break-lines

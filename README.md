@@ -20,9 +20,20 @@ Ruby library for working with the Tesseract OCR.
 
 ## Installation
 
-Check if tesseract ocr programs is installed:
+Check if tesseract ocr programs are installed:
 
     $ tesseract --version
+
+If not, you can install them with a command like:
+
+    $ apt install tesseract-ocr
+
+or
+
+    $ brew install tesseract
+
+or for Heroku 22 to add the buildpack https://github.com/pathwaysmedical/heroku-buildpack-tesseract
+
 
 Add this line to your application's Gemfile:
 

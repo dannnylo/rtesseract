@@ -7,9 +7,9 @@ jobs:
       matrix:
         ruby:
           - '2.7.4'
-          - '3.0.0'
+          - '3.2.0'
         repository:
-          - 'ppa:alex-p/tesseract-ocr'
+          - 'ppa:alex-p/tesseract-ocr5'
           - 'ppa:alex-p/tesseract-ocr-devel'
     steps:
       - uses: actions/checkout@v2
