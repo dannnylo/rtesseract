@@ -6,8 +6,8 @@ jobs:
     strategy:
       matrix:
         ruby:
-          - '2.7.4'
           - '3.2.0'
+          - '3.4.2'
         repository:
           - 'ppa:alex-p/tesseract-ocr5'
           - 'ppa:alex-p/tesseract-ocr-devel'
@@ -34,4 +34,3 @@ jobs:
         env:
           CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
         run: bash <(curl -Ls https://coverage.codacy.com/get.sh) report -l Ruby -r coverage/lcov/*
-
